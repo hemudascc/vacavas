@@ -1,0 +1,182 @@
+.hidedata2{
+	display:none;
+}
+.hidedata1{
+	display:none;
+}
+.hidedata{
+	display:none;
+}
+#sh{
+	display:none;
+}
+
+.more{
+float: right;
+background-color: blue;
+cursor:pointer;
+color:#E4FF00;
+padding-left:3px;
+padding-right:3px;
+border-radius: 5px;
+}
+#banner{
+width: 100%;
+
+margin-top: -21px;
+height:100px;
+}
+#header{
+	padding: 0px;
+	//background: url("../images/background/tom-and-jerry-photos-facebook-cover-timeline-banner-for-fb.jpg");
+	background-size: auto auto;
+	background-size: cover;
+	background-repeat: no-repeat;
+	color: #E4FF00;
+	background-size: cover;
+	margin-left:-15px;
+	margin-right:-15px;
+}
+
+.h2-text{
+	padding: 7px;
+
+font-size: 15px;
+font-weight: bold;
+margin:0px;
+
+}
+.translate{
+		padding: 7px;
+
+font-size: 15px;
+font-weight: bold;
+	transform: translateX(88%);
+}
+.linear-bg{
+	background: linear-gradient(to bottom, #8A8A8A 0%,#41DE3D 24%,#15C711 50%,#41DE3D 79%,#8A8A8A 100%);
+color: #fff;
+font-weight: bold;
+}
+
+.footer{
+	background-color:#444242;
+	color:#fff;
+	height:90px;
+	padding-top:15px;
+	padding-bottom:15px;
+}
+
+.navbar{
+	border-radius:0px;
+}
+
+ul.nav.navbar-nav>li>a{
+	font-size:17px;
+	color:white;
+}
+
+.col-sm-4.bg{
+	
+	
+margin-top: 2%;
+width: 50%;
+float: left;
+padding: 2%;
+	
+}
+.col-sm-4.bg p{
+font-size: 12px;
+color: #fff;
+box-shadow: 5px 5px 10px #c6c6c6;
+height: 29px;
+background-color: blue;
+margin-left: 0px;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+font-weight: bold;
+line-height:29px;
+border-radius: 0 0 15px 15px;
+text-align: center; padding-left: 3px;
+	
+	}
+.img-responsive.set-img{
+	width: 50px;
+height: 80px;
+float: left;
+}
+.img-responsive.fix-img{
+	height:220px;
+	
+}
+@media only screen and (max-width: 500px) {
+    .img-responsive.fix-img{
+		height:111px;
+	
+	}
+}
+@media only screen and (max-width: 300px) {
+    .img-responsive.fix-img{
+		height:98px;
+	
+	}
+}
+.shadow{
+	text-shadow:4px 4px 10px darkred;
+	
+}
+.navbar-brand.active{
+	color:#fff;
+}
+.col-sm-4.bg a{
+	text-decoration:none;
+	border-radius: 5px;
+}
+
+.btn.btn-primary.download{
+	margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+img.img-responsive{
+	width:100%;
+	min-height: 70px;
+max-height: 150px;
+border-radius: 15px 15px 0 0;
+}
+
+ul#inline{
+	list-style:none;
+}
+ul#inline>li{
+	float:left;
+}
+
+div#tab{
+	margin-left:4%;
+}
+
+hr{
+	border-top:1px solid cadetblue;
+}
+.card{
+	box-shadow: 5px 5px 10px #c6c6c6;
+	padding-left: 0px;
+	padding-right: 0px;
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
+}
+.videoplayer{
+	width: 100%;
+}
+.btndownload{
+	background:blue;
+	display:inline-block;
+	margin:5px;
+	padding:5px;
+	border-radius: 10px;
+	cursor: pointer;
+	color: #fff;
+	text-decoration:none;
+}

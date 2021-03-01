@@ -1,0 +1,427 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+ 
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>vacavas</groupId>
+  <artifactId>vacavas</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <name>vacavas</name>
+  <description>vacavas</description>
+  <properties>
+		<java.version>1.8</java.version>
+		<junit.version>4.11</junit.version>
+		<slf4j.version>1.7.5</slf4j.version>
+		
+		<hibernate.version>4.3.10.Final</hibernate.version>
+		<mysql.version>5.1.6</mysql.version>
+		<commons-dbcp.version>1.2.2</commons-dbcp.version>
+		<org.springframework.version>4.2.5.RELEASE</org.springframework.version>
+			<jackson.version>2.7.3</jackson.version>
+			
+	</properties>
+
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${org.springframework.version}</version>
+
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-expression</artifactId>
+			<version>${org.springframework.version}</version>
+
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${org.springframework.version}</version>
+
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${org.springframework.version}</version>
+
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${org.springframework.version}</version>
+
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${org.springframework.version}</version>
+
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>1.9.0.RELEASE</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${org.springframework.version}</version>
+
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${org.springframework.version}</version>
+
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-oxm</artifactId>
+			<version>${org.springframework.version}</version>
+
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${org.springframework.version}</version>
+
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+
+		</dependency>
+	<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+	</dependency>
+	<dependency>
+	<groupId>org.hibernate.javax.persistence</groupId>
+	<artifactId>hibernate-jpa-2.1-api</artifactId>
+	<version>1.0.0.Final</version>
+</dependency>
+
+
+		
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.0.2.GA</version>
+
+		</dependency>
+		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.6.1</version>
+
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.6.1</version>
+
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.ops4j.pax.logging/pax-logging-api -->
+<!-- https://mvnrepository.com/artifact/org.ops4j.pax.logging/pax-logging-api -->
+<!-- https://mvnrepository.com/artifact/org.ops4j.pax.logging/pax-logging-service -->
+<dependency>
+    <groupId>org.ops4j.pax.logging</groupId>
+    <artifactId>pax-logging-service</artifactId>
+    <version>1.5.3</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.apache.karaf.bundle/org.apache.karaf.bundle.command -->
+<dependency>
+    <groupId>org.apache.karaf.bundle</groupId>
+    <artifactId>org.apache.karaf.bundle.command</artifactId>
+    <version>3.0.4</version>
+</dependency>
+
+
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.34</version>
+
+		</dependency>
+
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+		
+		<dependency>
+			<groupId>commons-digester</groupId>
+			<artifactId>commons-digester</artifactId>
+			<version>2.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils-bean-collections</artifactId>
+			<version>1.8.3</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils-core</artifactId>
+			<version>1.8.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.10</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.0</version>
+		</dependency>
+		
+		<dependency>
+	<groupId>commons-dbcp</groupId>
+	<artifactId>commons-dbcp</artifactId>
+	<version>${commons-dbcp.version}</version>
+</dependency>
+
+<dependency>
+    <groupId>commons-net</groupId>
+    <artifactId>commons-net</artifactId>
+    <version>3.3</version>
+</dependency>
+
+
+
+<dependency>
+	<groupId>org.codehaus.jackson</groupId>
+	<artifactId>jackson-mapper-asl</artifactId>
+	<version>1.9.13</version>
+</dependency>
+<dependency>
+  <groupId>com.fasterxml.jackson.core</groupId>
+  <artifactId>jackson-core</artifactId>
+  <version>${jackson.version}</version>
+</dependency>
+<dependency>
+  <groupId>com.fasterxml.jackson.core</groupId>
+  <artifactId>jackson-databind</artifactId>
+  <version>${jackson.version}</version>
+</dependency>
+<dependency>
+  <groupId>com.fasterxml.jackson.core</groupId>
+  <artifactId>jackson-annotations</artifactId>
+  <version>${jackson.version}</version>
+</dependency>
+<dependency>
+	<groupId>javax.servlet</groupId>
+	<artifactId>javax.servlet-api</artifactId>
+	<version>3.0.1</version>
+</dependency>
+
+<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+
+<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.1</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.9.10</version>
+		</dependency>
+
+<dependency>
+    <groupId>org.eclipse.persistence</groupId>
+    <artifactId>javax.persistence</artifactId>
+    <version>2.0.0</version>
+    <scope>provided</scope>
+</dependency>
+
+
+
+
+<!-- https://mvnrepository.com/artifact/com.sun.jersey/jersey-bundle -->
+<dependency>
+    <groupId>com.sun.jersey</groupId>
+    <artifactId>jersey-bundle</artifactId>
+    <version>1.11</version>
+</dependency>
+
+		<dependency>
+			<groupId>com.ibm.vodafone</groupId>
+			<artifactId>cgencryption</artifactId>
+			<version>1.0</version>
+		</dependency>
+		
+	<dependency>
+    <groupId>org.json</groupId>
+    <artifactId>json</artifactId>
+    <version>20140107</version>
+   </dependency>	
+<dependency>
+			<groupId>com.google.code.simple-spring-memcached</groupId>
+			<artifactId>spring-cache</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.simple-spring-memcached</groupId>
+			<artifactId>xmemcached-provider</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+		
+		
+		<dependency>
+    <groupId>org.springframework.data</groupId>
+    <artifactId>spring-data-redis</artifactId>
+    <version>1.6.2.RELEASE</version>
+</dependency>
+  
+<dependency>
+    <groupId>redis.clients</groupId>
+    <artifactId>jedis</artifactId>
+    <version>2.5.1</version>
+</dependency>
+<dependency>
+  <groupId>com.fasterxml.jackson.core</groupId>
+  <artifactId>jackson-core</artifactId>
+  <version>${jackson.version}</version>
+</dependency>
+<dependency>
+  <groupId>com.fasterxml.jackson.core</groupId>
+  <artifactId>jackson-databind</artifactId>
+  <version>${jackson.version}</version>
+</dependency>
+<dependency>
+  <groupId>com.fasterxml.jackson.core</groupId>
+  <artifactId>jackson-annotations</artifactId>
+  <version>${jackson.version}</version>
+</dependency>
+		
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jms</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+
+		 <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-spring</artifactId>
+      <version>5.10.0</version>
+    </dependency>
+  
+  	<dependency>
+    <groupId>net.spy</groupId>
+    <artifactId>spymemcached</artifactId>
+    <version>2.12.1</version>
+</dependency>
+
+     <!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-kahadb-store -->
+<dependency>
+    <groupId>org.apache.activemq</groupId>
+    <artifactId>activemq-kahadb-store</artifactId>
+    <version>5.10.0</version>
+</dependency>
+		
+		<dependency>
+    <groupId>org.apache.activemq</groupId>
+    <artifactId>activemq-leveldb-store</artifactId>
+    <version>5.8.0</version>
+</dependency>
+
+<dependency>
+    <groupId>joda-time</groupId>
+    <artifactId>joda-time</artifactId>
+    <version>2.3</version>
+</dependency>
+
+
+		
+		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+<!-- <dependency> -->
+<!--     <groupId>org.apache.httpcomponents</groupId> -->
+<!--     <artifactId>httpclient</artifactId> -->
+<!--     <version>4.5</version> -->
+<!-- </dependency> -->
+<dependency>
+    <groupId>commons-httpclient</groupId>
+    <artifactId>commons-httpclient</artifactId>
+    <version>3.1</version>
+</dependency>
+
+
+<dependency>
+        <groupId>com.maxmind.geoip</groupId>
+        <artifactId>geoip-api</artifactId>
+        <version>1.3.1</version>
+    </dependency>
+    
+    <dependency>
+    <groupId>org.javamoney</groupId>
+    <artifactId>moneta</artifactId>
+    <version>1.1</version>
+</dependency>
+
+<dependency>
+    <groupId>org.eclipse.persistence</groupId>
+    <artifactId>org.eclipse.persistence.moxy</artifactId>
+    <version>2.5.0</version>
+</dependency>
+	</dependencies>
+  
+  
+  
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <warSourceDirectory>WebContent</warSourceDirectory>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

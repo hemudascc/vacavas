@@ -1,0 +1,111 @@
+@charset "ISO-8859-1";
+html, 
+body {
+    height: 100%;
+}
+body{
+	background-image: linear-gradient(55deg, #436a6b, #07050b);
+}
+.disclaimer
+{    display: flex;
+    flex-direction: column;
+    text-align: left;
+    padding: 0px 0px 0px 10px;
+}
+
+.img-div{
+	padding-top: 10px;
+}
+.center-div {
+    text-align: center;
+    color: white;
+    padding: 10px;
+}
+.text-content {
+    color: #d6b593;
+    text-align: center;
+    padding: 5px;
+}
+.sub-btn {
+    background-color: #54a593;
+    color: #0b1500;
+    border: 1px solid #f6eae1;
+}
+.img-banner{
+	height: 280px;
+	width: 300px;
+	border: 5px solid #739482;
+}
+ul{
+	color: wheat;
+}
+ol {
+    color: #53aedb;
+}
+select#lang {
+    color: #6f9b8b;
+    background-color: #1b141f;
+    width: 77px;
+    height: 25px;
+    border-radius: 5px;
+}
+.modal-header {
+    background-color: #204e50;
+    font-weight: bold;
+    color: #13ccba;
+    text-align: center;
+}
+
+.modal-body {
+    background-color: #436a6b;
+    color: #6ff6d4;
+    padding: 20px 15px 20px 15px;
+}
+footer {
+    text-align: center;
+    padding: 5px;
+    color: #d6b593;
+}
+h4.modal-title {
+    font-weight: bold;
+}
+
+.popup-button {
+    color: #132221;
+    background: #54a593;
+    border: 1px solid #f6eae1;
+}
+
+.popup-button-group {
+    display: flex;
+}
+@media only screen and (max-width: 320px) {
+ ul {
+    list-style-position: inside;
+    padding: 0% 0% 0% 2%;
+   }
+}
+
+@media only screen and (max-width: 320px) {
+ ul {
+    list-style-position: inside;
+    padding: 0% 0% 0% 2%;
+   }
+}
+
+@media screen and (max-width: 425px) and (min-width: 321px) {
+ul {
+    list-style-position: inside;
+    padding: 0% 0% 0% 10%;
+   }
+}
+@media screen and (max-width: 768px) and (min-width: 426px) {
+ul{
+  padding: 0% 0% 0% 18%;
+}
+}
+@media only screen and (min-width: 769px) {
+ul{
+  padding: 0% 0% 0% 30%;
+}
+}

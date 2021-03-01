@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jms="http://www.springframework.org/schema/jms"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans      http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+       http://www.springframework.org/schema/context    http://www.springframework.org/schema/context/spring-context-3.2.xsd
+       http://www.springframework.org/schema/jms        http://www.springframework.org/schema/jms/spring-jms-3.0.xsd
+       http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd
+           ">
+
+	<bean id="connectionFactory"
+		class="org.apache.activemq.ActiveMQConnectionFactory"
+		p:brokerURL="${acmq.brokerurl}" p:useAsyncSend="true" />
+
+	<bean id="cachedConnectionFactory"
+		class="org.springframework.jms.connection.CachingConnectionFactory"
+		p:targetConnectionFactory-ref="connectionFactory"
+		p:sessionCacheSize="700" />
+
+
+	<bean id="adnetworkTokenJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="vacavas/adnetworkTokenQueue" />
+		<qualifier value="adnetworkTokenJMSTemplate" />
+	</bean>
+
+	<bean id="adnetworkTokenDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="vacavas/adnetworkTokenQueue?consumer.prefetchSize=300" />
+	</bean>
+	<bean id="adnetworkTokenListenerListener"
+		class="net.common.jms.JMSAdnetworkTokenListener" />
+
+	<bean id="objectSaveJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="vacavas/objectSaveQueue" />
+		<qualifier value="objectSaveJMSTemplate" />
+	</bean>
+
+	<bean id="objectSaveDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="vacavas/objectSaveQueue?consumer.prefetchSize=10" />
+	</bean>
+	<bean id="objectSaveListener"
+		class="net.common.jms.JMSObjectSaveListener" />
+
+	<!-- tpay start -->
+	<bean id="tpayNotificationJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="vacavas/tpayNotificationQueue" />
+		<qualifier value="tpayNotificationJMSTemplate" />
+	</bean>
+
+	<bean id="tpayNotificationDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="vacavas/tpayNotificationQueue?consumer.prefetchSize=3" />
+	</bean>
+	<bean id="tpayNotificationListener"
+		class="net.mycomp.tpay.JMSTpayNotificationListener" />
+	<!-- tpay end -->
+
+	<!-- Actel Start -->
+	<bean id="actelDlrJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="vacavas/acteldlrQueue" />
+		<qualifier value="actelDlrJMSTemplate" />
+	</bean>
+	<bean id="actelDlrDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="vacavas/acteldlrQueue?consumer.prefetchSize=3" />
+	</bean>
+	<bean id="actelDlrListener"
+		class="net.mycomp.actel.JMSActelDlrListener" />
+
+	<!-- Actel End -->
+
+
+	<!-- Mobimind Start -->
+	<bean id="mobimindNotificationJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="vacavas/mobimindNotificationQueue" />
+		<qualifier value="mobimindNotificationJMSTemplate" />
+	</bean>
+	<bean id="mobimindNotificationDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="vacavas/mobimindNotificationQueue?consumer.prefetchSize=3" />
+	</bean>
+	<bean id="mobimindNotificationListener"
+		class="net.mycomp.mobimind.JMSMobimindNotificationListener" />
+
+	<!-- Mobimind End -->
+
+	<!-- Start Intarget Operator -->
+	<bean id="intargetOnResultJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="vaca/intargetOnResultQueue" />
+		<qualifier value="intargetOnResultJMSTemplate" />
+	</bean>
+
+	<bean id="intargetOnResultDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="vaca/intargetOnResultQueue?consumer.prefetchSize=3" />
+	</bean>
+	<bean id="intargetOnResultListener"
+		class="net.mycomp.intarget.JMSIntargetOnResultListener" />
+
+
+	<bean id="intargetOnReceiveSMSJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="vaca/intargetOnReceiveSMSQueue" />
+		<qualifier value="intargetOnReceiveSMSJMSTemplate" />
+	</bean>
+	<bean id="intargetOnReceiveSMSDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="vaca/intargetOnReceiveSMSQueue?consumer.prefetchSize=3" />
+	</bean>
+	<bean id="intargetOnReceiveSMSListener"
+		class="net.mycomp.intarget.JMSIntargetOnReceiveSMSListener" />
+
+	<!-- -END Intarget Operator -->
+	<!-- Start Message Cloud Gateway -->
+	<bean id="mcgMOMessageJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="vaca/mcgMOMessageQueue" />
+		<qualifier value="mcgMOMessageJMSTemplate" />
+	</bean>
+
+	<bean id="mcgMOMessageDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/mcgMOMessageQueue?consumer.prefetchSize=3" />
+	</bean>
+	<bean id="mcgMOMessageListener"
+		class="net.mycomp.messagecloud.gateway.JMSMCGMOMessageListener" />
+
+
+	<bean id="mcgDeliveryReportJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="vaca/mcgDeliveryReportQueue" />
+		<qualifier value="mcgDeliveryReportJMSTemplate" />
+	</bean>
+	<bean id="mcgDeliveryReportDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/mcgDeliveryReportQueue?consumer.prefetchSize=3" />
+	</bean>
+	<bean id="mcgDeliveryReportListener"
+		class="net.mycomp.messagecloud.gateway.JMSMCGDeliveryReportListener" />
+
+	<bean id="mcgRenewalMessageJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="vaca/mcgRenewalMessageQueue" />
+		<qualifier value="mcgRenewalMessageJMSTemplate" />
+	</bean>
+	<bean id="mcgRenewalMessageDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="vaca/mcgRenewalMessageQueue?consumer.prefetchSize=3" />
+	</bean>
+	<bean id="mcgRenewalMessageListener"
+		class="net.mycomp.messagecloud.gateway.JMSMCGRenewalMessageListener" />
+	<!-- End Message Cloud Gateway -->
+
+	<!-- Mondia Pay Start -->
+	<bean id="mondiaPayNotificationJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="vacavas/mondiaPayNotificationQueue" />
+		<qualifier value="mondiaPayNotificationJMSTemplate" />
+	</bean>
+
+	<bean id="mondiaPayNotificationDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="vacavas/mondiaPayNotificationQueue?consumer.prefetchSize=3" />
+	</bean>
+	
+	<bean id="mondiaPayNotificationListener"
+		class="net.mycomp.mondiapay.JMSMondiaPayNotificationListener" />
+	<!-- Mondia Pay End -->
+	
+	<!-- Comviva Ooredoo Start-->
+			<bean id="oredooKuwaitCGCallbackJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="vacavas/oredooKuwaitCGCallbackQueue" />
+		<qualifier value="oredooKuwaitCGCallbackJMSTemplate" />
+	</bean>
+
+	<bean id="oredooKuwaitCGCallbackDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="vacavas/oredooKuwaitCGCallbackQueue?consumer.prefetchSize=3" />
+	</bean>
+	<bean id="oredooKuwaitCGCallbackListener"
+		class="net.mycomp.oredoo.kuwait.JMSOredooKuwaitCGCallbackListener" />
+
+	<bean id="oredooKuwaitCGNotificationJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="vacavas/oredooKuwaitCGNotificationQueue" />
+		<qualifier value="oredooKuwaitCGNotificationJMSTemplate" />
+	</bean>
+
+	<bean id="oredooKuwaitCGNotificationDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="vacavas/oredooKuwaitCGNotificationQueue?consumer.prefetchSize=3" />
+	</bean>
+	<bean id="oredooKuwaitCGNotificationListener"
+		class="net.mycomp.oredoo.kuwait.JMSOredooKuwaitCGNotificationListener" />
+	<!-- Comviva Ooredoo End-->
+	
+	<jms:listener-container container-type="default"
+		connection-factory="cachedConnectionFactory" acknowledge="auto"
+		concurrency="5-340">
+		<jms:listener destination="vacavas/adnetworkTokenQueue"
+			ref="adnetworkTokenListenerListener" method="onMessage" />
+
+		<jms:listener destination="vacavas/objectSaveQueue"
+			ref="objectSaveListener" method="onMessage" />
+
+		<jms:listener destination="vacavas/tpayNotificationQueue"
+			ref="tpayNotificationListener" method="onMessage" />
+
+		<jms:listener destination="vacavas/acteldlrQueue"
+			ref="actelDlrListener" method="onMessage" />
+		<jms:listener
+			destination="vacavas/mobimindNotificationQueue"
+			ref="mobimindNotificationListener" method="onMessage" />
+
+		<jms:listener destination="vaca/mcgMOMessageQueue"
+			ref="mcgMOMessageListener" method="onMessage" />
+
+		<jms:listener destination="vaca/mcgDeliveryReportQueue"
+			ref="mcgDeliveryReportListener" method="onMessage" />
+
+		<jms:listener destination="vaca/mcgRenewalMessageQueue"
+			ref="mcgRenewalMessageListener" method="onMessage" />
+		<jms:listener destination="vaca/intargetOnResultQueue"
+			ref="intargetOnResultListener" method="onMessage" />
+
+		<jms:listener
+			destination="vaca/intargetOnReceiveSMSQueue"
+			ref="intargetOnReceiveSMSListener" method="onMessage" />
+
+		<jms:listener destination="vacavas/mondiaPayNotificationQueue"
+			ref="mondiaPayNotificationListener" method="onMessage" />
+		
+		<jms:listener
+			destination="vacavas/oredooKuwaitCGNotificationQueue"
+			ref="oredooKuwaitCGNotificationListener" method="onMessage" />
+			
+		<jms:listener
+			destination="vacavas/oredooKuwaitCGCallbackQueue"
+			ref="oredooKuwaitCGCallbackListener" method="onMessage" />
+
+	</jms:listener-container>
+</beans>

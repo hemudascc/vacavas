@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+	
+	<persistence-unit name="vacavas">
+	    <class>net.persist.bean.AbsractChargingCallBack</class>
+	    <class>net.persist.bean.AdnetworkCircleCappingConfig</class>
+	    <class>net.persist.bean.AdnetworkOperatorConfig</class>
+	    <class>net.persist.bean.AdnetworkToken</class>
+		<class>net.persist.bean.AdnetworkTypeConfig</class>
+		<class>net.persist.bean.Adnetworks</class>
+		<class>net.persist.bean.BlockCircle</class>
+		<class>net.persist.bean.BlockSeries</class>
+		<class>net.persist.bean.CampaignDetails</class>
+		<class>net.persist.bean.Circleid</class>
+		<class>net.persist.bean.DuplicateRequest</class>
+		<class>net.persist.bean.ErrorInfo</class>
+		<class>net.persist.bean.IPPool</class>
+		<class>net.persist.bean.Operator</class>
+		<class>net.persist.bean.OperatorCircles</class>
+		<class>net.persist.bean.Otp</class>
+		<class>net.persist.bean.Service</class>
+		<class>net.persist.bean.SubscriberReg</class>
+	    <class>net.persist.bean.VWCircleInfo</class>
+		<class>net.persist.bean.VWServiceCampaignDetail</class>
+		<class>net.persist.bean.Aggregator</class>
+		<class>net.persist.bean.Country</class>
+		<class>net.persist.bean.Product</class>
+		<class>net.persist.bean.VWAdnetworkOperatorConfig</class>	
+		<class>net.persist.bean.CallbackDump</class>
+		<class>net.persist.bean.VWCallbackDump</class>	
+		<!-- Tpay Start-->
+		<class>net.mycomp.tpay.TpayServiceConfig</class>
+		<class>net.mycomp.tpay.TpayRequest</class>
+		<class>net.mycomp.tpay.TpayNotification</class>
+		<!-- <class>net.mycomp.tpay.TpayTrans</class> -->
+		<!-- Tpay End -->
+		<!-- Actel Start -->
+		<class>net.mycomp.actel.ActelDlr</class>
+		<class>net.mycomp.actel.ActelSms</class>
+		<class>net.mycomp.actel.ActelServiceConfig</class>
+		<class>net.mycomp.actel.ActelApiTrans</class>
+		<class>net.mycomp.actel.ActelHECallback</class>
+		<!-- Actel End -->
+		
+		<!-- mobimind start -->
+		<class>net.mycomp.mobimind.MobimindCGCallback</class>
+		<class>net.mycomp.mobimind.MobimindNotification</class>
+		<class>net.mycomp.mobimind.MobimindServiceConfig</class>
+		<!-- mobimind end -->
+		
+		<!-- message cloud start -->
+		<class>net.mycomp.messagecloud.gateway.MccMncNetwork</class>
+		<class>net.mycomp.messagecloud.gateway.MCGDeliveryReport</class>
+		<class>net.mycomp.messagecloud.gateway.MCGFallbackPricePointConfig</class>
+		<class>net.mycomp.messagecloud.gateway.MCGMoMessage</class>
+		<class>net.mycomp.messagecloud.gateway.MCGMTMessage</class>
+		<class>net.mycomp.messagecloud.gateway.MCGServiceConfig</class>
+		<class>net.mycomp.messagecloud.MessageCloudServiceConfig</class>
+		<!-- message cloud end -->
+		
+		<!-- intarget start -->
+		<class>net.mycomp.intarget.InTargetConfig</class>
+		<class>net.mycomp.intarget.IntargetNotification</class>
+		<class>net.mycomp.intarget.IntargetOnReceiveSMSNotification</class>
+		<class>net.mycomp.intarget.IntargetOnResultNotification</class>
+		<class>net.mycomp.intarget.InTargetUssdTrans</class>
+		<!-- intarget end -->
+		<!-- mondia pay start-->
+		<class>net.mycomp.mondiapay.MondiaPayTrans</class>
+		<class>net.mycomp.mondiapay.MondiaPayCgCallback</class>
+		<class>net.mycomp.mondiapay.MondiaPayNotification</class>
+		<!-- mondia pay end-->
+		<!-- comviva kuwait start --> 
+			<class>net.mycomp.oredoo.kuwait.OoredooKuwaitCGTrans</class>
+			<class>net.mycomp.oredoo.kuwait.OredoKuwaitFallbackPricePoint</class>
+			<class>net.mycomp.oredoo.kuwait.OredooKuwaitCGCallback</class>
+			<class>net.mycomp.oredoo.kuwait.OredooKuwaitCGNotification</class>
+			<class>net.mycomp.oredoo.kuwait.OredooKuwaitOCSLogDetail</class>
+			<class>net.mycomp.oredoo.kuwait.OredooKuwaitServiceConfig</class>
+		<!-- comviva kuwait end -->
+		<!-- altruist start -->
+		<class>net.mycomp.altruist.AltruistServiceConfig</class>
+		<class>net.mycomp.altruist.AltruistTrans</class>
+		<!-- altruist end -->
+		    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+		<validation-mode>NONE</validation-mode>
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+			<property name="hibernate.show_sql" value="false" />
+			<property name="openjpa.jdbc.TransactionIsolation" value="read-committed" />
+		</properties>
+	</persistence-unit>
+</persistence>

@@ -1,0 +1,122 @@
+body{
+	margin: auto;
+    display: block;
+	font-family:Arial, Helvetica, sans-serif;
+	background: rgba(25,118,210,1);
+	background: -moz-linear-gradient(top, rgba(25,118,210,1) 0%, rgba(26,35,126,1) 100%);
+	background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(25,118,210,1)), color-stop(100%, rgba(26,35,126,1)));
+	background: -webkit-linear-gradient(top, rgba(25,118,210,1) 0%, rgba(26,35,126,1) 100%);
+	background: -o-linear-gradient(top, rgba(25,118,210,1) 0%, rgba(26,35,126,1) 100%);
+	background: -ms-linear-gradient(top, rgba(25,118,210,1) 0%, rgba(26,35,126,1) 100%);
+	background: linear-gradient(to bottom, rgba(25,118,210,1) 0%, rgba(26,35,126,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1976d2', endColorstr='#1a237e', GradientType=0 );
+}
+#main{
+	width: 90%;
+    max-width: 600px;
+    height: auto;
+    margin: auto;
+    background: #fff;
+    border:1px solid #a9a9a9;
+	margin-top:10px;
+	margin-bottom: 20px;
+	min-height: 500px;
+}
+h3{
+	font-size: 12px;
+    margin: auto;
+    color: #000;
+    text-align: center;
+    margin-top: 10px;
+	margin-bottom: 5px;
+}
+.banner{
+	width:100%;
+	margin:auto;
+}
+.banner img{
+	max-width:100%;
+}
+.buttonbar{
+	width:100%;
+	margin:auto;
+	text-align:center;
+	padding-top: 5px;
+}
+.button {
+    padding: 11px 25px;
+    font-size: 24px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: #fff;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+    width: 99%;
+     max-width: 160px;
+    background: #009ecf;
+    
+}
+.button a{
+	color: #fff;
+    font-weight: bold;
+    text-decoration: none;
+    
+}
+.terms{
+	width: 90%;
+    text-align: justify;
+    margin: auto;
+    padding-top: 8px;
+    font-size: 12px;
+	line-height: 1.5em;
+	padding-bottom:10px;
+}
+.input{
+    width: 100%;
+    margin: auto;
+    padding-top: 10px;
+    font-size: 12px;
+    font-weight: bold;
+}
+h2{
+	width:100%;
+	margin:auto;
+	font-size:14px;
+	padding-top:10px;
+	text-decoration:underline;
+}
+header{
+		width:100%;
+		margin:auto;
+		text-align:center;
+		margin-top: 10px;
+}
+header img{
+		max-width:100%;
+}
+h4 {
+   color: #054199;
+    margin: auto;
+    /* padding: 5px; */
+    text-align: center;
+    padding-top: 20px;
+}
+p{
+	padding: 10px;
+    text-align: justify;
+    font-size: 12px;
+	margin: auto;
+	line-height: 2em;
+}
+	
+.frm1{
+display: block;
+text-align: center;
+margin: auto;
+width: 140px;
+position: relative;
+left: -3%;
+}
+	

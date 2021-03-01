@@ -1,0 +1,3 @@
+function sessionToken(){
+	return "HEMU";
+}

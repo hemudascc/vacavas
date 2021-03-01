@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:jms="http://www.springframework.org/schema/jms"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	 xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans      http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+       http://www.springframework.org/schema/mvc        http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+       http://www.springframework.org/schema/context    http://www.springframework.org/schema/context/spring-context-3.2.xsd
+       http://www.springframework.org/schema/tx         http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+       http://www.springframework.org/schema/task      http://www.springframework.org/schema/task/spring-task-3.0.xsd
+       http://www.springframework.org/schema/cache     http://www.springframework.org/schema/cache/spring-cache-3.1.xsd
+       http://www.springframework.org/schema/jms        http://www.springframework.org/schema/jms/spring-jms-3.0.xsd
+       http://www.springframework.org/schema/data/jpa   http://www.springframework.org/schema/data/jpa/spring-jpa.xsd 
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd ">
+
+
+<import resource="jms-context.xml"/>
+<context:component-scan	base-package="net.*" />
+  <jpa:repositories base-package="net.jpa.repository" />	
+	<mvc:annotation-driven />
+	<task:annotation-driven scheduler="poolScheduler"/>
+	<task:scheduler id="poolScheduler" pool-size="10"/>
+	<mvc:default-servlet-handler />
+	 
+	 
+	<context:property-placeholder
+		location="
+		classpath:properties/services.properties,
+		classpath:properties/db.properties,
+		classpath:properties/actel.properties,
+		classpath:properties/mobimind_service.properties,
+		classpath:properties/intarget.properties,		
+		classpath:properties/message_cloud_gateway.properties,
+		classpath:properties/mondiapay.properties,
+		classpath:properties/oredoo_kuwait.properties
+		" />
+	
+<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="timeBetweenEvictionRunsMillis" value="600000" />
+		<property name="numTestsPerEvictionRun" value="6" />
+		<property name="minEvictableIdleTimeMillis" value="1800000" />
+		<property name="initialSize" value="3" />
+		<property name="maxActive" value="200" />
+		<property name="maxIdle" value="50" />
+		<property name="maxWait" value="10000" />
+		<property name="poolPreparedStatements" value="true" />
+		<property name="maxOpenPreparedStatements" value="100" />
+		<property name="defaultTransactionIsolation" value="2" />
+	</bean>
+
+	<bean id="persistenceUnitManager"
+		class="org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager">
+		<property name="persistenceXmlLocations">
+			<list>
+				<value>classpath*:META-INF/persistence.xml</value>
+			</list>
+		</property>
+		<property name="defaultDataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="persistenceUnitManager" ref="persistenceUnitManager" />
+		<property name="persistenceUnitName" value="vacavas" />
+		<property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
+	</bean>
+
+	<bean id="jpaVendorAdapter"
+		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+		<property name="database" value="MYSQL" />
+		<property name="showSql" value="false" />
+		<property name="generateDdl" value="true" />
+		<property name="databasePlatform" value="org.hibernate.dialect.MySQLDialect" />
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	
+	
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+
+	
+	
+	<bean id="commonDao" class="net.dao.CommonDaoImpl">			
+			<constructor-arg name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="jedisConnectionFactory" 
+ class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+  p:use-pool="true" />  
+  
+<bean id="stringRedisTemplate" 
+  class="org.springframework.data.redis.core.StringRedisTemplate" 
+  p:connection-factory-ref="jedisConnectionFactory"/>
+  
+  
+   <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+    <property name="connectionFactory" ref="jedisConnectionFactory" />
+    <property name="valueSerializer">
+        <bean id="jackson2JsonRedisSerializer" 
+                        class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer">
+         </bean>   
+    </property>
+</bean>
+
+<bean id="redisTemplateInt" class="org.springframework.data.redis.core.RedisTemplate">
+    <property name="connectionFactory" ref="jedisConnectionFactory" />   
+  
+</bean>
+
+<bean id="blockSeriesJedisConnectionFactory" 
+ class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+  p:use-pool="true" p:timeout="30" p:database="0">
+   
+  </bean>  
+  
+<bean id="blockSeriesStringRedisTemplate" 
+  class="org.springframework.data.redis.core.StringRedisTemplate" 
+  p:connection-factory-ref="blockSeriesJedisConnectionFactory">
+  </bean>
+  <bean id="commonScheduler" class="net.scheduler.CommonScheduler"/> 
+  <bean id="mcgRenewalScheduler" class="net.mycomp.messagecloud.gateway.MCGRenewalScheduler"/>
+ </beans>
+ 
+ 
