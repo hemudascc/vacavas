@@ -69,7 +69,7 @@ public class AltruistApiService {
 			requestMap.put("channel", chennel);
 			requestMap.put("sourceIP", "");
 			requestMap.put("sourceIP", "");
-			requestMap.put("adPartnerName", "Collectcent");
+			requestMap.put("adPartnerName", "Google ads");
 			requestMap.put("pubId", "2");
 			String requestJson = JsonMapper.getObjectToJson(requestMap);
 			altruistTrans.setRequest("request url: "+pinSendURL+" requestMap: "+requestJson+"headers"+headerMap);
@@ -120,8 +120,7 @@ public class AltruistApiService {
 			requestMap.put("packageId", AltruistUtil.encrypt(Objects.toString(altruistServiceConfig.getPackageId())));
 			requestMap.put("channel", chennel);
 			requestMap.put("sourceIP", "");
-			requestMap.put("sourceIP", "");
-			requestMap.put("adPartnerName", "Collectcent");
+			requestMap.put("adPartnerName", "Google ads");
 			requestMap.put("pubId", "2");
 			requestMap.put("pin", AltruistUtil.encrypt(pin));
 			requestMap.put("token", AltruistUtil.encrypt(Objects.toString(redisCacheService.getCacheValue(AltruistConstant.ALTRUIST_UNIQUE_TOKEN_PREFIX+msisdn))));
@@ -183,9 +182,29 @@ public class AltruistApiService {
 		return "0";
 	}
 	
-	private String smsPush(String msisdn,String action,String token) {
-		//TODO
-		return null;
+	public String smsPush(String msisdn,String action,String token) {
+		AltruistTrans altruistTrans = new AltruistTrans(true);
+		CGToken cgToken = new CGToken(token);
+		try {
+			VWServiceCampaignDetail vwServiceCampaignDetail = MData.mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
+			AltruistServiceConfig altruistServiceConfig = AltruistConstant.mapServiceIdToAltruistServiceConfig.get(vwServiceCampaignDetail.getServiceId());
+			String sms=AltruistConstant.getSms(action, altruistServiceConfig);
+			altruistTrans.setMsisdn(msisdn);
+			altruistTrans.setRequestType(AltruistConstant.SEND_SMS);
+			String url = smsPushURL.replaceAll("username", altruistServiceConfig.getUserName())
+					.replaceAll("<password>", altruistServiceConfig.getPassword())
+					.replaceAll("<msisdn>", msisdn)
+					.replaceAll("<message>", sms);
+			altruistTrans.setRequest("request url: "+url);
+			HTTPResponse  httpResponse = httpURLConnectionUtil.makeHTTPGETRequest(url, null);
+			altruistTrans.setResponseCode(httpResponse.getResponseCode());
+			altruistTrans.setResposne(httpResponse.getResponseStr());
+		} catch (Exception e) {
+			logger.error("error while sending sms to msisdn="+msisdn);
+		}finally {
+			daoService.saveObject(altruistTrans);
+		}	
+		return "1";
 	}
 	
 }

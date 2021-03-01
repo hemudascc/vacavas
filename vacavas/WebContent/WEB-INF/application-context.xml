@@ -36,7 +36,8 @@
 		classpath:properties/intarget.properties,		
 		classpath:properties/message_cloud_gateway.properties,
 		classpath:properties/mondiapay.properties,
-		classpath:properties/oredoo_kuwait.properties
+		classpath:properties/oredoo_kuwait.properties,
+		classpath:properties/altruist.properties
 		" />
 	
 <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"

@@ -24,9 +24,9 @@ body{
 }
 </style>
 <body>
-	<form>
+	<form action="${pageContext.request.contextPath}/sys/altr/send-pin" method="post">
 		<!-- Hidden Parameters Start -->
-		<input id="token" value="${token}" type="hidden">
+		<input id="token" name="token" value="${token}" type="hidden">
 		<!-- Hidden Parameters End -->
 		<!-- Body Start -->
 		<p>Free for 1 day then AED ${altruistServiceConfig.price} per
@@ -38,8 +38,8 @@ body{
 				alt="${altruistServiceConfig.serviceName}">
 		</div>
 		<h3>${altruistServiceConfig.serviceName}</h3>
-		<p>Enter your Etisalat Mobile number to receive OTP</p>
-		<input type="text" name="msisdn" id="msisdn" placeholder="05XXXXXXXX" style="width: 200px;height: 30px;margin: 0px 0px 5px 0px;">
+		<p>${msg}</p>
+		<input type="text" name="msisdn" id="msisdn" placeholder="971XXXXXXXX" style="width: 200px;height: 30px;margin: 0px 0px 5px 0px;">
 		<br>
 		<button id="subscribe" type="submit" class="btn btn-success">Subscribe</button>
 		<button id="exit" class="btn btn-danger">Exit</button>

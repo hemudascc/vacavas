@@ -13,4 +13,21 @@ public interface AltruistConstant {
 	String UNSUBSCRIBE="UNSUBSCRIBE";
 	String SEND_SMS="SEND_SMS";
 	
+	
+	static String getSms(String action,AltruistServiceConfig altruistServiceConfig){
+		String sms="";
+		switch (action) {
+		case PIN_VERIFY:
+			sms = altruistServiceConfig.getWelcomeMessage();
+			break;
+		case UNSUBSCRIBE:
+			sms = altruistServiceConfig.getUnsubscribeMessage();
+			break;
+		default:
+			sms = altruistServiceConfig.getAlreadySubscribeMessage();
+			break;
+		}
+		return sms;
+	}
+	
 }

@@ -43,6 +43,7 @@ public class AltruistService extends AbstractOperatorService{
 		adNetworkRequestBean.adnetworkToken.setAction(MConstants.REDIRECT_TO_CG);
 		modelAndView.addObject("token", adNetworkRequestBean.adnetworkToken.getTokenToCg());
 		modelAndView.addObject("altruistServiceConfig", altruistServiceConfig);
+		modelAndView.addObject("msg", "Enter your Etisalat Mobile number to receive OTP");
 		modelAndView.setViewName("altruist/lp");
 		return true;
 	}
