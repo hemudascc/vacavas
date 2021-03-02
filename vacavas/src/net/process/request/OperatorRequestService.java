@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import net.mycomp.actel.ActelService;
 import net.mycomp.altruist.AltruistService;
+import net.mycomp.macrokiosk.thailand.ThialandService;
 import net.mycomp.messagecloud.gateway.MCGService;
 import net.mycomp.mobimind.MobimindService;
 import net.mycomp.mondiapay.MondiaPayService;
@@ -53,6 +54,10 @@ public class OperatorRequestService implements IOperatorService{
 	@Qualifier("altruistService")
 	private AltruistService altruistService;
 	
+	@Autowired
+	@Qualifier("thialandService")
+	private ThialandService thialandService;
+	
 	private IOperatorService findProcessRequest(int opId){
 		
 		IOperatorService ioperatorService=null;
@@ -89,6 +94,10 @@ public class OperatorRequestService implements IOperatorService{
 		}
 		case MConstants.ALTRUIST_ETISALAT_UAE_OPERATOR_ID:{
 			ioperatorService=altruistService;
+			break;
+		}
+		case MConstants.MICROKIOSK_AIS_OPERATOR_ID:{
+			ioperatorService=thialandService;
 			break;
 		}
 		default:	{

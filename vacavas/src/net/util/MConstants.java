@@ -31,7 +31,8 @@ public interface MConstants {
 	public static final int MONDIA_PAY_MTN_OPERATOR_ID = 12;
 	public static final int OREDOO_KUWAIT_OPERATOR_ID=13;
 	public static final int ALTRUIST_ETISALAT_UAE_OPERATOR_ID=14;
-
+	public static final int MICROKIOSK_AIS_OPERATOR_ID=15;
+	  
 	public static final String CMPID="evid";
 	public static final String ACTIVE="ACTIVE";
 	public static final String INACTIVE="INACTIVE";

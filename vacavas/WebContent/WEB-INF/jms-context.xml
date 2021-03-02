@@ -256,6 +256,72 @@
 	<bean id="oredooKuwaitCGNotificationListener"
 		class="net.mycomp.oredoo.kuwait.JMSOredooKuwaitCGNotificationListener" />
 	<!-- Comviva Ooredoo End-->
+	<!-- Start Macrokiosk Thailand  -->
+	<bean id="thMoMessageJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/thMoMessageQueue" />
+		<qualifier value="thMoMessageJMSTemplate" />
+	</bean>
+	<bean id="thMoMessageDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/thMoMessageQueue?consumer.prefetchSize=3" />
+	</bean>
+	<bean id="thMoMessageListener"
+		class="net.mycomp.macrokiosk.thailand.JMSTHMOMessageListener" />
+
+	<bean id="thMtMessageJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/thMtMessageQueue" />
+		<qualifier value="thMtMessageJMSTemplate" />
+	</bean>
+	<bean id="thMtMessageDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/thMtMessageQueue?consumer.prefetchSize=3" />
+	</bean>
+	<bean id="thMtMessageListener"
+		class="net.mycomp.macrokiosk.thailand.JMSTHMTMessageListener" />
+
+	<bean id="thialandRenewalMessageJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/thialandRenewalMessageQueue" />
+		<qualifier value="thialandRenewalMessageJMSTemplate" />
+	</bean>
+	<bean id="thialandRenewalMessageDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/thialandRenewalMessageQueue?consumer.prefetchSize=3" />
+	</bean>
+	<bean id="thialandRenewalMessageListener"
+		class="net.mycomp.macrokiosk.thailand.JMSThialandRenewalMessageListener" />
+
+
+	<bean id="thDlnMessageJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/thDlnMessageQueue" />
+		<qualifier value="thDlnMessageJMSTemplate" />
+	</bean>
+	<bean id="thDlnMessageDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/thDlnMessageQueue?consumer.prefetchSize=3" />
+	</bean>
+	<bean id="thDlnMessageListener"
+		class="net.mycomp.macrokiosk.thailand.JMSTHDNListener" />
+	<!--END Macrokiosk Thailand -->
 	
 	<jms:listener-container container-type="default"
 		connection-factory="cachedConnectionFactory" acknowledge="auto"
@@ -300,6 +366,19 @@
 		<jms:listener
 			destination="vacavas/oredooKuwaitCGCallbackQueue"
 			ref="oredooKuwaitCGCallbackListener" method="onMessage" />
+		<!-- Macrokiosk Thailand Start -->
+			<jms:listener destination="cc/thMoMessageQueue"
+			ref="thMoMessageListener" method="onMessage" />
 
+		<jms:listener destination="cc/thMtMessageQueue"
+			ref="thMtMessageListener" method="onMessage" />
+
+		<jms:listener
+			destination="cc/thialandRenewalMessageQueue"
+			ref="thialandRenewalMessageListener" method="onMessage" />
+
+		<jms:listener destination="cc/thDlnMessageQueue"
+			ref="thDlnMessageListener" method="onMessage" />
+		<!-- Macrokiosk  Thailand End-->	
 	</jms:listener-container>
 </beans>

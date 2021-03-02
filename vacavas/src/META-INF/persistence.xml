@@ -82,6 +82,13 @@
 		<class>net.mycomp.altruist.AltruistServiceConfig</class>
 		<class>net.mycomp.altruist.AltruistTrans</class>
 		<!-- altruist end -->
+		<!-- macrokiosk thailand start -->
+			<class>net.mycomp.macrokiosk.thailand.DeliveryNotification</class>
+			<class>net.mycomp.macrokiosk.thailand.THConfig</class>
+			<class>net.mycomp.macrokiosk.thailand.THMOMessage</class>
+			<class>net.mycomp.macrokiosk.thailand.THMTMessage</class>
+			<class>net.mycomp.macrokiosk.thailand.ThiaHeCallbackTrans</class>
+		<!-- macrokiosk thailand end -->
 		    <exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<validation-mode>NONE</validation-mode>
 		<properties>
