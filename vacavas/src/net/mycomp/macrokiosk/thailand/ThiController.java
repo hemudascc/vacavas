@@ -210,12 +210,12 @@ public class ThiController {
 							.replace("<configid>", ""+thConfig.getId())
 							.replace("<refid>", token);
 					modelAndView.clear();
-					modelAndView.setView(new RedirectView(url));
+					modelAndView.setView(new RedirectView(url));    
 				}else{
 				  modelAndView.setViewName(thConfig.getLpPages());	
-				}
+				} 
 				  modelAndView.addObject("token",token);
-				return modelAndView;
+				return modelAndView;  
 			}else{
 				logger.info("  callBackUrl:: redirect to :: "+MConstants.REDIRECT_TO_WASTE_URL_ALREADY_SUBSCRIBED);
 				return new ModelAndView(new RedirectView(thConfig.getPortalUrl()+"?msisdn="+msisdn));

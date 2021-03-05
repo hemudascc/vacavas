@@ -198,10 +198,10 @@ function xyz(){
 <div id="main">
 	<div id="bannerbox">
       <a href="#" onclick="xyz();"><span id="close"><img src="${pageContext.request.contextPath}/resources/th/image/close.png"></span></a>
-      <img src="${pageContext.request.contextPath}/resources/th/image/gameshub.png"/>
+      <img src="${pageContext.request.contextPath}/resources/th/image/gameshub_banner.png"/>
      </div>
      
-    <div class="content">
+    <div class="content">  
         	
         	
             	<input type="hidden" name="refid" value="${refid}"/>
@@ -209,15 +209,14 @@ function xyz(){
                
                
          <div class="loginbar">
-           <p>บริการ GAMESHUB</p>
+           <p>บริการ GamesHub อัตราค่าบริการ 5บาทต่อ SMS คุณจะได้รับ 2SMS ต่อ วัน</p>
            
          	<input type="submit" id="frm1_WebManager" value="สมัครบริการ" 
          	style="height:40px; width:150px;  background:#000; color: #fff; border-radius:10px; font-weight:bold; font-size:18px;"/>
-             <p>บริการ Game HTML</p>
-             <p>โดยท่านจะได้รับ SMS วันละ 2 ข้อความ</p>            
-             <p>ยกเลิกพิมพ์ STOP GHUB ส่งมาที่ 4541268</p>
-             <p>ค่าบริการ 5 บาท (ไม่รวมภาษีและค่าเชื่อมต่ออินเตอร์เน็ต)</p>
-             <p> สอบถาม : (66)021158814, 9.00 – 18.00 (จันทร์ – ศุกร์)</p>
+               
+             <p>หรือสมัครโดยพิมพ์ GHUBส่งมาที่ 4541268 หรือ โทร *454111601</p>
+             <p>ยกเลิกพิมพ์ STOP GHUB สง่ มาที่ 4541268 หรือ โทร *454111698</p>
+             <p>สอบถามโทร 02-1158814 (9:00 – 18:00, จันทร์ – ศุกร์)</p>
             
 	  </div>
      </div>

@@ -107,13 +107,13 @@ public class OredoKuwaitService extends AbstractOperatorService {
 					.collect(Collectors.toMap(p -> p.getComvivaServiceId()+p.getPlanId(), p -> p)));
 				
 		
-		  List<OredoKuwaitFallbackPricePoint> listOredoKuwaitFallbackPricePoint =
-		  jpaOredooKuwaitFallbackPricePoint.findEnableOredoKuwaitFallbackPricePoint(
-		  true);
-		  OredoKuwaitConstant.mapServiceIdToListOredoKuwaitFallbackPricePoint.putAll(
-		  listOredoKuwaitFallbackPricePoint.stream().collect(
-		  Collectors.groupingBy(OredoKuwaitFallbackPricePoint::getServiceId,
-		  HashMap::new, Collectors.toCollection(ArrayList::new))));
+//		  List<OredoKuwaitFallbackPricePoint> listOredoKuwaitFallbackPricePoint =
+//		  jpaOredooKuwaitFallbackPricePoint.findEnableOredoKuwaitFallbackPricePoint(
+//		  true);
+//		  OredoKuwaitConstant.mapServiceIdToListOredoKuwaitFallbackPricePoint.putAll(
+//		  listOredoKuwaitFallbackPricePoint.stream().collect(
+//		  Collectors.groupingBy(OredoKuwaitFallbackPricePoint::getServiceId,
+//		  HashMap::new, Collectors.toCollection(ArrayList::new))));
 		 
 			OredoKuwaitConstant.oredooKuwaitOCSLogDetailId.set(
 					daoService.findNextAutoIncrementId("tb_oredoo_kuwait_ocs_log_detail", dbName));
