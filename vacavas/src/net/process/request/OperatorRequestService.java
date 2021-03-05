@@ -26,19 +26,19 @@ public class OperatorRequestService implements IOperatorService{
 	@Autowired
 	@Qualifier("defaultOperatorService")
 	private IOperatorService defaultOperatorService;
-	
+
 	@Autowired
 	@Qualifier("tpayService")
 	private TpayService tpayService;
-	
+
 	@Autowired
 	@Qualifier("actelService")
 	private ActelService actelService;
-	
+
 	@Autowired
 	@Qualifier("mobimindService")
 	private MobimindService mobimindService;
-	
+
 	@Autowired
 	@Qualifier("mcgService")
 	private MCGService mcgService;
@@ -46,15 +46,15 @@ public class OperatorRequestService implements IOperatorService{
 	@Qualifier("mondiaPayService")
 	private MondiaPayService mondiaPayService;
 	@Autowired
-	@Qualifier("oredoKuwaitService")
-	private OredoKuwaitService oredoKuwaitService;
-	
+	@Qualifier("oredoKuwaitService") private OredoKuwaitService
+	oredoKuwaitService;
+
 	@Autowired
 	@Qualifier("altruistService")
 	private AltruistService altruistService;
-	
+
 	private IOperatorService findProcessRequest(int opId){
-		
+
 		IOperatorService ioperatorService=null;
 		switch(opId){
 		case MConstants.TPAY_EGYPT_VODAFONE_OPERATOR_ID:
@@ -83,10 +83,12 @@ public class OperatorRequestService implements IOperatorService{
 			ioperatorService=mondiaPayService;
 			break;
 		}
+
 		case MConstants.OREDOO_KUWAIT_OPERATOR_ID:{
-			ioperatorService=oredoKuwaitService;
-			break;
+			ioperatorService=oredoKuwaitService; 
+			break; 
 		}
+
 		case MConstants.ALTRUIST_ETISALAT_UAE_OPERATOR_ID:{
 			ioperatorService=altruistService;
 			break;
@@ -97,7 +99,7 @@ public class OperatorRequestService implements IOperatorService{
 		}
 		return ioperatorService;
 	}
-	
+
 
 	@Override
 	public boolean checkBlocking(AdNetworkRequestBean adNetworkRequestBean) {
@@ -113,7 +115,7 @@ public class OperatorRequestService implements IOperatorService{
 	public boolean isSubscribed(AdNetworkRequestBean adNetworkRequestBean) {
 		return findProcessRequest(adNetworkRequestBean.getOpId()).isSubscribed(adNetworkRequestBean);
 	}
-	
+
 	@Override
 	public DeactivationResponse deactivation(ModelAndView modelAndView,
 			SubscriberReg subscriberReg) {
@@ -121,17 +123,17 @@ public class OperatorRequestService implements IOperatorService{
 	}
 
 
-//	@Override
-//	public IOtp sendOtp(ModelAndView modelAndView, String msisdn,Integer operatorId,Integer serviceId) {
-//		return findProcessRequest(operatorId).sendOtp( modelAndView,  msisdn, operatorId, serviceId);
-//	}
+	//	@Override
+	//	public IOtp sendOtp(ModelAndView modelAndView, String msisdn,Integer operatorId,Integer serviceId) {
+	//		return findProcessRequest(operatorId).sendOtp( modelAndView,  msisdn, operatorId, serviceId);
+	//	}
 
 
 	@Override
 	public SubscriberReg searchSubscriber(Integer operatorId,String msisdn, Integer serviceId,Integer productId) {
 		return findProcessRequest(operatorId).searchSubscriber(operatorId, msisdn, serviceId,productId);
 	}	
-	
+
 	@Override
 	public boolean checkSub(Integer productId,Integer operatorId,String msisdn) {
 		return findProcessRequest(operatorId).checkSub(productId,operatorId, msisdn);
@@ -142,7 +144,7 @@ public class OperatorRequestService implements IOperatorService{
 	public boolean sendOtp(ModelAndView modelAndView,
 			AdNetworkRequestBean adNetworkRequestBean) {
 		return findProcessRequest(adNetworkRequestBean.getOpId()).sendOtp( modelAndView,
-				 adNetworkRequestBean);
+				adNetworkRequestBean);
 	}
 
 
@@ -150,12 +152,12 @@ public class OperatorRequestService implements IOperatorService{
 	public boolean validateOtp(ModelAndView modelAndView, 
 			AdNetworkRequestBean adNetworkRequestBean) {
 		return findProcessRequest(adNetworkRequestBean.getOpId()).validateOtp( modelAndView,
-				 adNetworkRequestBean);
+				adNetworkRequestBean);
 	}	
 	@Override
 	public Timestamp getTimeByOperator(Integer opId) {
 		return findProcessRequest(opId).getTimeByOperator(
-				 opId);
+				opId);
 	}	
-	
+
 }

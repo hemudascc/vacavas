@@ -17,6 +17,10 @@ public class AltruistServiceConfig {
 	private Integer serviceId;
 	@Column(name="service_name")
 	private String serviceName;
+	@Column(name="mt_push_login")
+	private String mtPushLogin;
+	@Column(name="mt_push_password")
+	private String mtPushPassword;
 	@Column(name="package_id")
 	private Integer packageId;
 	@Column(name="package_name")
@@ -35,6 +39,8 @@ public class AltruistServiceConfig {
 	private String userName;
 	@Column(name="password")
 	private String password;
+	@Column(name="portal_url")
+	private String portalURL;
 	@Column(name="welcome_message")
 	private String welcomeMessage;
 	@Column(name="unsubscribe_message")
@@ -149,14 +155,34 @@ public class AltruistServiceConfig {
 	public void setCreateTime(Timestamp createTime) {
 		this.createTime = createTime;
 	}
+	
+	public String getPortalURL() {
+		return portalURL;
+	}
+	public void setPortalURL(String portalURL) {
+		this.portalURL = portalURL;
+	}
+	public String getMtPushLogin() {
+		return mtPushLogin;
+	}
+	public void setMtPushLogin(String mtPushLogin) {
+		this.mtPushLogin = mtPushLogin;
+	}
+	public String getMtPushPassword() {
+		return mtPushPassword;
+	}
+	public void setMtPushPassword(String mtPushPassword) {
+		this.mtPushPassword = mtPushPassword;
+	}
+	
 	@Override
 	public String toString() {
 		return "AltruistServiceConfig [id=" + id + ", serviceId=" + serviceId + ", serviceName=" + serviceName
-				+ ", packageId=" + packageId + ", packageName=" + packageName + ", price=" + price + ", duration="
-				+ duration + ", durationDescription=" + durationDescription + ", unsubKey=" + unsubKey + ", shortCode="
-				+ shortCode + ", userName=" + userName + ", password=" + password + ", welcomeMessage=" + welcomeMessage
-				+ ", unsubscribeMessage=" + unsubscribeMessage + ", alreadySubscribeMessage=" + alreadySubscribeMessage
-				+ ", createTime=" + createTime + ", status=" + status + "]";
+				+ ", mtPushLogin=" + mtPushLogin + ", mtPushPassword=" + mtPushPassword + ", packageId=" + packageId
+				+ ", packageName=" + packageName + ", price=" + price + ", duration=" + duration
+				+ ", durationDescription=" + durationDescription + ", unsubKey=" + unsubKey + ", shortCode=" + shortCode
+				+ ", userName=" + userName + ", password=" + password + ", portalURL=" + portalURL + ", welcomeMessage="
+				+ welcomeMessage + ", unsubscribeMessage=" + unsubscribeMessage + ", alreadySubscribeMessage="
+				+ alreadySubscribeMessage + ", createTime=" + createTime + ", status=" + status + "]";
 	}
-	
 }

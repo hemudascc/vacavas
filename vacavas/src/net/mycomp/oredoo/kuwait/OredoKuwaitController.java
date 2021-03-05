@@ -1,6 +1,5 @@
 package net.mycomp.oredoo.kuwait;
 
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,6 +10,17 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import net.common.jms.JMSService;
 import net.common.service.IDaoService;
@@ -23,29 +33,15 @@ import net.persist.bean.SubscriberReg;
 import net.persist.bean.VWServiceCampaignDetail;
 import net.process.bean.CGToken;
 import net.util.JsonMapper;
-import net.util.MConstants;
 import net.util.MData;
 import net.util.MUtility;
-
-import org.apache.log4j.Logger;
-import org.eclipse.persistence.sessions.coordination.ServiceId;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 
 @Controller
 @RequestMapping("ord")
 public class OredoKuwaitController {
 
-	private static final Logger logger = Logger
-			.getLogger(OredoKuwaitController.class.getName());
+	private static final Logger logger = Logger.getLogger(OredoKuwaitController.class.getName());
 	
 	@Autowired
 	private OredooKuwaitSubscriptionService oredooKuwaitSubscriptionService;
@@ -68,19 +64,14 @@ public class OredoKuwaitController {
 	@Autowired
 	private IDaoService daoService;
 	
-//	private final String portalUrl;
-	
 	private final String msisdnHeaderUrl;
 	
 	private final String  cgUrl;
 	
 	@Autowired
-	public OredoKuwaitController(@Value("${oredo.kuwait.msisdn.header.url}") 
-	                            String msisdnHeaderUrl,
-	                           // @Value("${oredoo.portal.url}") String portalUrl,
+	public OredoKuwaitController(@Value("${oredo.kuwait.msisdn.header.url}") String msisdnHeaderUrl,
 	                            @Value("${oredoo.kuwait.cg.url}") String cgUrl){
 		this.msisdnHeaderUrl=msisdnHeaderUrl;
-		//this.portalUrl=portalUrl;
 		this.cgUrl=cgUrl;
 	}
 	
@@ -89,7 +80,6 @@ public class OredoKuwaitController {
 		 
 		String encodedQueryString=MUtility.getBase64EncodedString(request.getQueryString());	
 		String headerUrl=msisdnHeaderUrl.replaceAll("<query>", encodedQueryString);		
-		//modelAndView.addObject("msisdnHeaderUrl", headerUrl);
 		logger.info("findMsisdnHeader::::::: "+headerUrl+" , query string: "+request.getQueryString());
 		modelAndView.setView(new RedirectView(headerUrl));
 		return modelAndView;
@@ -110,7 +100,6 @@ public class OredoKuwaitController {
 		oredooKuwaitCGCallback.setSongName(request.getParameter("Sonngname"));
 		oredooKuwaitCGCallback.setQueryStr(request.getQueryString());
 		
-		
 		 OredooKuwaitCGToken cgToken=new OredooKuwaitCGToken(oredooKuwaitCGCallback.getTransId()); 
 		  AdnetworkToken adnetworkToken=daoService.findAdnetworkTokenById(cgToken.getTokenId());
 		 
@@ -120,7 +109,6 @@ public class OredoKuwaitController {
 				 mapServiceIdToOredooKuwaitServiceConfig.get(vwServiceCampaignDetail.getServiceId());
 		 if(oredooKuwaitCGCallback.getResult()!=null
 				 &&oredooKuwaitCGCallback.getResult().equalsIgnoreCase("SUCCESS"))
-				// &&vwServiceCampaignDetail.getProductId()==25)
 			 {
 			 
 			 LiveReport liveReport=new LiveReport(vwServiceCampaignDetail.getOpId(),
@@ -134,7 +122,6 @@ public class OredoKuwaitController {
 					 oredooKuwaitServiceConfig.getPortalUrl(),"",subscriberReg.getSubscriberId());
 			 modelAndView.setView(new RedirectView(portalUrl));
 				modelAndView.addObject("portalUrl", portalUrl)  ;
-				//modelAndView.setViewName("google_success_all");
 				modelAndView.setViewName("oredoo/kuwait/success");
 			 return modelAndView;
 		 }
@@ -142,7 +129,6 @@ public class OredoKuwaitController {
 				 OredoKuwaitConstant.getPortalUrl(
 						 oredooKuwaitServiceConfig.getPortalUrl(),oredooKuwaitCGCallback.getMsisdn(),0);
 		 modelAndView.setView(new RedirectView(portalUrl));
-		//modelAndView.setView(new RedirectView(portalUrl+"?msisdn="+oredooKuwaitCGCallback.getMsisdn()));
 		}catch(Exception ex){
 			logger.error("exception ",ex);
 		}finally{
@@ -232,11 +218,9 @@ public class OredoKuwaitController {
 	     ooredooKuwaitCGTrans.setTokenId(oredooKuwaitCGToken.getTokenId());
 	     
 		CGToken cgToken=new CGToken(token);
-		redisCacheService.putIntValue(OredoKuwaitConstant.OREDOO_KUWAIT_CG_SERVICE_ID_PREFIX+transId,
-				serviceId, 120);
+		redisCacheService.putIntValue(OredoKuwaitConstant.OREDOO_KUWAIT_CG_SERVICE_ID_PREFIX+transId, serviceId, 120);
 		
-		OredooKuwaitServiceConfig oredooKuwaitServiceConfig=
-				OredoKuwaitConstant.mapServiceIdToOredooKuwaitServiceConfig.get(serviceId);		
+		OredooKuwaitServiceConfig oredooKuwaitServiceConfig= OredoKuwaitConstant.mapServiceIdToOredooKuwaitServiceConfig.get(serviceId);		
 		
 		String queryStr="MSISDN="+request.getParameter("MSISDN")
 				+"&productID="+request.getParameter("productID")
@@ -253,7 +237,7 @@ public class OredoKuwaitController {
 				 +"&cpBgColor="+request.getParameter("cpBgColor")
 				 +"&sRenewalPrice="+request.getParameter("sRenewalPrice")
 				 +"&sRenewalValidity="+request.getParameter("sRenewalValidity");
-		      if(cgToken.getCampaignId()==170){
+		      if(cgToken.getCampaignId()==16){
 		    	  queryStr+="&Wap_mdata="+MUtility.urlEncoding(
 		    			  "http://192.241.167.189:8080/vacavas/sys/resources/ooredoo/%22+onerror=%22return+SubmitForm%28%29%3B%22+alt=%22gameshop.png");
 		      }else{
@@ -331,7 +315,7 @@ public class OredoKuwaitController {
 		OCSResponse  ocsResponse=null;
 		try {
 			OredooKuwaitServiceConfig oredooKuwaitServiceConfig=OredoKuwaitConstant
-					.mapServiceIdToOredooKuwaitServiceConfig.get(23);
+					.mapServiceIdToOredooKuwaitServiceConfig.get(16);
 			  ocsResponse=oredooKuwaitSubscriptionService.checkSubs(msisdn, oredooKuwaitServiceConfig);
 		} catch (Exception e) {
 			
@@ -345,7 +329,7 @@ public class OredoKuwaitController {
 		String str="";
 		try {
 			OredooKuwaitServiceConfig oredooKuwaitServiceConfig=OredoKuwaitConstant
-					.mapServiceIdToOredooKuwaitServiceConfig.get(23);
+					.mapServiceIdToOredooKuwaitServiceConfig.get(16);
 			str=oredooKuwaitSubscriptionService.checkSubsToPublisher(msisdn, oredooKuwaitServiceConfig);
 		} catch (Exception e) {
 			str=e.toString();

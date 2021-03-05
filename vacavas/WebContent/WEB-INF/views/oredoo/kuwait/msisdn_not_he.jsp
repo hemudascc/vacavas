@@ -147,7 +147,7 @@ input[type=image] {
 	 };
 </script>
 </head>	
-<body>      		
+<body style="text-align: center;">      		
 <form id="frm1" name="frm1"  
  method="get" >
  <p >

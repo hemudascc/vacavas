@@ -18,16 +18,16 @@ public interface MondiaPayConstant {
 	String SUBSCRIPTION_DETAIL="SUBSCRIPTION_DETAIL";
 	String CANCEL_SUBSCRIPTION="CANCEL_SUBSCRIPTION";
 	static String findAction(MondiaPayNotification mondiaPayNotification) {
-		if(mondiaPayNotification.getEvent().equalsIgnoreCase("CREATE") && mondiaPayNotification.getAmount()>0) {
+		if(!mondiaPayNotification.getEvent().equalsIgnoreCase("RENEWAL") && mondiaPayNotification.getMondiaStatus().equalsIgnoreCase("ACTIVE")) {
 			return MConstants.ACT;
-		}else if(mondiaPayNotification.getEvent().equalsIgnoreCase("CREATE") && mondiaPayNotification.getAmount()<=0){
+		}else if(mondiaPayNotification.getEvent().equalsIgnoreCase("CREATE") && mondiaPayNotification.getMondiaStatus().equalsIgnoreCase("INACTIVE")){
 			return MConstants.GRACE;
 		}else if(mondiaPayNotification.getEvent().equalsIgnoreCase("RENEWAL")) {
 			return MConstants.RENEW;
 		}else if(mondiaPayNotification.getEvent().equalsIgnoreCase("CANCEL")) {
 			return MConstants.DCT;
+		}else {
+			return "";
 		}
-		return null;
 	}
-
 }

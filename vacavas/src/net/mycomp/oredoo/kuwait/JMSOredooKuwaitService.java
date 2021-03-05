@@ -20,7 +20,6 @@ public class JMSOredooKuwaitService {
 
 	private static final Logger logger = Logger.getLogger(JMSOredooKuwaitService.class);
 
-	
 	@Autowired
 	@Qualifier("oredooKuwaitCGCallbackJMSTemplate")
 	private JmsTemplate oredooKuwaitCGCallbackJMSTemplate;
@@ -39,7 +38,6 @@ public class JMSOredooKuwaitService {
 			@Override
 			public Message createMessage(Session session) throws JMSException {
 				Message message=session.createObjectMessage(oredooKuwaitCGCallback);
-				//message.setLongProperty(ScheduledMessage.AMQ_SCHEDULED_DELAY, 1*60*1000);
 				return message;
 			}
 		});

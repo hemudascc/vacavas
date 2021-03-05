@@ -376,7 +376,8 @@ public class OredooKuwaitSubscriptionService {
 			String secretEncriptionKeyAlias="com";
 			String secretEncriptionKeyStorePassword="com@123";
 			String secretEncriptionKeyPassword="com@123";
-			String cpId="Collectcent";//oredooKuwaitServiceConfig.getCpId();
+			String cpId="VacaStudio";
+			//oredooKuwaitServiceConfig.getCpId();
 			//String jksFilePath="C:\\Users\\mobitize\\Desktop\\numero\\alphamovil\\oredo\\encryption\\keyFile.jks";
 			//String requestParam="MSISDN=67057839&productID=S-HolZonEwMY2&pName=HollywoodZone&pPrice=800.0&pVal=7&CpId="+cpId+"&CpPwd=mt2%40543&CpName=Mt2&ismID=367&transID="+System.currentTimeMillis()+"&reqMode=WAP&reqType=Subscription&cpBgColor=&sRenewalPrice=800.0&sRenewalValidity=7&Wap_mdata=http%253A%252F%252F45.114.143.164%252Fadpoke%252Fimages%252Foredoo%252FThe_Shady_Truth_About_Miranda_Kerr.jpg";
 		     //requestParam=JsonMapper.getObjectToJson(map);
@@ -389,8 +390,7 @@ public class OredooKuwaitSubscriptionService {
 //				String check=Base64.encodeBase64String(sha256HMAC.
 //						doFinal(queryStr.getBytes()));
 				
-				checksum=URLEncoder.encode(Base64.encodeBase64String(sha256HMAC.
-						doFinal(queryStr.getBytes())),"utf-8");
+				checksum=URLEncoder.encode(Base64.encodeBase64String(sha256HMAC.doFinal(queryStr.getBytes())),"utf-8");
 				File file = new File(jksFilePath);
 				InputStream keystoreStream = new FileInputStream(file); 
 				KeyStore keystore = KeyStore.getInstance("JCEKS");

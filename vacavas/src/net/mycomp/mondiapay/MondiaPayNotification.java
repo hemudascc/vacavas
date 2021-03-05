@@ -197,4 +197,16 @@ public class MondiaPayNotification implements Serializable{
 	public void setToken(String token) {
 		this.token = token;
 	}
+
+	@Override
+	public String toString() {
+		return "MondiaPayNotification [id=" + id + ", uuid=" + uuid + ", purchaseToken=" + purchaseToken
+				+ ", subscriptionId=" + subscriptionId + ", subscriptionTypeId=" + subscriptionTypeId + ", channel="
+				+ channel + ", event=" + event + ", reason=" + reason + ", mondiaStatus=" + mondiaStatus
+				+ ", subStatus=" + subStatus + ", startDate=" + startDate + ", amount=" + amount + ", currency="
+				+ currency + ", token=" + token + ", action=" + action + ", createTime=" + createTime
+				+ ", sendToAdnetwork=" + sendToAdnetwork + "]";
+	}
+	
+	
 }

@@ -12,7 +12,8 @@ public class AltruistUtil {
 	private static final String ALGO = "AES";
 	private static final String secretKeyPhrase=AltruistConstant.encriptionKey;
 	private static final String PREFIX= "971";
-	public static String decrypt(String encryptedData, String secretKeyPhrase) throws Exception
+	
+	public static String decrypt(String encryptedData) throws Exception
 	{
 		Key key = new SecretKeySpec(secretKeyPhrase.getBytes(), AltruistUtil.ALGO);
 		Cipher c = Cipher.getInstance(AltruistUtil.ALGO);
@@ -70,11 +71,12 @@ public class AltruistUtil {
 		}
 	}
 	
-	/*
-	 * public static void main(String [] ar) throws Exception{ String msisdn="999";
-	 * 
-	 * String result2=AltruistUtil.decrypt(msisdn, "DHDUFYlinsGDDSSs");
-	 * System.out.println(result2); }
-	 */
+	
+	  public static void main(String [] ar) throws Exception{ 
+		  String param="1614690078748c935887c14=";
+	  
+	  String result2=AltruistUtil.encrypt(param);
+	  System.out.println(result2); }
+	 
 	
 }

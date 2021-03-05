@@ -150,40 +150,17 @@ public class OredoKuwaitService extends AbstractOperatorService {
     	  String lpImage="";
   		if(oredooKuwaitServiceConfig.getLpImages()!=null&&oredooKuwaitServiceConfig.getLpImages().size()>0){
   			int index=MConstants.random.nextInt(oredooKuwaitServiceConfig.getLpImages().size());
-  			//lpImage="../images/oredoo/"+oredooKuwaitServiceConfig.getLpImages().get(index);
   			lpImage=imageUrl+oredooKuwaitServiceConfig.getLpImages().get(index);
   		}	
   		
     	  modelAndView.addObject("img",lpImage);
     	  modelAndView.addObject("Wap_mdata", lpImage);
-    	  
-//		  modelAndView.addObject("productID",oredooKuwaitServiceConfig.getProductId());
-//		  modelAndView.addObject("pName",oredooKuwaitServiceConfig.getProductName());
-//		  modelAndView.addObject("pPrice",String.valueOf(oredooKuwaitServiceConfig.getPricePoint()));
-//		  modelAndView.addObject("pVal",String.valueOf(oredooKuwaitServiceConfig.getValidity()));
-//		  modelAndView.addObject("CpId",oredooKuwaitServiceConfig.getCpId());
-//		  modelAndView.addObject("CpPwd",oredooKuwaitServiceConfig.getCpPwd());
-//		  modelAndView.addObject("CpName",oredooKuwaitServiceConfig.getCpName());
-//		  modelAndView.addObject("ismID",oredooKuwaitServiceConfig.getIsmId());
-//		  modelAndView.addObject("transID",adNetworkRequestBean.adnetworkToken.getTokenToCg());
-//		  modelAndView.addObject("Wap_mdata", MUtility.urlEncoding(img));
-//		  modelAndView.addObject("serviceDesc",oredooKuwaitServiceConfig.getProductName());
-//		  modelAndView.addObject("img",img);
-//		  modelAndView.addObject("pricePoint",oredooKuwaitServiceConfig.getPricePoint());
-//		  modelAndView.addObject("validity",oredooKuwaitServiceConfig.getValidity());
-//		  modelAndView.addObject("portalUrl",portalUrl);
-//		  modelAndView.addObject("chargeableTypeUrl",chargeableTypeUrl);
-//		  modelAndView.addObject("msisdn",adNetworkRequestBean.getMsisdn());
-    	//  AdnetworkOperatorConfig adnetworkOpConfig= MData.mapAdnetworkOpConfig.
-			//	  get(adNetworkRequestBean.getOpId()).get(adNetworkRequestBean.getAdNetworkId());
-    	  
+    	  	  
 		if(adNetworkRequestBean.getMsisdn()==null||adNetworkRequestBean.getMsisdn().equalsIgnoreCase("NA")){
-			//modelAndView.addObject("validatemsisdn",true);
 			
 			if(MUtility.toBoolean(adNetworkRequestBean.adnetworkToken.getParam1(),Boolean.TRUE)){
 				logger.info("TRUE:::::::::::::::");
 				modelAndView.addObject("serviceId",adNetworkRequestBean.vwserviceCampaignDetail.getServiceId());
-				//modelAndView.setViewName("oredoo/kuwait/msisdn_not_he");
 				modelAndView.setViewName(oredooKuwaitServiceConfig.getNotHeView());
 				adNetworkRequestBean.adnetworkToken.setAction(MConstants.REDIRECT_TO_WASTE_URL);
 			}else{
@@ -191,7 +168,6 @@ public class OredoKuwaitService extends AbstractOperatorService {
 						   .get(adNetworkRequestBean.vwserviceCampaignDetail.getServiceId());
 				  modelAndView.addObject("oredooKuwaitServiceConfig",oredooKuwaitServiceConfig);
 				  modelAndView.addObject("validatemsisdn",false);
-				  //modelAndView.setViewName("oredoo/kuwait/msisdn_not_he_auto_wifi");
 				  modelAndView.setViewName(oredooKuwaitServiceConfig.getNotHeAutoWifiView());
 				  adNetworkRequestBean.adnetworkToken.setAction(MConstants.REDIRECT_TO_CG);
 			}
@@ -214,15 +190,11 @@ public class OredoKuwaitService extends AbstractOperatorService {
 			  logger.info("sub type:: adNetworkRequestBean.getOpId():: "+adNetworkRequestBean.getOpId()
 					  +", adNetworkRequestBean.getAdNetworkId()::"+adNetworkRequestBean.getAdNetworkId()
 					  +", MData.mapAdnetworkOpConfig:: "+MData.mapAdnetworkOpConfig);
-			 
-			//  logger.info("sub type:: adnetworkOpConfig:: "+adnetworkOpConfig);
-			  
+			 			  
 			  if(MUtility.toBoolean(adNetworkRequestBean.adnetworkToken.getParam1(),Boolean.TRUE)){
-				  //modelAndView.setViewName("oredoo/kuwait/msisdn_he");
 				  modelAndView.setViewName(oredooKuwaitServiceConfig.getHeView());
 				  adNetworkRequestBean.adnetworkToken.setAction(MConstants.REDIRECT_TO_CG);			 
 			  }else{				
-				 // modelAndView.setViewName("oredoo/kuwait/msisdn_he_auto");
 				  modelAndView.setViewName(oredooKuwaitServiceConfig.getHeAutoView());
 				  adNetworkRequestBean.adnetworkToken.setAction(MConstants.REDIRECT_TO_CG);
 			  }
@@ -313,36 +285,6 @@ public class OredoKuwaitService extends AbstractOperatorService {
 		logger.info("deactivationResponse:::::::::::: "+deactivationResponse.getMessgae());
 		     return deactivationResponse;
 		}
-	
-//	@Override
-//	public IOtp sendOtp(ModelAndView modelAndView, String msisdn,
-//			Integer operatorId, Integer serviceId) {
-//		Otp otp=new Otp();
-//	   
-//	  try{
-//	    otp.setMsisdn(msisdn);
-//		otp.setOtp(String.format("%04d", random.nextInt(10000)));
-//		otp.setCreateTime(new Timestamp(System.currentTimeMillis()));
-//		otp.setStatus(true);	
-//		
-//		 otp.setMsg("your OTP is "+otp.getOtp() +". Enter this pin to access portal service.");
-//		boolean send=false;//oredooKuwaitSubscriptionService.sendMT(msisdn, otp.getMsg());
-//	  
-//	   
-//	     if(send){
-//	    	 otp.setSend(true);	
-//	    	}
-//		} catch (Exception ex) {
-//			logger.error("deactivation::: ",ex);
-//		}finally{
-//			
-//			jmsService.saveObject(otp);
-//		}
-//	     
-//		 return otp;
-//	}
-	
-	
 	
 	public SubscriberReg searchSubscriber(Integer operatorId,String msisdn, 
 			Integer serviceId,Integer productId){

@@ -111,7 +111,7 @@
    // var opid = $(this).val();
     $.ajax({
         type: 'GET',
-        url: "http://<%=request.getLocalAddr()%>/ccsub/cnt/rcerpaotrt/productdetail?opid=" + opid,
+        url: "http://<%=request.getLocalAddr()%>/vacavas/sys/rcerpaotrt/productdetail?opid=" + opid,
         success: function(data){
             var product=$('#productId'), option="";
             product.empty();
@@ -147,7 +147,7 @@ $('.formselect').change(function(){
    <%
    String url=request.getHeader("referer");
    if(url==null||!url.contains("hourlyreport")){
-	url="http://"+request.getLocalAddr()+"/ccsub/cnt/rcerpaotrt/hourlyreport";   
+	url="http://"+request.getLocalAddr()+"/vacavas/sys/rcerpaotrt/hourlyreport";   
    }
    %>
     <h3 style="color: red;white-space:nowrap;"><a 
@@ -157,7 +157,7 @@ $('.formselect').change(function(){
 	
     
 <form:form  modelAttribute="AggReport" name="reportform" id="reportform"
- action="${pageContext.request.contextPath}/cnt/rcerpaotrt/callbackdump">
+ action="${pageContext.request.contextPath}/sys/rcerpaotrt/callbackdump-test">
 <table  border="1" class="mtable" align="center">
 
 	 <tr>

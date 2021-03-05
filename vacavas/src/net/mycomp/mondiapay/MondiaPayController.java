@@ -114,7 +114,7 @@ public class MondiaPayController {
 	@ResponseBody
 	public String notification(@RequestBody MondiaPayNotification mondiaPayNotification) {
 		try {
-			System.out.println("MondiaPayNotification :::::::::::"+mondiaPayNotification);
+			logger.info("mondia-notification: received:::::"+mondiaPayNotification);
 		} catch (Exception e) {
 			logger.error("error while processing mondia notification",e);
 		}finally {

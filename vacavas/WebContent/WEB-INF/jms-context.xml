@@ -216,13 +216,13 @@
 		<constructor-arg index="0"
 			value="vacavas/mondiaPayNotificationQueue?consumer.prefetchSize=3" />
 	</bean>
-	
+
 	<bean id="mondiaPayNotificationListener"
 		class="net.mycomp.mondiapay.JMSMondiaPayNotificationListener" />
 	<!-- Mondia Pay End -->
-	
-	<!-- Comviva Ooredoo Start-->
-			<bean id="oredooKuwaitCGCallbackJMSTemplate"
+
+	<!-- Comviva Ooredoo Start -->
+	<bean id="oredooKuwaitCGCallbackJMSTemplate"
 		class="org.springframework.jms.core.JmsTemplate">
 		<constructor-arg name="connectionFactory"
 			ref="cachedConnectionFactory" />
@@ -255,8 +255,28 @@
 	</bean>
 	<bean id="oredooKuwaitCGNotificationListener"
 		class="net.mycomp.oredoo.kuwait.JMSOredooKuwaitCGNotificationListener" />
-	<!-- Comviva Ooredoo End-->
-	
+	<!-- Comviva Ooredoo End -->
+
+
+	<!-- Altruist Start -->
+	<bean id="altruistCallbackJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="vacavas/altruistCallbackQueue" />
+		<qualifier value="altruistCallbackJMSTemplate" />
+	</bean>
+	<bean id="altruistCallbackDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="vacavas/altruistCallbackQueue?consumer.prefetchSize=3" />
+	</bean>
+	<bean id="altruistCallbackListener"
+		class="net.mycomp.altruist.JMSAltruistCallbackListener" />
+	<!-- Altruist End -->
+
+
 	<jms:listener-container container-type="default"
 		connection-factory="cachedConnectionFactory" acknowledge="auto"
 		concurrency="5-340">
@@ -290,16 +310,20 @@
 			destination="vaca/intargetOnReceiveSMSQueue"
 			ref="intargetOnReceiveSMSListener" method="onMessage" />
 
-		<jms:listener destination="vacavas/mondiaPayNotificationQueue"
+		<jms:listener
+			destination="vacavas/mondiaPayNotificationQueue"
 			ref="mondiaPayNotificationListener" method="onMessage" />
-		
+
 		<jms:listener
 			destination="vacavas/oredooKuwaitCGNotificationQueue"
 			ref="oredooKuwaitCGNotificationListener" method="onMessage" />
-			
+
 		<jms:listener
 			destination="vacavas/oredooKuwaitCGCallbackQueue"
 			ref="oredooKuwaitCGCallbackListener" method="onMessage" />
-
+		<jms:listener
+			destination="vacavas/altruistCallbackQueue"
+			ref="altruistCallbackListener" method="onMessage" />
+			
 	</jms:listener-container>
 </beans>
