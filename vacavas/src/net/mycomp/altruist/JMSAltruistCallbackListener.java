@@ -44,7 +44,7 @@ public class JMSAltruistCallbackListener implements MessageListener{
 			liveReport.setTokenId(cgToken.getTokenId());
 			liveReport.setToken(cgToken.getCGToken());
 			action = AltruistConstant.findAction(altruistCallback);
-			logger.debug(altruistCallback);
+			logger.debug(altruistCallback+"::::action:::"+action);
 
 			if(Objects.nonNull(action)) {
 				if(MConstants.ACT.equals(action)) {
@@ -79,23 +79,22 @@ public class JMSAltruistCallbackListener implements MessageListener{
 		}catch (Exception e) {
 			logger.error("error while saving altruistCallback::"+altruistCallback,e);
 		}finally {
-			if(liveReport.getAction()!=null) {
-				try {
-					if(liveReport.getAction()!=null){
-						liveReportFactoryService.process(liveReport);
-					}
-				}catch (Exception e) {
-					logger.error(" fianlly liveReport:: " + liveReport
-							+ ", : altruistCallback:: "
-							+ altruistCallback);
-					logger.error("onMessage::::::::::finally " ,e);
-				}finally {
-					daoService.saveObject(altruistCallback);
+			try {
+				if(liveReport.getAction()!=null){
+					altruistCallback.setAction(liveReport.getAction());
+					liveReportFactoryService.process(liveReport);
 				}
-				logger.info("onMessage::::::::::::::::: :: update::live report "
-						+ save + ", total time:: "
-						+ (System.currentTimeMillis() - time));
+			}catch (Exception e) {
+				logger.error(" fianlly liveReport:: " + liveReport
+						+ ", : altruistCallback:: "
+						+ altruistCallback);
+				logger.error("onMessage::::::::::finally " ,e);
+			}finally {
+				daoService.saveObject(altruistCallback);
 			}
+			logger.info("onMessage::::::::::::::::: :: update::live report "
+					+ save + ", total time:: "
+					+ (System.currentTimeMillis() - time));
 		}
 	}
 }

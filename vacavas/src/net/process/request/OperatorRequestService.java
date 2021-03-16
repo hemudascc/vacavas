@@ -10,10 +10,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import net.mycomp.actel.ActelService;
 import net.mycomp.altruist.AltruistService;
+import net.mycomp.comviva.ComvivaService;
 import net.mycomp.messagecloud.gateway.MCGService;
 import net.mycomp.mobimind.MobimindService;
 import net.mycomp.mondiapay.MondiaPayService;
-import net.mycomp.oredoo.kuwait.OredoKuwaitService;
 import net.mycomp.tpay.TpayService;
 import net.persist.bean.SubscriberReg;
 import net.process.bean.AdNetworkRequestBean;
@@ -45,10 +45,16 @@ public class OperatorRequestService implements IOperatorService{
 	@Autowired
 	@Qualifier("mondiaPayService")
 	private MondiaPayService mondiaPayService;
+	/*
+	 * @Autowired
+	 * 
+	 * @Qualifier("oredoKuwaitService") private OredoKuwaitService
+	 * oredoKuwaitService;
+	 */
 	@Autowired
-	@Qualifier("oredoKuwaitService") private OredoKuwaitService
-	oredoKuwaitService;
-
+	@Qualifier("comvivaService")
+	private ComvivaService comvivaService;
+	
 	@Autowired
 	@Qualifier("altruistService")
 	private AltruistService altruistService;
@@ -85,7 +91,7 @@ public class OperatorRequestService implements IOperatorService{
 		}
 
 		case MConstants.OREDOO_KUWAIT_OPERATOR_ID:{
-			ioperatorService=oredoKuwaitService; 
+			ioperatorService=comvivaService; 
 			break; 
 		}
 

@@ -147,7 +147,7 @@ $('.formselect').change(function(){
    <%
    String url=request.getHeader("referer");
    if(url==null||!url.contains("hourlyreport")){
-	url="http://"+request.getLocalAddr()+"/vacavas/sys/rcerpaotrt/hourlyreport";   
+	url="http://"+request.getLocalAddr()+":8080/vacavas/sys/rcerpaotrt/hourlyreport";   
    }
    %>
     <h3 style="color: red;white-space:nowrap;"><a 
@@ -157,7 +157,7 @@ $('.formselect').change(function(){
 	
     
 <form:form  modelAttribute="AggReport" name="reportform" id="reportform"
- action="${pageContext.request.contextPath}/sys/rcerpaotrt/callbackdump-test">
+ action="${pageContext.request.contextPath}/sys/rcerpaotrt/callbackdump">
 <table  border="1" class="mtable" align="center">
 
 	 <tr>

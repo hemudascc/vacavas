@@ -1,4 +1,4 @@
-package net.mycomp.oredoo.kuwait;
+package net.mycomp.comviva;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;

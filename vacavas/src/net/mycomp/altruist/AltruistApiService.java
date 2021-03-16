@@ -1,6 +1,5 @@
 package net.mycomp.altruist;
 
-import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriUtils;
 
 import net.common.service.IDaoService;
 import net.common.service.RedisCacheService;
@@ -173,9 +173,9 @@ public class AltruistApiService {
 			VWServiceCampaignDetail vwServiceCampaignDetail = MData.mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
 			AltruistServiceConfig altruistServiceConfig = AltruistConstant.mapServiceIdToAltruistServiceConfig.get(vwServiceCampaignDetail.getServiceId());
 			String url= unsubscribeURL.replaceAll("<msisdn>", msisdn)
-					.replaceAll("<username>", URLEncoder.encode(altruistServiceConfig.getUserName()))
-					.replaceAll("<password>", URLEncoder.encode(altruistServiceConfig.getPassword()))
-					.replaceAll("<packageid>", URLEncoder.encode(Objects.toString(altruistServiceConfig.getPackageId())));
+					.replaceAll("<username>", UriUtils.encode(altruistServiceConfig.getUserName(),"UTF-8"))
+					.replaceAll("<password>", UriUtils.encode(altruistServiceConfig.getPassword(),"UTF-8"))
+					.replaceAll("<packageid>", UriUtils.encode(Objects.toString(altruistServiceConfig.getPackageId()),"UTF-8"));
 			altruistTrans.setRequest("request url: "+url);
 			HTTPResponse  httpResponse = httpURLConnectionUtil.makeHTTPGETRequest(url, null);
 			altruistTrans.setResponseCode(httpResponse.getResponseCode());
@@ -206,10 +206,10 @@ public class AltruistApiService {
 			String sms=AltruistConstant.getSubscriptionMessage(altruistServiceConfig,msisdn);
 			altruistTrans.setMsisdn(msisdn);
 			altruistTrans.setRequestType(AltruistConstant.SEND_SMS);
-			String url = smsPushURL.replaceAll("<username>", URLEncoder.encode(altruistServiceConfig.getMtPushLogin()))
-					.replaceAll("<password>", URLEncoder.encode(altruistServiceConfig.getMtPushPassword()))
-					.replaceAll("<msisdn>", URLEncoder.encode(msisdn))
-					.replaceAll("<message>", URLEncoder.encode(sms));
+			String url = smsPushURL.replaceAll("<username>", UriUtils.encode(altruistServiceConfig.getMtPushLogin(),"UTF-8"))
+					.replaceAll("<password>", UriUtils.encode(altruistServiceConfig.getMtPushPassword(),"UTF-8"))
+					.replaceAll("<msisdn>", UriUtils.encode(msisdn,"UTF-8"))
+					.replaceAll("<message>", UriUtils.encode(sms,"UTF-8"));
 			altruistTrans.setRequest("request url: "+url);
 			HTTPResponse  httpResponse = httpURLConnectionUtil.makeHTTPGETRequest(url, null);
 			altruistTrans.setResponseCode(httpResponse.getResponseCode());

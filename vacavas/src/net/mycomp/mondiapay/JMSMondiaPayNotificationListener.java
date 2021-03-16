@@ -47,12 +47,17 @@ public class JMSMondiaPayNotificationListener implements MessageListener{
 			mondiaPayNotification = (MondiaPayNotification)objectMessage.getObject();
 			logger.debug("processing MondiaPayNotification"+mondiaPayNotification);
 			List<SubscriberReg> subscriberRegs = jpaSubscriberReg.findSubscriberRegByParam1(Objects.toString(mondiaPayNotification.getSubscriptionId()));
-			if(subscriberRegs.size()<1) {
+/*			if(subscriberRegs.size()<1) {
 				Thread.sleep(5000L);
 				jmsMondiaPayService.saveMondiaPayNotification(mondiaPayNotification);
-			}else {
+			}else {*/
+			if(subscriberRegs.size()>0) {	
 				token = subscriberRegs.get(0).getMsisdn();
+			}
 				cgToken = new CGToken(token);
+				if(cgToken.getCampaignId()<0) {
+					cgToken = new CGToken("-1c-1c12");
+				}
 				mondiaPayNotification.setToken(token);
 				liveReport = new LiveReport(MondiaPayConstant.MONDIA_PAY_OPERATOR_ID, new Timestamp(System.currentTimeMillis()),
 						cgToken.getCampaignId(), MondiaPayConstant.MONDIA_PAY_SERVICE_ID, MondiaPayConstant.MONDIA_PAY_PRODUCT_ID);
@@ -89,7 +94,7 @@ public class JMSMondiaPayNotificationListener implements MessageListener{
 						liveReport.setDctCount(1);
 					}
 				}
-			}
+				/* } */
 		} catch (Exception e) {
 			logger.error("ERROR while processing mondai pay notification"+mondiaPayNotification,e);
 		}finally {

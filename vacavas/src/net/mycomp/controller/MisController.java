@@ -457,7 +457,7 @@ public class MisController {
 		return modelAndView;
 	}
 	
-	@RequestMapping("callbackdump-test")	
+	@RequestMapping("callbackdump")	
 	public ModelAndView callbackDumpReport(@ModelAttribute(value="AggReport") AggReport aggReport,BindingResult result) {
 		
 		ModelAndView modelAndView=new ModelAndView("callback_dump_report");

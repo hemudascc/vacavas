@@ -3,6 +3,7 @@ package net.mycomp.mondiapay;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -56,8 +57,8 @@ public class MondiaPayNotification implements Serializable{
 	
 	@JsonProperty("price")
 	private void unpackNested(Map<String,Object> price) {
-        this.amount = (Double)price.get("amount");
-        this.currency = (String)price.get("currency");
+        this.amount = Double.valueOf(Objects.toString(price.get("amount")));
+        this.currency = Objects.toString(price.get("currency"));
 		this.createTime=new Timestamp(System.currentTimeMillis());
 		this.sendToAdnetwork=false;
     }

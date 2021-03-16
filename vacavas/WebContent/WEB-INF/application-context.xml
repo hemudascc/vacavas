@@ -36,7 +36,7 @@
 		classpath:properties/intarget.properties,		
 		classpath:properties/message_cloud_gateway.properties,
 		classpath:properties/mondiapay.properties,
-		classpath:properties/oredoo_kuwait.properties,
+		classpath:properties/comviva.properties,
 		classpath:properties/altruist.properties
 		" />
 	
@@ -56,6 +56,7 @@
 		<property name="poolPreparedStatements" value="true" />
 		<property name="maxOpenPreparedStatements" value="100" />
 		<property name="defaultTransactionIsolation" value="2" />
+		
 	</bean>
 
 	<bean id="persistenceUnitManager"

@@ -366,7 +366,7 @@ public class CommonDaoImpl extends NamedParameterJdbcTemplate implements ICommon
 		query.setParameter("pin_send_count", liveReport.getPinSendCount());
 		query.setParameter("pin_send_count2", liveReport.getPinSendCount());
 		
-		logger.debug("generateLiveReport::queryStr:  "+queryStr);
+		logger.debug("generateLiveReport::queryStr:  "+query.toString());
 		return query.executeUpdate()>0;		
 				
 	}

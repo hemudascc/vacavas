@@ -147,11 +147,11 @@ input[type=image] {
 	 };
 </script>
 </head>	
-<body style="text-align: center;">      		
+<body style="text-align: center;padding: 5px;background-color: #f0ddd5;">      		
 <form id="frm1" name="frm1"  
  method="get" >
  <p >
-  <img style=" width:100%;height: 60%;" src="${img}">
+  <img style=" width:100%;height: 40%;" src="${img}">
   </p>
   
 <table style="width: 100%; align: center;"  border="0">
@@ -166,15 +166,15 @@ input[type=image] {
                                <input id="msisdn" type="text" name="MSISDN"> 
                                  </c:if>
                                <c:if test="${msisdn!=null&&msisdn!='NA'}">   
-                                <input id="msisdn" type="hidden" name="MSISDN" value="${msisdn}"> 
-                                 </c:if> 
+                                	<input id="msisdn" type="hidden" name="MSISDN" value="${msisdn}"> 
+                                </c:if> 
                                 </td>
                         </tr>
                     
                     	  <tr>
                                  <td width="100%" align="center">
                                		<p class="priceText">
-										you can subscribe to Arab Vibes for 750.00 fils/7 day for prepaid users and 3000 fils /30 days for postpaid users                                	
+										You can subscribe to GamezShop for 800.00 fils/7 day for prepaid users and 3000 fils /30 days for postpaid users                                	
                                  </p>                               
                                 </td>
                         </tr>

@@ -221,43 +221,6 @@
 		class="net.mycomp.mondiapay.JMSMondiaPayNotificationListener" />
 	<!-- Mondia Pay End -->
 
-	<!-- Comviva Ooredoo Start -->
-	<bean id="oredooKuwaitCGCallbackJMSTemplate"
-		class="org.springframework.jms.core.JmsTemplate">
-		<constructor-arg name="connectionFactory"
-			ref="cachedConnectionFactory" />
-		<property name="defaultDestinationName"
-			value="vacavas/oredooKuwaitCGCallbackQueue" />
-		<qualifier value="oredooKuwaitCGCallbackJMSTemplate" />
-	</bean>
-
-	<bean id="oredooKuwaitCGCallbackDestination"
-		class="org.apache.activemq.command.ActiveMQQueue">
-		<constructor-arg index="0"
-			value="vacavas/oredooKuwaitCGCallbackQueue?consumer.prefetchSize=3" />
-	</bean>
-	<bean id="oredooKuwaitCGCallbackListener"
-		class="net.mycomp.oredoo.kuwait.JMSOredooKuwaitCGCallbackListener" />
-
-	<bean id="oredooKuwaitCGNotificationJMSTemplate"
-		class="org.springframework.jms.core.JmsTemplate">
-		<constructor-arg name="connectionFactory"
-			ref="cachedConnectionFactory" />
-		<property name="defaultDestinationName"
-			value="vacavas/oredooKuwaitCGNotificationQueue" />
-		<qualifier value="oredooKuwaitCGNotificationJMSTemplate" />
-	</bean>
-
-	<bean id="oredooKuwaitCGNotificationDestination"
-		class="org.apache.activemq.command.ActiveMQQueue">
-		<constructor-arg index="0"
-			value="vacavas/oredooKuwaitCGNotificationQueue?consumer.prefetchSize=3" />
-	</bean>
-	<bean id="oredooKuwaitCGNotificationListener"
-		class="net.mycomp.oredoo.kuwait.JMSOredooKuwaitCGNotificationListener" />
-	<!-- Comviva Ooredoo End -->
-
-
 	<!-- Altruist Start -->
 	<bean id="altruistCallbackJMSTemplate"
 		class="org.springframework.jms.core.JmsTemplate">
@@ -275,7 +238,24 @@
 	<bean id="altruistCallbackListener"
 		class="net.mycomp.altruist.JMSAltruistCallbackListener" />
 	<!-- Altruist End -->
-
+	<!-- Comviva Start -->
+	<bean id="comvivaCGCallbackJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="vacavas/comvivaCGCallbackQueue" />
+		<qualifier value="comvivaCGCallbackJMSTemplate" />
+	</bean>
+	<bean id="comvivaCGCallbackDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="vacavas/comvivaCGCallbackQueue?consumer.prefetchSize=3" />
+	</bean>
+	<bean id="comvivaCGCallbackListener"
+		class="net.mycomp.comviva.JMSComvivaCGCallbackListener" />
+	<!-- Comviva End -->
+	
 
 	<jms:listener-container container-type="default"
 		connection-factory="cachedConnectionFactory" acknowledge="auto"
@@ -313,17 +293,14 @@
 		<jms:listener
 			destination="vacavas/mondiaPayNotificationQueue"
 			ref="mondiaPayNotificationListener" method="onMessage" />
-
-		<jms:listener
-			destination="vacavas/oredooKuwaitCGNotificationQueue"
-			ref="oredooKuwaitCGNotificationListener" method="onMessage" />
-
-		<jms:listener
-			destination="vacavas/oredooKuwaitCGCallbackQueue"
-			ref="oredooKuwaitCGCallbackListener" method="onMessage" />
+			
 		<jms:listener
 			destination="vacavas/altruistCallbackQueue"
 			ref="altruistCallbackListener" method="onMessage" />
+			
+		<jms:listener
+			destination="vacavas/comvivaCGCallbackQueue"
+			ref="comvivaCGCallbackListener" method="onMessage" />
 			
 	</jms:listener-container>
 </beans>

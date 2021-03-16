@@ -1,24 +1,22 @@
-package net.mycomp.oredoo.kuwait;
+package net.mycomp.comviva;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.Table;
 import javax.persistence.Id;
-import javax.persistence.Column;
+import javax.persistence.Table;
 
 @Entity
-@Table(name = "tb_oredoo_kuwait_ocs_log_detail")
-public class OredooKuwaitOCSLogDetail implements Serializable{
-
-	/**
-	 * 
-	 */
+@Table(name="tb_comviva_ocs_log_detail")
+public class ComvivaOCSLogDetail implements Serializable{
+	
 	private static final long serialVersionUID = 1L;
+	
 	@Id
-	//@GeneratedValue
+	@GeneratedValue
 	private Integer id;
 	@Column(name = "msisdn")
 	private String msisdn;
@@ -32,15 +30,11 @@ public class OredooKuwaitOCSLogDetail implements Serializable{
 	private Timestamp createDate;
 	@Column(name = "status")
 	private Boolean status;
-	
-	public OredooKuwaitOCSLogDetail(){}
-	public OredooKuwaitOCSLogDetail(Boolean status){
-		
-		this.id=OredoKuwaitConstant.oredooKuwaitOCSLogDetailId.incrementAndGet();
-		this.createDate=new Timestamp(System.currentTimeMillis());
-		this.status=status;
+	public ComvivaOCSLogDetail(){}
+	public ComvivaOCSLogDetail(Boolean status) {
+		this.status = status;
+		this.createDate = new Timestamp(System.currentTimeMillis());
 	}
-	
 	public Integer getId() {
 		return id;
 	}
@@ -82,5 +76,11 @@ public class OredooKuwaitOCSLogDetail implements Serializable{
 	}
 	public void setStatus(Boolean status) {
 		this.status = status;
+	}
+	
+	@Override
+	public String toString() {
+		return "ComvivaOCSLogDetail [id=" + id + ", msisdn=" + msisdn + ", action=" + action + ", requet=" + requet
+				+ ", response=" + response + ", createDate=" + createDate + ", status=" + status + "]";
 	}
 }
