@@ -192,7 +192,7 @@ public class TpayApiService {
 			 liveReport.setParam3(token);
 			 subscriberRegService.findOrCreateSubscriberByAct(msisdn,
 					   null, liveReport);
-			 redisCacheService.putObjectCacheValueByEvictionMinute(TpayConstant.TPAY_TEMP_SUBSCRIBE + msisdn, token,60*24);
+			 redisCacheService.putObjectCacheValueByEvictionDay(TpayConstant.TPAY_TEMP_SUBSCRIBE + subscriptionContractId, token,1);
 			tpaySubscriptionContractRequest = createSendWelcomeMtRequest(token, msisdn,"SEND_WELCOME_MT",lang);
 		} catch (Exception e) {
 			logger.error("error"+e);

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -290,6 +291,11 @@ public class TpayController {
 	@RequestMapping("check-sub")
 	public Integer checkSub(@RequestParam String msisdn) {	
 		return subscriberRegService.isSubscribed(msisdn)?1:0;
+	}
+	@RequestMapping("addsubsid")
+	public String addSubsid(@RequestParam String subid) {	
+		 redisCacheService.putObjectCacheValueByEvictionDay(TpayConstant.TPAY_TEMP_SUBSCRIBE + subid, "-1c-1c2",1);
+		 return "OK";
 	}
 	@RequestMapping("wifi-flow")
 	public ModelAndView wifiFlow(ModelAndView modelAndView, @RequestParam String token, @RequestParam Integer lang) {	
