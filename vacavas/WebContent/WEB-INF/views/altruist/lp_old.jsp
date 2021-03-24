@@ -18,16 +18,39 @@ body {
 	color: #e8f5e9;
 	background-color: darkslategrey;
 }
+
+.langchange {
+	padding: 5px;
+	text-align: right;
+	color: blue;
+}
 </style>
 <body>
-	<form action="${pageContext.request.contextPath}/sys/altr/verify-pin"
+	<form action="${pageContext.request.contextPath}/sys/altr/send-pin"
 		method="post">
+		<div class="langchange">
+			<select id="lang-select" onchange="changeLang()">
+				<option value="0">EN</option>
+				<option value="1">AR</option>
+			</select>
+		</div>
 		<!-- Hidden Parameters Start -->
 		<input id="token" name="token" value="${token}" type="hidden">
-		<input id="msisdn" name="msisdn" value="${msisdn}" type="hidden">
 		<input id="lang" name="lang" value="${lang}" type="hidden">
 		<!-- Hidden Parameters End -->
 		<!-- Body Start -->
+	<%-- 	<c:if test="${lang==0}">
+			<p>Free for 1 day then AED ${altruistServiceConfig.price} per
+				${altruistServiceConfig.durationDescription} VAT Included</p>
+		</c:if>
+		<c:if test="${lang==1}">
+			<p dir="rtl">
+				مجانًا ليوم واحد ثم ${altruistServiceConfig.price} درهم لكل
+				<c:if test="${altruistServiceConfig.durationDescription=='day'}">يوم</c:if>
+				<c:if test="${altruistServiceConfig.durationDescription=='week'}">أسبوع</c:if>
+				شامل ضريبة القيمة المضافة
+			</p>
+		</c:if> --%>
 		<div class="img-div" style="margin-top: 15px;">
 			<img style="height: 200px; width: 80%;"
 				src="${pageContext.request.contextPath}/resources/altruist/image/banner.png"
@@ -37,42 +60,49 @@ body {
 		<h3>${altruistServiceConfig.serviceName}</h3>
 		<c:if test="${lang==0}">
 			<c:if test="${status==0}">
-				<p>Please Enter a valid pin to activate your subscription</p>
+				<p>Enter your Etisalat Mobile number to receive OTP</p>
 			</c:if>
 			<c:if test="${status==1}">
-				<p>Please Enter the pin you received to activate your
-					subscription</p>
+				<p>Please Enter a valid mobile number</p>
 			</c:if>
 			<c:if test="${status==2}">
-				<p>Some error occurred while processing your request.</p>
+				<p>You have exceded your limit.</p>
+			</c:if>
+			<c:if test="${status==3}">
+				<p>Could not send pin please try again</p>
 			</c:if>
 		</c:if>
 		<c:if test="${lang==1}">
 			<c:if test="${status==0}">
-				<p dir="rtl">الرجاء إدخال رقم تعريف شخصي صالح لتفعيل اشتراكك</p>
+				<p dir="rtl">أدخل رقم هاتف اتصالات الخاص بك لتلقي OTP</p>
 			</c:if>
 			<c:if test="${status==1}">
-				<p dir="rtl">الرجاء إدخال رقم التعريف الشخصي الذي تلقيته لتفعيل
-					اشتراكك</p>
+				<p dir="rtl">الرجاء إدخال رقم جوال صحيح</p>
 			</c:if>
 			<c:if test="${status==2}">
-				<p dir="rtl">حدث خطأ ما أثناء معالجة طلبك.</p>
+				<p dir="rtl">لقد تجاوزت الحد الخاص بك</p>
+			</c:if>
+			<c:if test="${status==3}">
+				<p dir="rtl">تعذر إرسال رقم التعريف الشخصي ، يرجى المحاولة مرة
+					أخرى</p>
 			</c:if>
 		</c:if>
-		<input type="text" name="pin" id="pin" placeholder="XXXX"
+		<input type="text" name="msisdn" id="msisdn" placeholder="971XXXXXXXX"
 			style="width: 200px; height: 30px; margin: 0px 0px 5px 0px; color: black;">
 		<br>
 		<c:if test="${lang==0}">
 			<button id="subscribe" type="submit" class="btn btn-success">Subscribe</button>
-			<button id="exit" type="button" onclick="exit();" class="btn btn-danger">Exit</button>
+			<button id="exit" type="button" onclick="exit();"
+				class="btn btn-danger">Exit</button>
 		</c:if>
 		<c:if test="${lang==1}">
 			<button id="subscribe" type="submit" class="btn btn-success"
 				dir="rtl">الإشتراك</button>
-			<button id="exit" type="button" onclick="exit();" class="btn btn-danger" dir="rtl">مخرج</button>
+			<button id="exit" type="button" onclick="exit();"
+				class="btn btn-danger" dir="rtl">مخرج</button>
 		</c:if>
 	</form>
-	<div>
+	<%-- <div>
 		<c:if test="${lang==0}">
 			<p>Free for 1 day then AED ${altruistServiceConfig.price} per
 				${altruistServiceConfig.durationDescription} VAT Included</p>
@@ -85,7 +115,7 @@ body {
 				شامل ضريبة القيمة المضافة
 			</p>
 		</c:if>
-	</div>
+	</div> --%>
 	<div class="terms-condition">
 		<p>
 			<c:if test="${lang==0}">
@@ -102,18 +132,27 @@ body {
 		<p>
 			<b>-</b>
 			<c:if test="${lang==0}">
-			After 1 day free trial, you will be charged AED 
-			${altruistServiceConfig.price}/${altruistServiceConfig.durationDescription} automatically.
+			You will start the paid subscription automatically after the
+			free trail.
 			</c:if>
 			<c:if test="${lang==1}">
-				<span dir="rtl">
-				بعد يوم واحد من الإصدار التجريبي المجاني ، ستتم محاسبتك تلقائيًا على ${altruistServiceConfig.price} / 
-				<c:if test="${altruistServiceConfig.durationDescription=='day'}">يوم</c:if>
-				<c:if test="${altruistServiceConfig.durationDescription=='week'}">أسبوع</c:if> درهم إماراتي.
-				</span>
+				<span dir="rtl">ستبدأ الاشتراك المدفوع تلقائيًا بعد انتهاء
+					الفترة التجريبية المجانية.</span>
 			</c:if>
 		</p>
-			<p>
+		<p>
+			<b>-</b>
+			<c:if test="${lang==0}">
+				<span dir="rtl">Renewal will be automatic every
+					${altruistServiceConfig.durationDescription}</span>
+			</c:if>
+			<c:if test="${lang==1}">
+			سيتم التجديد تلقائيًا كل <c:if
+					test="${altruistServiceConfig.durationDescription=='day'}">يوم</c:if>
+				<c:if test="${altruistServiceConfig.durationDescription=='week'}">أسبوع</c:if>
+			</c:if>
+		</p>
+		<p>
 			<b>-</b>
 			<c:if test="${lang==0}">
 				<span>No commitment you can cancel anytime by sending
@@ -126,8 +165,7 @@ body {
 					${altruistServiceConfig.shortCode}</span>
 			</c:if>
 		</p>
-		
-			<p>
+		<p>
 			<c:if test="${lang==0}">
 				<b>-</b>
 				<span>For support please contact vas.support@vacastudios.com</span>
@@ -137,38 +175,15 @@ body {
 					vas.support@vacastudios.com </span>
 			</c:if>
 		</p>
-		
 		<p>
 			<b>-</b>
 			<c:if test="${lang==0}">
-				<span > Free trial applicable only for first time subscriber.</span>
-			</c:if>
-			<c:if test="${lang==1}">
-			<span dir="rtl">
-			نسخة تجريبية مجانية قابلة للتطبيق فقط للمشترك لأول مرة.
-			</span>
-			</c:if>
-		</p>
-		<p>
-			<b>-</b>
-			<c:if test="${lang==0}">
-				<span>Enjoy your Free trial until today 23:59 hours</span>
-			</c:if>
-			<c:if test="${lang==1}">
-			<span dir="rtl">
-			استمتع بتجربتك المجانية حتى اليوم الساعة 23:59
-			</span>
-			</c:if>
-		</p>
-		<p>
-			<b>-</b>
-			<c:if test="${lang==0}">
-				<span>For complete T's &amp;C's <a
+				<span>For complete T&amp;C <a
 					href="${pageContext.request.contextPath}/sys/altr/tc">click
 						here</a></span>
 			</c:if>
 			<c:if test="${lang==1}">
-				<span dir="rtl"> للحصول على T's &amp;C's كاملة <a
+				<span dir="rtl"> للحصول على T&amp;C كاملة <a
 					href="${pageContext.request.contextPath}/sys/altr/tc">انقر هنا</a>
 				</span>
 			</c:if>
@@ -177,8 +192,16 @@ body {
 	<!-- Body End -->
 </body>
 <script>
-$("#exit").click(function(){
-		window.location.href="http://theplaymall.com/?dcb=altr"
-});
+	function changeLang() {
+		window.location.href = '${pageContext.request.contextPath}/sys/altr/change-lang?lang='
+				+ $("#lang-select").val() + '&token=' + $("#token").val()
+	}
+	$(document).ready(function() {
+		var e = document.getElementById("lang-select");
+		e.value = $("#lang").val();
+	});
+	$("#exit").click(function() {
+		window.location.href = "http://theplaymall.com/?dcb=altr"
+	});
 </script>
 </html>

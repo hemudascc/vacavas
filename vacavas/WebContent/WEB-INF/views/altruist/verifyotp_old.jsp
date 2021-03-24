@@ -28,7 +28,20 @@ body {
 		<input id="lang" name="lang" value="${lang}" type="hidden">
 		<!-- Hidden Parameters End -->
 		<!-- Body Start -->
-		<div class="img-div" style="margin-top: 15px;">
+
+		<c:if test="${lang==0}">
+			<p>Free for 1 day then AED ${altruistServiceConfig.price} per
+				${altruistServiceConfig.durationDescription} VAT Included</p>
+		</c:if>
+		<c:if test="${lang==1}">
+			<p dir="rtl">
+				مجانًا ليوم واحد ثم ${altruistServiceConfig.price} درهم لكل
+				<c:if test="${altruistServiceConfig.durationDescription=='day'}">يوم</c:if>
+				<c:if test="${altruistServiceConfig.durationDescription=='week'}">أسبوع</c:if>
+				شامل ضريبة القيمة المضافة
+			</p>
+		</c:if>
+		<div class="img-div">
 			<img style="height: 200px; width: 80%;"
 				src="${pageContext.request.contextPath}/resources/altruist/image/banner.png"
 				class="center-block img-rounded img-banner"
@@ -89,31 +102,38 @@ body {
 	<div class="terms-condition">
 		<p>
 			<c:if test="${lang==0}">
-		<!-- 		<b>By clicking on Subscribe, you agree to the below terms and
-					conditions:</b> -->
-					<b>Terms and Conditions:</b>
+				<b>By clicking on Subscribe, you agree to the below terms and
+					conditions:</b>
 			</c:if>
 			<c:if test="${lang==1}">
-				<!-- <b dir="rtl">بالنقر فوق "اشتراك" ، فإنك توافق على الشروط وبالنقر
-					فوق "اشتراك" ، فإنك توافق على الشروط والأحكام التالية:</b> -->
-					<b  dir="rtl">الأحكام والشروط</b>
+				<b dir="rtl">بالنقر فوق "اشتراك" ، فإنك توافق على الشروط وبالنقر
+					فوق "اشتراك" ، فإنك توافق على الشروط والأحكام التالية:</b>
 			</c:if>
 		</p>
 		<p>
 			<b>-</b>
 			<c:if test="${lang==0}">
-			After 1 day free trial, you will be charged AED 
-			${altruistServiceConfig.price}/${altruistServiceConfig.durationDescription} automatically.
+			You will start the paid subscription automatically after the
+			free trail.
 			</c:if>
 			<c:if test="${lang==1}">
-				<span dir="rtl">
-				بعد يوم واحد من الإصدار التجريبي المجاني ، ستتم محاسبتك تلقائيًا على ${altruistServiceConfig.price} / 
-				<c:if test="${altruistServiceConfig.durationDescription=='day'}">يوم</c:if>
-				<c:if test="${altruistServiceConfig.durationDescription=='week'}">أسبوع</c:if> درهم إماراتي.
-				</span>
+				<span dir="rtl">ستبدأ الاشتراك المدفوع تلقائيًا بعد انتهاء
+					الفترة التجريبية المجانية.</span>
 			</c:if>
 		</p>
-			<p>
+		<p>
+			<b>-</b>
+			<c:if test="${lang==0}">
+				<span dir="rtl">Renewal will be automatic every
+					${altruistServiceConfig.durationDescription}</span>
+			</c:if>
+			<c:if test="${lang==1}">
+			سيتم التجديد تلقائيًا كل <c:if
+					test="${altruistServiceConfig.durationDescription=='day'}">يوم</c:if>
+				<c:if test="${altruistServiceConfig.durationDescription=='week'}">أسبوع</c:if>
+			</c:if>
+		</p>
+		<p>
 			<b>-</b>
 			<c:if test="${lang==0}">
 				<span>No commitment you can cancel anytime by sending
@@ -126,8 +146,7 @@ body {
 					${altruistServiceConfig.shortCode}</span>
 			</c:if>
 		</p>
-		
-			<p>
+		<p>
 			<c:if test="${lang==0}">
 				<b>-</b>
 				<span>For support please contact vas.support@vacastudios.com</span>
@@ -137,38 +156,15 @@ body {
 					vas.support@vacastudios.com </span>
 			</c:if>
 		</p>
-		
 		<p>
 			<b>-</b>
 			<c:if test="${lang==0}">
-				<span > Free trial applicable only for first time subscriber.</span>
-			</c:if>
-			<c:if test="${lang==1}">
-			<span dir="rtl">
-			نسخة تجريبية مجانية قابلة للتطبيق فقط للمشترك لأول مرة.
-			</span>
-			</c:if>
-		</p>
-		<p>
-			<b>-</b>
-			<c:if test="${lang==0}">
-				<span>Enjoy your Free trial until today 23:59 hours</span>
-			</c:if>
-			<c:if test="${lang==1}">
-			<span dir="rtl">
-			استمتع بتجربتك المجانية حتى اليوم الساعة 23:59
-			</span>
-			</c:if>
-		</p>
-		<p>
-			<b>-</b>
-			<c:if test="${lang==0}">
-				<span>For complete T's &amp;C's <a
+				<span>For complete T&amp;C <a
 					href="${pageContext.request.contextPath}/sys/altr/tc">click
 						here</a></span>
 			</c:if>
 			<c:if test="${lang==1}">
-				<span dir="rtl"> للحصول على T's &amp;C's كاملة <a
+				<span dir="rtl"> للحصول على T&amp;C كاملة <a
 					href="${pageContext.request.contextPath}/sys/altr/tc">انقر هنا</a>
 				</span>
 			</c:if>

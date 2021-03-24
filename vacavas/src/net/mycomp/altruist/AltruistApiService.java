@@ -197,7 +197,7 @@ public class AltruistApiService {
 		return "0";
 	}
 
-	private void smsPush(String msisdn,String token) {
+	public void smsPush(String msisdn,String token) {
 		AltruistTrans altruistTrans = new AltruistTrans(true);
 		CGToken cgToken = new CGToken(token);
 		try {
@@ -211,7 +211,7 @@ public class AltruistApiService {
 					.replaceAll("<msisdn>", UriUtils.encode(msisdn,"UTF-8"))
 					.replaceAll("<message>", UriUtils.encode(sms,"UTF-8"));
 			altruistTrans.setRequest("request url: "+url);
-			HTTPResponse  httpResponse = httpURLConnectionUtil.makeHTTPGETRequest(url, null);
+			HTTPResponse  httpResponse = httpURLConnectionUtil.sendHttpsGet(url, null);
 			altruistTrans.setResponseCode(httpResponse.getResponseCode());
 			altruistTrans.setResposne(httpResponse.getResponseStr());
 		} catch (Exception e) {

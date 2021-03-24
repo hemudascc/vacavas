@@ -39,12 +39,15 @@ public class ComvivaController {
 
 	@Value("${comviva.cg.parameter}")
 	private String cgParameter;
+	@Value("${comviva.cg.url}")
+	private String cgURLPrefix;
+	
 	@Value("${comviva.image.url}")
 	private String imagePath;
 
 	@RequestMapping("hecallback")
 	public ModelAndView heCallback(HttpServletRequest request,ModelAndView modelAndView) {
-		//http://192.241.167.189:8080/vacavas/ord/hecallback?
+		//http://192.241.167.189:8080/vacavas/sys/ord/hecallback?
 		//MSISDN=96569687736&Reason=DATA&productId=S-GamShpEwMY2&transID=test0400
 		ComvivaCGTrans comvivaCGTrans = new ComvivaCGTrans(true);
 		ComvivaServiceConfig comvivaServiceConfig = null;
@@ -64,7 +67,7 @@ public class ComvivaController {
 			//MSISDN=<msisdn>&productID=<product_id>&pName=<product_name>&pPrice=<price>&pVal=<validity>&CpId=<cp_id>
 			//&CpPwd=<cp_pwd>&CpName=<cp_name>&ismID=<ism_id>&transID=<trans_id>&reqMode=<req_mode>&reqType=<req_type>&cpBgColor=
 			//&sRenewalPrice=<renew_price>&sRenewalValidity=<renew_validity>&Wap_mdata=<wap_mdata>
-			String cgURL =  cgParameter.replaceAll("<msisdn>", comvivaCGTrans.getMsisdn())
+			String cgURLParam =  cgParameter.replaceAll("<msisdn>", comvivaCGTrans.getMsisdn())
 					.replaceAll("<product_id>", comvivaServiceConfig.getComvivaProductId())
 					.replaceAll("<product_name>", comvivaServiceConfig.getProductName())
 					.replaceAll("<price>", Objects.toString(comvivaServiceConfig.getPrice()))
@@ -79,8 +82,9 @@ public class ComvivaController {
 					.replaceAll("<renew_price>", Objects.toString(comvivaServiceConfig.getPrice()))
 					.replaceAll("<renew_validity>", Objects.toString(comvivaServiceConfig.getValidity()))
 					.replaceAll("<wap_mdata>", Objects.toString(imagePath.replaceAll("<image>", comvivaServiceConfig.getLpImage())));
-			comvivaCGTrans.setCgURL(cgURL);
-			String encryptedCgUrl = comvivaUtill.encrypt(cgURL);
+			
+			comvivaCGTrans.setCgURL(cgURLPrefix+cgURLParam);
+			String encryptedCgUrl = cgURLPrefix+comvivaUtill.encrypt(cgURLParam);
 			comvivaCGTrans.setEncryptedCgURL(encryptedCgUrl);
 			modelAndView.setView(new RedirectView(encryptedCgUrl));
 		} catch (Exception e) {

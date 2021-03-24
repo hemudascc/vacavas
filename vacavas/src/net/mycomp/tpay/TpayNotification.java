@@ -10,29 +10,20 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="tb_tpay_notification")
+@Table(name="tb_tpay_vaca_notification")
 public class TpayNotification implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue
+	@Column(name="id")
 	private Integer id;
+	@Column(name="action")
 	private String action;
+	@Column(name="tpay_action")
 	private String tpayAction;
-	@Column(name="transaction_id")
-	private String transactionId;
-	@Column(name="error_message")
-	private String errorMessage;
-	@Column(name="billing_action")
-	private String billingAction;
-	@Column(name="billing_number")
-	private String billingNumber;
-	@Column(name="product_id")
-	private String productId;
 	@Column(name="msisdn")
 	private String msisdn;
-	@Column(name="digest")
-	private String digest;
 	@Column(name = "notification_status")
 	private String notificationStatus;
 	@Column(name="payment_transaction_status_code")
@@ -54,6 +45,8 @@ public class TpayNotification implements Serializable{
 	@Column(name="subscription_contract_id")
 	private String subscriptionContractId;
 	private Boolean status;
+	@Column(name="product_catalog_name")
+	private String productCatalogName;
 	
 	public TpayNotification() {}
 	public TpayNotification(Boolean status) {
@@ -73,49 +66,12 @@ public class TpayNotification implements Serializable{
 	public void setAction(String action) {
 		this.action = action;
 	}
-	public String getTransactionId() {
-		return transactionId;
-	}
-	public void setTransactionId(String transactionId) {
-		this.transactionId = transactionId;
-	}
-	public String getErrorMessage() {
-		return errorMessage;
-	}
-	public void setErrorMessage(String errorMessage) {
-		this.errorMessage = errorMessage;
-	}
-	public String getBillingAction() {
-		return billingAction;
-	}
-	public void setBillingAction(String billingAction) {
-		this.billingAction = billingAction;
-	}
-	public String getBillingNumber() {
-		return billingNumber;
-	}
-	public void setBillingNumber(String billingNumber) {
-		this.billingNumber = billingNumber;
-	}
-	public String getProductId() {
-		return productId;
-	}
-	public void setProductId(String productId) {
-		this.productId = productId;
-	}
 	public String getMsisdn() {
 		return msisdn;
 	}
 	public void setMsisdn(String msisdn) {
 		this.msisdn = msisdn;
 	}
-	public String getDigest() {
-		return digest;
-	}
-	public void setDigest(String digest) {
-		this.digest = digest;
-	}
-	
 	public String getTpayAction() {
 		return tpayAction;
 	}
@@ -189,15 +145,21 @@ public class TpayNotification implements Serializable{
 	public void setStatus(Boolean status) {
 		this.status = status;
 	}
+	
+	public String getProductCatalogName() {
+		return productCatalogName;
+	}
+	public void setProductCatalogName(String productCatalogName) {
+		this.productCatalogName = productCatalogName;
+	}
+	
 	@Override
 	public String toString() {
-		return "TpayNotification [id=" + id + ", action=" + action + ", transactionId=" + transactionId
-				+ ", errorMessage=" + errorMessage + ", billingAction=" + billingAction + ", billingNumber="
-				+ billingNumber + ", productId=" + productId + ", msisdn=" + msisdn + ", digest=" + digest
+		return "TpayNotification [id=" + id + ", action=" + action + ", tpayAction=" + tpayAction + ", msisdn=" + msisdn
 				+ ", notificationStatus=" + notificationStatus + ", paymentTransactionStatusCode="
 				+ paymentTransactionStatusCode + ", tokenId=" + tokenId + ", token=" + token + ", sendToAdnetwork="
 				+ sendToAdnetwork + ", validity=" + validity + ", amount=" + amount + ", queryStr=" + queryStr
-				+ ", createTime=" + createTime + ", status=" + status + "]";
-	}
-
+				+ ", createTime=" + createTime + ", subscriptionContractId=" + subscriptionContractId + ", status="
+				+ status + ", productCatalogName=" + productCatalogName + "]";
+	}	
 }

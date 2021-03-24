@@ -55,7 +55,7 @@ public class JMSTpayNotificationListener implements MessageListener
                 cgToken = new CGToken(subscriberRegs.get(0).getParam3());
             }
             else {
-                cgToken = new CGToken("-1c-1c1");
+                cgToken = new CGToken(getDefaultToken(tpayNotification));
             }
             final VWServiceCampaignDetail vwServiceCampaignDetail = MData.mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
             JMSTpayNotificationListener.logger.info("view " + vwServiceCampaignDetail);
@@ -74,17 +74,17 @@ public class JMSTpayNotificationListener implements MessageListener
             liveReport.setCircleId(0);
             tpayNotification.setToken(cgToken.getCGToken());
             tpayNotification.setTokenId(Integer.valueOf(cgToken.getTokenId()));
-            tpayNotification.setAction(this.findAction(tpayNotification, liveReport, tpayServiceConfig, sameDaysub));
+            tpayNotification.setAction(findAction(tpayNotification, liveReport, tpayServiceConfig, sameDaysub));
             JMSTpayNotificationListener.logger.info((Object)("tpay action : " + tpayNotification.getAction()));
             final double priceAmount = MUtility.toDouble(tpayNotification.getAmount(), -1.0);
-            if (tpayNotification.getAction().equalsIgnoreCase("RECYCLED_SUBCRIBER")) {
+            if (tpayNotification.getAction().equalsIgnoreCase(MConstants.GRACE)) {
                 liveReport.setParam1(tpayNotification.getSubscriptionContractId());
                 liveReport.setParam2(tpayServiceConfig.getOperatorCode());
-                liveReport.setAction("GRACE");
+                liveReport.setAction(MConstants.GRACE);
                 liveReport.setGraceConversionCount(1);
             }
-            else if (tpayNotification.getAction().equalsIgnoreCase("ACT")) {
-                liveReport.setAction("ACT");
+            else if (tpayNotification.getAction().equalsIgnoreCase(MConstants.ACT)) {
+                liveReport.setAction(MConstants.ACT);
                 liveReport.setConversionCount(1);
                 liveReport.setAmount(Double.valueOf((priceAmount > 0.0) ? priceAmount : Double.valueOf(tpayServiceConfig.getPrice())));
                 liveReport.setNoOfDays((int)tpayServiceConfig.getValidity());
@@ -93,7 +93,7 @@ public class JMSTpayNotificationListener implements MessageListener
                 tpayNotification.setValidity(Integer.valueOf(liveReport.getNoOfDays()));
                 tpayNotification.setAmount(liveReport.getAmount().toString());
             }
-            else if (tpayNotification.getAction().equalsIgnoreCase("RENEW")) {
+            else if (tpayNotification.getAction().equalsIgnoreCase(MConstants.RENEW)) {
                 liveReport.setAction("RENEW");
                 liveReport.setRenewalCount(1);
                 liveReport.setRenewalAmount(Double.valueOf((priceAmount > 0.0) ? priceAmount : Double.valueOf(tpayServiceConfig.getPrice())));
@@ -103,10 +103,11 @@ public class JMSTpayNotificationListener implements MessageListener
                 tpayNotification.setValidity(Integer.valueOf(liveReport.getNoOfDays()));
                 tpayNotification.setAmount(liveReport.getRenewalAmount().toString());
             }
-            else if (tpayNotification.getAction().equalsIgnoreCase("DCT")) {
-                liveReport.setAction("DCT");
+            else if (tpayNotification.getAction().equalsIgnoreCase(MConstants.DCT)) {
+                liveReport.setAction(MConstants.DCT);
                 liveReport.setDctCount(1);
             }
+            System.out.println("FINAL OBJ::::::"+tpayNotification);
         }
         catch (Exception e) {
             JMSTpayNotificationListener.logger.error("onMessage::::: ",e);
@@ -115,49 +116,38 @@ public class JMSTpayNotificationListener implements MessageListener
         finally {
                 try {
                     if (liveReport.getAction() != null) {
-                        this.liveReportFactoryService.process(liveReport);
+                        liveReportFactoryService.process(liveReport);
                     }
                     tpayNotification.setSendToAdnetwork(Boolean.valueOf(liveReport.getSendConversionCount() > 0));
                 }
                 catch (Exception ex) {
                     logger.error("onMessage::::::::::finally ", ex);
-                    update = this.daoService.saveObject(tpayNotification);
+                    update = daoService.saveObject(tpayNotification);
                 }
                 finally {
-                    update = this.daoService.saveObject(tpayNotification);
+                    update = daoService.saveObject(tpayNotification);
                 }
-                update = this.daoService.saveObject(tpayNotification);
             logger.info("onMessage::::::::::::::::: :: update::live report " + update + ", total time:: " + (System.currentTimeMillis() - time));
         }
-            try {
-                if (liveReport.getAction() != null) {
-                    this.liveReportFactoryService.process(liveReport);
-                }
-                tpayNotification.setSendToAdnetwork(Boolean.valueOf(liveReport.getSendConversionCount() > 0));
-            }
-            catch (Exception ex) {
-                logger.error("onMessage::::::::::finally ",ex);
-            }
-            finally {
-                update = this.daoService.saveObject(tpayNotification);
-            }
-            update = this.daoService.saveObject(tpayNotification);
         logger.info(("onMessage::::::::::::::::: :: update::live report " + update + ", total time:: " + (System.currentTimeMillis() - time)));
     }
     
     private String findAction(final TpayNotification tpayNotification, final LiveReport liveReport, final TpayServiceConfig tpayServiceConfig, final boolean sameDaysub) {
-    	System.out.println("TEST::::::::::::::"+Objects.nonNull(redisCacheService.getObjectCacheValue("TPAY_TEMP_SUBSCRIBE" + tpayNotification.getSubscriptionContractId())));
-       if(Objects.nonNull(redisCacheService.getObjectCacheValue("TPAY_TEMP_SUBSCRIBE" + tpayNotification.getSubscriptionContractId()))) {
-    	   if ("PaymentCompletedSuccessfully".equalsIgnoreCase(tpayNotification.getPaymentTransactionStatusCode())) {
+    	if(Objects.nonNull(redisCacheService.getObjectCacheValue("TPAY_TEMP_SUBSCRIBE" + tpayNotification.getSubscriptionContractId()))) {
+    	  if("SubscriptionChargingNotification".equalsIgnoreCase(tpayNotification.getTpayAction())) {
+    		if ("PaymentCompletedSuccessfully".equalsIgnoreCase(tpayNotification.getPaymentTransactionStatusCode())) {
     		   return MConstants.ACT;
     	   }else {
-    		   if(Objects.nonNull(redisCacheService.getObjectCacheValue(TpayConstant.TPAY_GRACE_RECEIVED_CACHE+tpayNotification.getSubscriptionContractId()))) {
+    		   if(Objects.isNull(redisCacheService.getObjectCacheValue(TpayConstant.TPAY_GRACE_RECEIVED_CACHE+tpayNotification.getSubscriptionContractId()))) {
     			   redisCacheService.putObjectCacheValueByEvictionDay(TpayConstant.TPAY_GRACE_RECEIVED_CACHE+tpayNotification.getSubscriptionContractId(), "RECEIVED", 1);
     			   return MConstants.GRACE;
     		   }else {
     			   return "";
     		   }
     	   }
+    	}else {
+    		return "";
+    	}
        }else if("SubscriptionContractStatusChanged".equalsIgnoreCase(tpayNotification.getTpayAction()) && "Canceled".equalsIgnoreCase(tpayNotification.getNotificationStatus())) {
 		   return MConstants.DCT;
 	   }
@@ -168,5 +158,20 @@ public class JMSTpayNotificationListener implements MessageListener
     		   return "";
     	   }
        }
+    }
+    
+    private String getDefaultToken(final TpayNotification tpayNotification) {
+    	if("GamesHub_Vodafone".equalsIgnoreCase(tpayNotification.getProductCatalogName())) {
+    		return "-1c-1c1";
+    	}else if("GamesHub_Orange".equalsIgnoreCase(tpayNotification.getProductCatalogName())) {
+    		return "-1c-1c2";
+    	}else if("GamesHub_Etisalat".equalsIgnoreCase(tpayNotification.getProductCatalogName())) {
+    		return "-1c-1c3";
+    	}else if("GamesHub_WE".equalsIgnoreCase(tpayNotification.getProductCatalogName())){
+    		return "-1c-1c4";
+    	}else {
+    		return "-1c-1c-1";
+    	}
+    	
     }
 }

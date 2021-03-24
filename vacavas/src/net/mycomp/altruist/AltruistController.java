@@ -18,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
+import net.jpa.repository.JPASubscriberReg;
+import net.persist.bean.SubscriberReg;
 import net.persist.bean.VWServiceCampaignDetail;
 import net.process.bean.CGToken;
 import net.util.MData;
@@ -34,6 +37,9 @@ public class AltruistController {
 	@Qualifier("jmsAltruistService")
 	private JMSAltruistService jmsAltruistService;
 	
+	@Autowired
+	private JPASubscriberReg jpaSubscriberReg; 
+	
 	private static final Logger logger = Logger.getLogger(AltruistController.class);
 	
 	@RequestMapping(value="send-pin", method=RequestMethod.POST)
@@ -44,13 +50,18 @@ public class AltruistController {
 			String token = request.getParameter("token");
 			String msisdn = request.getParameter("msisdn");
 			String lang = request.getParameter("lang");
-			modelAndView.addObject("msisdn", msisdn);
-			modelAndView.addObject("token", token);
-			modelAndView.addObject("lang", lang);
 			CGToken cgToken = new CGToken(token);
 			vwserviceCampaignDetail= MData.mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
 			altruistServiceConfig = AltruistConstant.mapServiceIdToAltruistServiceConfig
 					  .get(vwserviceCampaignDetail.getServiceId());
+			SubscriberReg subscriberReg =jpaSubscriberReg.findSubscriberRegByMsisdnAndProductId(msisdn, vwserviceCampaignDetail.getProductId());
+			if(Objects.nonNull(subscriberReg) && subscriberReg.getStatus()==1) {
+				modelAndView.setView(new RedirectView(altruistServiceConfig.getPortalURL().replaceAll("<msisdn>", msisdn)));
+				return modelAndView;
+			}
+			modelAndView.addObject("msisdn", msisdn);
+			modelAndView.addObject("token", token);
+			modelAndView.addObject("lang", lang);
 			modelAndView.addObject("altruistServiceConfig", altruistServiceConfig);
 			String response = altruistApiService.pinSend(token, msisdn, "web");
 			if(Objects.nonNull(response) && response.equals("1")) {
@@ -81,18 +92,18 @@ public class AltruistController {
 	public ModelAndView verifyPin(HttpServletRequest request, ModelAndView modelAndView) {
 		VWServiceCampaignDetail vwserviceCampaignDetail = null;
 		AltruistServiceConfig altruistServiceConfig=null;
-		try {	
+		try {
 			String token = request.getParameter("token");
 			String msisdn = request.getParameter("msisdn");
 			String lang = request.getParameter("lang");
 			String pin = request.getParameter("pin");
-			modelAndView.addObject("msisdn", msisdn);
-			modelAndView.addObject("token", token);
-			modelAndView.addObject("lang", lang);
 			CGToken cgToken = new CGToken(token);
 			vwserviceCampaignDetail= MData.mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
 			altruistServiceConfig = AltruistConstant.mapServiceIdToAltruistServiceConfig
 					  .get(vwserviceCampaignDetail.getServiceId());
+			modelAndView.addObject("msisdn", msisdn);
+			modelAndView.addObject("token", token);
+			modelAndView.addObject("lang", lang);
 			modelAndView.addObject("altruistServiceConfig", altruistServiceConfig);
 			String response = altruistApiService.verifyPin(token, msisdn, pin, "web");
 			if(Objects.nonNull(response) && response.equals("1")) {
@@ -155,4 +166,10 @@ public class AltruistController {
 		return modelAndView;
 	}
 	
+	@RequestMapping(value="send-sms")
+	@ResponseBody
+	public String sendSms(@RequestParam String msisdn, @RequestParam String token) {
+		altruistApiService.smsPush(msisdn, token);
+		return "OK";
+	}
 }

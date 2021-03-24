@@ -99,6 +99,7 @@ public class TpayApiService {
 		TpayRequest tpayRequest = null;
 
 		try {
+			 redisCacheService.putObjectCacheValueByEvictionDay(TpayConstant.TPAY_TEMP_SUBSCRIBE + subscriptionContractId, token,1);
 			tpayRequest = createValidationRequest(token, msisdn,"VALIDATE_PIN",subscriptionContractId,pin);
 		} catch (Exception e) {
 			logger.error("error"+e);
@@ -192,7 +193,6 @@ public class TpayApiService {
 			 liveReport.setParam3(token);
 			 subscriberRegService.findOrCreateSubscriberByAct(msisdn,
 					   null, liveReport);
-			 redisCacheService.putObjectCacheValueByEvictionDay(TpayConstant.TPAY_TEMP_SUBSCRIBE + subscriptionContractId, token,1);
 			tpaySubscriptionContractRequest = createSendWelcomeMtRequest(token, msisdn,"SEND_WELCOME_MT",lang);
 		} catch (Exception e) {
 			logger.error("error"+e);

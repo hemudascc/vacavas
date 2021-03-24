@@ -1,6 +1,5 @@
 package net.mycomp.tpay;
 
-import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -59,18 +57,13 @@ public class TpayController {
 		TpayNotification tpayNotification = new TpayNotification(true);
 		try {
 			tpayNotification.setTpayAction(request.getParameter("action"));
-			tpayNotification.setTransactionId(request.getParameter("transactionId"));
 			tpayNotification.setAmount(request.getParameter("collectedAmount"));
-			tpayNotification.setErrorMessage(request.getParameter("errorMessage"));
-			tpayNotification.setBillingAction(request.getParameter("billAction"));
-			tpayNotification.setBillingNumber(request.getParameter("billNumber"));
-			tpayNotification.setProductId(request.getParameter("productId"));
 			tpayNotification.setMsisdn(request.getParameter("msisdn"));
-			tpayNotification.setDigest(URLDecoder.decode(request.getParameter("digest")));
 			tpayNotification.setNotificationStatus(request.getParameter("status"));
 			tpayNotification.setPaymentTransactionStatusCode(request.getParameter("paymentTransactionStatusCode"));
 			tpayNotification.setQueryStr(request.getQueryString());
 			tpayNotification.setSubscriptionContractId(request.getParameter("subscriptionContractId"));
+			tpayNotification.setProductCatalogName(request.getParameter("productCatalogName"));
 		} catch (Exception e) {
 			logger.error("notification:: ", e);
 		} finally {
