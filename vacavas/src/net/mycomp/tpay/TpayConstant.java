@@ -34,20 +34,20 @@ public interface TpayConstant {
 	 * "http://enrichment-staging.tpay.me/idxml.ashx/js-staging?date=[0]&digest=[4]";
 	 */
 	
-	public static final String PUBLIC_KEY = "3pxFle1Fe3jvdtLuwjMt";
-	public static final String PRIVATE_KEY = "d4U9NCOXBAmMSloiiH2u";	
-	public static final String SECRET_KEY = "d4U9NCOXBAmMSloiiH2u";
+//	public static final String PUBLIC_KEY = "3pxFle1Fe3jvdtLuwjMt";
+//	public static final String PRIVATE_KEY = "d4U9NCOXBAmMSloiiH2u";	
+//	public static final String SECRET_KEY = "d4U9NCOXBAmMSloiiH2u";
 	
-	public static final String TPAY_PORTAL_URL="http://192.241.167.189:8080/gameshub/?msisdn=<msisdn>&lang=<lang>";
+//	public static final String TPAY_PORTAL_URL="http://192.241.167.189:8080/gameshub/?msisdn=<msisdn>&lang=<lang>";
 	public static final String PIN_URL = "https://live.tpay.me/api/TPAYSubscription.svc/json/AddSubscriptionContractRequest";
 	public static final String PIN_VALIDATE_URL = "https://live.tpay.me/api/TPaySubscription.svc/json/VerifySubscriptionContract";
 	public static final String PIN_RESEND_URL = "https://live.tpay.me/api/TPaySubscription.svc/json/SendSubscriptionContractVerificationSMS";
 	public static final String SMS_URL = "https://live.tpay.me/api/TPay.svc/json/SendFreeMTMessage";
 	public static final String CANCEL_SUBSCRIPTION_CONTARCT_URL = "https://live.tpay.me/api/TPaySubscription.svc/json/CancelSubscriptionContractRequest";
-	public static final String WELCOME_MESSAGE_SMS_ENG = "Thanks for subscribing to GamesHub to enjoy visit http://192.241.167.189:8080/gameshub?msisdn=<msisdn>&lang=<lang>. You will be charged for <price> Egyptian Pound/<billing_sequence> to unsubscribe send <unsub_keyword> to <shortcode> for free. Service is auto-renewed. Internet usage is deducted from your Internet bundle for queries, contact on vas.support@vacastudios.com";
-	public static final String WELCOME_MESSAGE_SMS_ARB = new String("شكرًا لك على الاشتراك في GamesHub ، للاستمتاع بزيارة http://192.241.167.189:8080/gameshub?msisdn=<msisdn>&lang=<lang>. سيتم تحصيل <price> جنيه مصري في اليوم لإلغاء الاشتراك ، أرسل <unsub_keyword> إلى <shortcode>. الخدمة تجدد تلقائيا , استهلاك الانترنت سوف يخصم من الباقة الخاصة بك للاستفسارات ، اتصل على vas.support@vacastudios.com".getBytes(),StandardCharsets.UTF_8);
-	public static final String CONTENT_MESSAGE_SMS_ENG = "Please access the content using http://192.241.167.189:8080/gameshub?msisdn=<msisdn>&lang=<lang> URL. For queries, contact on vas.support@vacastudios.com";
-	public static final String CONTENT_MESSAGE_SMS_ARB = "يرجى الوصول إلى المحتوى باستخدام http://192.241.167.189:8080/gameshub?msisdn=<msisdn>&lang=<lang> URL. للاستفسارات ، اتصل على vas.support@vacastudios";
+	public static final String WELCOME_MESSAGE_SMS_ENG = "Thanks for subscribing to <servicename>  to enjoy visit <portalurl>. You will be charged for <price> <currency>/<billing_sequence> to unsubscribe send <unsub_keyword> to <shortcode> for free. For queries, contact on vas.support@vacastudios.com";
+	public static final String WELCOME_MESSAGE_SMS_ARB = new String("شكرًا لاشتراكك في <servicename> للاستمتاع بزيارة <portalurl>. سيتم محاسبتك على <price> <currency> / <billing_sequence> لإلغاء الاشتراك ، أرسل <unsub_keyword> إلى <shortcode> مجانًا. للاستفسارات ، اتصل على vas.support@vacastudios.com");
+	public static final String CONTENT_MESSAGE_SMS_ENG = "Please access the content using <portalurl> URL. For queries, contact on vas.support@vacastudios.com";
+	public static final String CONTENT_MESSAGE_SMS_ARB = "يرجى الوصول إلى المحتوى باستخدام <portalurl> URL. للاستفسارات ، اتصل على vas.support@vacastudios.com";
 
 	
 	

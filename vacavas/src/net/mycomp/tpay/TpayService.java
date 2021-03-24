@@ -17,9 +17,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 import net.common.service.RedisCacheService;
+import net.jpa.repository.JPASubscriberReg;
 import net.jpa.repository.JPATpayServiceConfig;
+import net.persist.bean.SubscriberReg;
 import net.process.bean.AdNetworkRequestBean;
 import net.process.request.AbstractOperatorService;
+import net.util.MConstants;
 
 @Service("tpayService")
 public class TpayService extends AbstractOperatorService {
@@ -35,7 +38,10 @@ public class TpayService extends AbstractOperatorService {
 	
 	@Autowired
 	private RedisCacheService redisCacheService;
-
+	
+	@Autowired
+	private JPASubscriberReg jpaSubscriberReg;
+	
 	@PostConstruct
 	public void init() {
 		List<TpayServiceConfig> tpayServiceConfigList = jpaTpayServiceConfig.findEnableTpayServiceConfig(true);
@@ -59,18 +65,18 @@ public class TpayService extends AbstractOperatorService {
 			TpayServiceConfig tpayServiceConfig = TpayConstant.mapServiceIdToTpayServiceConfig
 					.get(adNetworkRequestBean.vwserviceCampaignDetail.getServiceId());
 
-			logger.info("TPAY-CONFIG : " + tpayServiceConfig);
+			logger.info("TPAY-CONFIG : " + tpayServiceConfig);  
 
 			String lang = adNetworkRequestBean.getQueryString().contains("lang=2") ? TpayConstant.LANG_AR
 					: TpayConstant.LANG_EN;
 
 			
-			String date = getCurrentTimeStamp() + "Z";
-			String message = date+lang;
-			logger.info("message: " + message);
-			byte[] keyBytes = TpayConstant.SECRET_KEY.getBytes();
+			String date = getCurrentTimeStamp() + "Z";  
+			String message = date+lang;  
+			logger.info("message: " + message);   
+			byte[] keyBytes = tpayServiceConfig.getPrivateKey().getBytes();  
 
-			String digest = TpayConstant.PUBLIC_KEY + ":" + TpayUtill.hmacSHA256(message, keyBytes);
+			String digest = tpayServiceConfig.getPublicKey() + ":" + TpayUtill.hmacSHA256(message, keyBytes);
 			logger.info("Digest:" + digest);
 			
 			String msisdn = TpayConstant.getMsisdnByOperatorCode(tpayServiceConfig.getOperatorCode());
@@ -116,6 +122,16 @@ public class TpayService extends AbstractOperatorService {
 
 	@Override
 	public boolean checkSub(Integer productId, Integer opid, String msisdn) {
+		List<SubscriberReg> list=jpaSubscriberReg.findSubscriberRegByMsisdn(msisdn);
+		logger.info("checkSub:::::::::: list of subscriberreg "+list);
+		SubscriberReg subscriberReg=null;
+		if(list!=null&&list.size()>0){
+			subscriberReg=list.get(0);
+		}
+		logger.info("checkSub:::::::::: subscriberReg: "+subscriberReg);
+		if(subscriberReg!=null&&subscriberReg.getStatus()==MConstants.SUBSCRIBED){
+			return true;
+		}		
 		return false;
 	}
 	

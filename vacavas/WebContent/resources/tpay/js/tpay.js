@@ -5,7 +5,8 @@ var portalurlsentcount=0;
 $(document).ready(function(){
 	token = $("#token").val();
 	lang = $("#langvalue").val();
-	
+	var portal = $("#protalUrl").val();
+	portalUrl = portal.split("?")[0];
 	if($("#sessionToken").val()===''){
 		sessionToken = TPay.HeaderEnrichment.sessionToken();	
 	}
@@ -58,7 +59,7 @@ $(document).ready(function(){
 						}
 					},operatorCode,msisdn);
 				}else{
-					window.location.href="./"+$('#baseURL').val()+"/redirect-portal/"+subId+"/"+lang
+					window.location.href="./"+$('#baseURL').val()+"/redirect-portal/"+subId+"/"+lang+"/"+token 
 				}
 			});
 		}else{
@@ -165,12 +166,19 @@ $(document).ready(function(){
 			   event.returnValue = false;
 			}
 		}
-		$("#exit-button").click(function(){
-			window.location.href="http://192.241.167.189:8080/gameshub?msisdn="+$("#msisdn").val()+"&lang="+lang
-		});
-		$("#unsubscribe-button").click(function(){
-			$("#unsubscribe-button").prop("disabled",true);
-			$.get("./unsubscribe?msisdn="+$("#msisdn").val()+"&lang="+$("#lang").val(), function(data, status){
+		
+
+});
+
+function exit(){
+	window.location.href=$("#portalurl").val();
+} 
+ 
+function unsubscribe(){
+	
+		$("#unsubscribe-button").prop("disabled",true);
+		$("#unsubscribe-button1").prop("disabled",true);
+			$.get("./unsubscribe?msisdn="+$("#msisdn").val()+"&lang="+$("#langvalue").val()+"&token="+$("#tokenvalue").val(), function(data, status){
 				if(parseInt(data)==51){
 					$("#consent-p").css('display',"none");
 					$("#unsubscribe-msg").text($("#already-unsub-message").val());
@@ -182,7 +190,7 @@ $(document).ready(function(){
 					$("#consent-p").css('display',"none");
 					$("#unsubscribe-msg").text($("#success-unsub-message").val());
 					$("#unsubscribe-msg").css('display',"block");
-					setTimeout(function(){ window.location.href="http://192.241.167.189:8080/vacavas/sys/sub?adid=1&evid="+$("#campId").val()+"&ref=test" }, 3000);
+					setTimeout(function(){ window.location.href="http://192.241.167.189:8080/vacavas/sys/sub?adid=1&evid="+$("#campId").val()+"&ref=test"}, 3000);
 				}else{
 					$("#consent-p").css('display',"none");
 					$("#unsubscribe-msg").text($("#already-unsub-message").val());
@@ -190,9 +198,9 @@ $(document).ready(function(){
 				}
 				}
 			});
-		});
-});
 
+}
+ 
 function changeLang(){
 	var x = document.getElementById("redirectStatus").value;
 	var lang = document.getElementById("lang").value;
@@ -213,7 +221,7 @@ function sendWelcomeMT(msisdn,token,subscriptionContractId){
 }
 
 function sendPortalUrlMt(){
-	$.get("./"+$('#baseURL').val()+"/send-content-mt?msisdn="+$('#msisdn').val()+"&lang="+$("#langvalue").val(), function(data, status){
+	$.get("./"+$('#baseURL').val()+"/send-content-mt?msisdn="+$('#msisdn').val()+"&lang="+$("#langvalue").val()+"&token="+token, function(data, status){
 		var obj = JSON.parse(data);
 		if(obj.messageDeliveryStatus==true){
 			$("#message").text($("#success-content-msg").val());

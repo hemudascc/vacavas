@@ -87,7 +87,9 @@ public class TpayController {
 		JSONObject object = null;
 		logger.info("sending pin to user msisdn : " + msisdn + " token : " + token);
 		try {
-			
+			if(msisdn !=null) {
+				msisdn = msisdn.trim();
+			}
 			CGToken cgToken = new CGToken(token);
 
 			VWServiceCampaignDetail vwServiceCampaignDetail = MData.mapCamapignIdToVWServiceCampaignDetail
@@ -115,7 +117,9 @@ public class TpayController {
 		String response = null;
 		logger.info("resending pin to user msisdn : " + msisdn + " token : " + token);
 		try {
-
+			if(msisdn !=null) {
+				msisdn = msisdn.trim();
+			}
 			response = tpayApiService.resendPin(token, msisdn, subscriptionContractId,lang);
 
 			logger.info("pin resent to user msisdn : " + msisdn + " token : " + token);
@@ -132,6 +136,12 @@ public class TpayController {
 		JSONObject object = null;
 		logger.info("validate pin to user subscriptionContractId : " + subscriptionContractId + " pin : " + pin);
 		try {
+			if(msisdn !=null) {
+				msisdn = msisdn.trim();
+			}
+			if(pin !=null) {
+				pin = pin.trim();
+			}
 			redisCacheService.putObjectCacheValueByEvictionMinute(
 					TpayConstant.TPAY_CACHE_PREFIX + subscriptionContractId, msisdn, 60 * 24);
 			CGToken cgToken = new CGToken(token);
@@ -145,7 +155,7 @@ public class TpayController {
 			response = tpayApiService.validatePin(token, msisdn, subscriptionContractId, pin);
 			object = new JSONObject(response);
 			object.put("portalUrl", tpayServiceConfig.getProtalUrl().replaceAll("<msisdn>", msisdn)
-					.replaceAll("<lang>", lang.equals("1")?"2":"1"));
+					.replaceAll("<lang>", lang.equals("1")?"2":"1").replaceAll("<subid>", msisdn));
 			// response = response.substring(0, response.length()-1)+","":"++"}";
 
 			logger.info("pin validation to user subscriptionContractId : " + subscriptionContractId + " pin : " + pin);
@@ -155,15 +165,17 @@ public class TpayController {
 		return object.toString();
 	}
 
-	@RequestMapping("send-welcome-mt")
-	public String sendWelcomeMT(@RequestParam String token, @RequestParam String msisdn,
+	@RequestMapping("send-welcome-mt")  
+	public String sendWelcomeMT(@RequestParam String token, @RequestParam String msisdn,  
 			@RequestParam String subscriptionContractId, @RequestParam Integer lang) {
 
 		String response = null;
 		logger.info("Sending welcome message to user msisdn : " + msisdn + " token : " + token
 				+ " subscriptionContractId: " + subscriptionContractId+" lang: "+lang);
 		try {
-
+			if(msisdn !=null) {
+				msisdn = msisdn.trim();
+			}
 			response = tpayApiService.sendWelcomeMT(token, msisdn, subscriptionContractId,lang);
 
 			logger.info("Sending welcome message to user msisdn : " + msisdn + " token : " + token
@@ -176,13 +188,15 @@ public class TpayController {
 	}
 	
 	@RequestMapping("send-content-mt")
-	public String sendContentMT(@RequestParam String msisdn, @RequestParam Integer lang) {
+	public String sendContentMT(@RequestParam String msisdn, @RequestParam Integer lang,@RequestParam String token) {
 
 		String response = null;
 		logger.info("Sending Content message to user msisdn : " + msisdn+" lang: "+lang);
 		try {
-
-			response = tpayApiService.sendContentMT(msisdn, lang);
+			if(msisdn !=null) {
+				msisdn = msisdn.trim();
+			}
+			response = tpayApiService.sendContentMT(msisdn, lang,token);
 
 			logger.info("Sent Content message to user msisdn : " + msisdn+" lang: "+lang);	
 		} catch (Exception e) {
@@ -200,20 +214,28 @@ public class TpayController {
 		modelAndView.setViewName("tpay/unsubscribe");
 		modelAndView.addObject("msisdn", msisdn);
 		if(subscriberReg!=null && subscriberReg.getStatus()==1) {
-			modelAndView.addObject("campId", subscriberReg.getServiceId());	
+			TpayServiceConfig tpayServiceConfig = TpayConstant.mapServiceIdToTpayServiceConfig
+					.get(subscriberReg.getServiceId());
+			CGToken cgToken = new CGToken(subscriberReg.getParam3());
+			modelAndView.addObject("lpImageUrl", tpayServiceConfig.getLpImageUrl());
+			modelAndView.addObject("portalUrl", tpayServiceConfig.getProtalUrl().replaceAll("<msisdn>", msisdn).replaceAll("<lang>", lang).replaceAll("<subid>", msisdn));	
+			modelAndView.addObject("campId", cgToken.getCampaignId());	
+			modelAndView.addObject("token", subscriberReg.getParam3());	
 		}
 		modelAndView.addObject("lang", lang);
 		return modelAndView;
 	}
 
 	@RequestMapping("unsubscribe")
-	public String unsubscribe(@RequestParam String msisdn, @RequestParam String lang) {
+	public String unsubscribe(@RequestParam String msisdn, @RequestParam String lang,@RequestParam String token) {
 
 		String response = null;
 		logger.info("unsubscribing user msisdn : " + msisdn);
 		try {
-
-			response = tpayApiService.unsubscribe(msisdn, lang);
+			if(msisdn !=null) {
+				msisdn = msisdn.trim();
+			}
+			response = tpayApiService.unsubscribe(msisdn, lang,token);
 
 			logger.info("unsubscribing user msisdn : " + msisdn);
 		} catch (Exception e) {
@@ -235,9 +257,9 @@ public class TpayController {
 		String date = getCurrentTimeStamp() + "Z";
 		String message = date+langString;
 		logger.info("message: " + message);
-		byte[] keyBytes = TpayConstant.SECRET_KEY.getBytes();
+		byte[] keyBytes = tpayServiceConfig.getPrivateKey().getBytes();
 
-		String digest = TpayConstant.PUBLIC_KEY + ":" + TpayUtill.hmacSHA256(message, keyBytes);
+		String digest = tpayServiceConfig.getPublicKey() + ":" + TpayUtill.hmacSHA256(message, keyBytes);
 		logger.info("Digest:" + digest);
 		
 	//	String msisdn = TpayConstant.getMsisdnByOperatorCode(tpayServiceConfig.getOperatorCode());
@@ -274,14 +296,20 @@ public class TpayController {
 		
 		return modelAndView;
 	}
-	@RequestMapping("redirect-portal/{subscriptionContractId}/{lang}")
+	@RequestMapping("redirect-portal/{subscriptionContractId}/{lang}/{token}")
 	public ModelAndView redirectPortal(@PathVariable("subscriptionContractId") String subscriptionContractId,
-										@PathVariable("lang") String lang, ModelAndView modelAndView) {
+										@PathVariable("lang") String lang,@PathVariable("token") String token, ModelAndView modelAndView) {
 		String portalURL="http://subscriptionContractId";
+		CGToken cgToken=new CGToken(token);
+		VWServiceCampaignDetail 
+		vwServiceCampaignDetail = MData.mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
+		TpayServiceConfig tpayServiceConfig = TpayConstant.mapServiceIdToTpayServiceConfig
+				.get(vwServiceCampaignDetail.getServiceId());
 		List<SubscriberReg> subscriberRegs = tpayApiService.getSubscriberRegBySubscriptionContractId(subscriptionContractId);
 		if(subscriberRegs!=null) {
-			portalURL = TpayConstant.TPAY_PORTAL_URL.replaceAll("<msisdn>", subscriberRegs.get(0).getMsisdn())
-					.replaceAll("<lang>", lang.equals("0")?"1":"2");
+			portalURL = tpayServiceConfig.getProtalUrl().replaceAll("<msisdn>", subscriberRegs.get(0).getMsisdn())
+					.replaceAll("<lang>", lang.equals("0")?"1":"2")
+					.replaceAll("<subid>", subscriptionContractId);
 		}
 		modelAndView.setView(new RedirectView(portalURL));
 		return modelAndView;
@@ -302,9 +330,9 @@ public class TpayController {
 		String date = getCurrentTimeStamp() + "Z";
 		String message = date+langString;
 		logger.info("message: " + message);
-		byte[] keyBytes = TpayConstant.SECRET_KEY.getBytes();
+		byte[] keyBytes = tpayServiceConfig.getPrivateKey().getBytes();
 
-		String digest = TpayConstant.PUBLIC_KEY + ":" + TpayUtill.hmacSHA256(message, keyBytes);
+		String digest = tpayServiceConfig.getPublicKey() + ":" + TpayUtill.hmacSHA256(message, keyBytes);
 		logger.info("Digest:" + digest);
 		
 	//	String msisdn = TpayConstant.getMsisdnByOperatorCode(tpayServiceConfig.getOperatorCode());

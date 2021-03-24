@@ -11,7 +11,12 @@ public class TpayServiceConfig {
 	
 	@Id
 	private Integer id;
+
+	@Column(name="public_key")
+	private String publicKey;
 	
+	@Column(name="private_key")
+	private String privateKey;
 	@Column(name="service_id")
 	private Integer serviceId;
 	
@@ -56,6 +61,9 @@ public class TpayServiceConfig {
 	
 	@Column(name="billing_sequence")
 	private String billingSequence;
+	
+	@Column(name="lp_image_url")
+	private String lpImageUrl;
 	
 	@Column(name="portal_url")
 	private String protalUrl;
@@ -218,15 +226,42 @@ public class TpayServiceConfig {
 		this.validity = validity;
 	}
 
+	public String getPublicKey() {
+		return publicKey;
+	}
+
+	public void setPublicKey(String publicKey) {
+		this.publicKey = publicKey;
+	}
+
+	public String getPrivateKey() {
+		return privateKey;
+	}
+
+	public void setPrivateKey(String privateKey) {
+		this.privateKey = privateKey;
+	}
+
+	public String getLpImageUrl() {
+		return lpImageUrl;
+	}
+
+	public void setLpImageUrl(String lpImageUrl) {
+		this.lpImageUrl = lpImageUrl;
+	}
+
 	@Override
 	public String toString() {
-		return "TpayServiceConfig [id=" + id + ", serviceId=" + serviceId + ", productId=" + productId + ", operatorId="
-				+ operatorId + ", serviceName=" + serviceName + ", operatorCode=" + operatorCode
-				+ ", subscriptionPlanId=" + subscriptionPlanId + ", catalogName=" + catalogName + ", paymentProductId="
-				+ paymentProductId + ", country=" + country + ", operatorName=" + operatorName + ", shortCode="
-				+ shortCode + ", unsubKeyword=" + unsubKeyword + ", currency=" + currency + ", price=" + price
-				+ ", billingSequence=" + billingSequence + ", protalUrl=" + protalUrl + ", validity=" + validity
-				+ ", status=" + status + "]";
+		return "TpayServiceConfig [id=" + id + ", publicKey=" + publicKey + ", privateKey=" + privateKey
+				+ ", serviceId=" + serviceId + ", productId=" + productId + ", operatorId=" + operatorId
+				+ ", serviceName=" + serviceName + ", operatorCode=" + operatorCode + ", subscriptionPlanId="
+				+ subscriptionPlanId + ", catalogName=" + catalogName + ", paymentProductId=" + paymentProductId
+				+ ", country=" + country + ", operatorName=" + operatorName + ", shortCode=" + shortCode
+				+ ", unsubKeyword=" + unsubKeyword + ", currency=" + currency + ", price=" + price
+				+ ", billingSequence=" + billingSequence + ", lpImageUrl=" + lpImageUrl + ", protalUrl=" + protalUrl
+				+ ", validity=" + validity + ", status=" + status + "]";
 	}
+
+
 	
 }

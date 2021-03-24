@@ -109,7 +109,7 @@ public class TpayApiService {
 		return tpayRequest.getResponse();
 	}
 
-	public String unsubscribe(String msisdn,String lang) {
+	public String unsubscribe(String msisdn,String lang,String token) {
 		TpayRequest tpayRequest = null;
 		String contractId=null;
 		try {
@@ -122,7 +122,7 @@ public class TpayApiService {
 				contractId = subscriberReg.getParam1();
 			}
 			
-			tpayRequest = createUnsubscribeRequest(contractId,"UNSUBSCRIBE",msisdn,lang);
+			tpayRequest = createUnsubscribeRequest(contractId,"UNSUBSCRIBE",msisdn,lang,token);
 		
 		} catch (Exception e) {
 			logger.error("error"+e);
@@ -133,12 +133,13 @@ public class TpayApiService {
 		return tpayRequest.getResponse();
 	}
 		
-	private TpayRequest createUnsubscribeRequest(String subscriptionContractId, String action, String msisdn, String lang) {
+	private TpayRequest createUnsubscribeRequest(String subscriptionContractId, String action, String msisdn, String lang,String token) {
 		
 		TpayRequest  tpaySubscriptionContractRequest = new TpayRequest(true,action);
 
 		Map<String,String> headerMap=new HashMap<String,String>();
 
+		CGToken cgtoken = new CGToken(token);
 		headerMap.put("Content-Type", "application/json");
 		headerMap.put("Accept", "application/json");
 		
@@ -146,12 +147,15 @@ public class TpayApiService {
 			logger.info("can not proceed request for unsubscription msisdn"+msisdn);
 			tpaySubscriptionContractRequest.setResponseCode(400);
 			tpaySubscriptionContractRequest.setResponse("51");
+			tpaySubscriptionContractRequest.setCampaignId(cgtoken.getCampaignId());
+			tpaySubscriptionContractRequest.setMsisdn(msisdn);
+			tpaySubscriptionContractRequest.setToken(token);
 			return tpaySubscriptionContractRequest;
 		}
 		
 		Map<String, String> requestMap = new HashMap<>();
 		requestMap.put("subscriptionContractId", subscriptionContractId);
-		requestMap.put("signature", createSignature(requestMap,subscriptionContractId));
+		requestMap.put("signature", createSignature(requestMap,subscriptionContractId,token));
 		requestMap.put("lang", lang.equals("1")?"2":"1");
 		String request = JsonMapper.getObjectToJson(requestMap);
 
@@ -163,7 +167,9 @@ public class TpayApiService {
 
 		tpaySubscriptionContractRequest.setResponseCode(httpResponse.getResponseCode());
 		tpaySubscriptionContractRequest.setResponse(httpResponse.getResponseStr());
-
+		tpaySubscriptionContractRequest.setCampaignId(cgtoken.getCampaignId());
+		tpaySubscriptionContractRequest.setMsisdn(msisdn);
+		tpaySubscriptionContractRequest.setToken(token);
 		return tpaySubscriptionContractRequest;
 
 		
@@ -203,14 +209,14 @@ public class TpayApiService {
 		return tpaySubscriptionContractRequest.getResponse();
 	}
 	
-	public String sendContentMT(String msisdn,Integer lang) {
+	public String sendContentMT(String msisdn,Integer lang,String token) {
 		
 		TpayRequest tpaySubscriptionContractRequest = null;
 		
 		try {
 			List<SubscriberReg> subscriberReg = jpaSubscriberReg.findSubscriberRegByMsisdn(msisdn);
 			if(subscriberReg!=null) {
-				tpaySubscriptionContractRequest = createSendContentRequest(msisdn,"SEND_CONTENT_MT",lang, subscriberReg.get(0));
+				tpaySubscriptionContractRequest = createSendContentRequest(msisdn,"SEND_CONTENT_MT",lang, subscriberReg.get(0),token);
 			}
 		} catch (Exception e) {
 			logger.error("error"+e);
@@ -221,22 +227,28 @@ public class TpayApiService {
 		return tpaySubscriptionContractRequest.getResponse();
 	}
 	
-	private TpayRequest createSendContentRequest(String msisdn, String action, Integer lang, SubscriberReg subscriberReg) {
+	private TpayRequest createSendContentRequest(String msisdn, String action, Integer lang, SubscriberReg subscriberReg,String token) {
 		Map<String,String> headerMap=new HashMap<String,String>();
 		TpayRequest  tpaySubscriptionContractRequest = new TpayRequest(true,action);
-		
+		CGToken cgToken=new CGToken(token);
+		VWServiceCampaignDetail 
+		vwServiceCampaignDetail = MData.mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
+		TpayServiceConfig tpayServiceConfig = TpayConstant.mapServiceIdToTpayServiceConfig
+				.get(vwServiceCampaignDetail.getServiceId());
 		headerMap.put("Content-Type", "application/json");
 		headerMap.put("Accept", "application/json");
 		
 		String message = "";
 		if(lang==0) { 
 			message =	TpayConstant.CONTENT_MESSAGE_SMS_ENG
-						 .replaceAll("<msisdn>", msisdn)
-						 .replaceAll("<lang>","1");
+					 .replaceAll("<portalurl>", tpayServiceConfig.getProtalUrl())
+					 .replaceAll("<msisdn>", msisdn)  
+					 .replaceAll("<lang>","1");
 		}else {
 			message = TpayConstant.CONTENT_MESSAGE_SMS_ARB
-					 .replaceAll("<msisdn>", msisdn)
-					 .replaceAll("<lang>","2");
+					.replaceAll("<portalurl>", tpayServiceConfig.getProtalUrl())
+					.replaceAll("<msisdn>", msisdn)
+					.replaceAll("<lang>","2");
 		}
 		
 		Map<String, String> requestMap = new HashMap<>();
@@ -244,7 +256,7 @@ public class TpayApiService {
 		requestMap.put("messageBody", message);
 		requestMap.put("msisdn", msisdn);
 		requestMap.put("operatorCode", subscriberReg.getParam2());
-		requestMap.put("signature", TpayUtill.CalculateDigest(TpayConstant.PUBLIC_KEY, message+msisdn+subscriberReg.getParam2(), TpayConstant.PRIVATE_KEY));
+		requestMap.put("signature", TpayUtill.CalculateDigest(tpayServiceConfig.getPublicKey(), message+msisdn+subscriberReg.getParam2(), tpayServiceConfig.getPrivateKey()));
 		
 		String request = JsonMapper.getObjectToJson(requestMap);
 
@@ -258,6 +270,9 @@ public class TpayApiService {
 		
 		tpaySubscriptionContractRequest.setResponseCode(response.getStatusCode().value());
 		tpaySubscriptionContractRequest.setResponse(response.getBody());
+		tpaySubscriptionContractRequest.setCampaignId(cgToken.getCampaignId());
+		tpaySubscriptionContractRequest.setMsisdn(msisdn);
+		tpaySubscriptionContractRequest.setToken(token);
 		logger.info("response:"+response.getBody());
 
 		return tpaySubscriptionContractRequest;
@@ -285,18 +300,26 @@ public class TpayApiService {
 		String message = "";
 		if(lang==0) { 
 			message =	TpayConstant.WELCOME_MESSAGE_SMS_ENG.replaceAll("<price>", tpayServiceConfig.getPrice())
-						 .replaceAll("<msisdn>", msisdn)
-						 .replaceAll("<billing_sequence>",tpayServiceConfig.getBillingSequence())
-						 .replaceAll("<unsub_keyword>", tpayServiceConfig.getUnsubKeyword())
-						 .replaceAll("<shortcode>", tpayServiceConfig.getShortCode())
-						 .replaceAll("<lang>","1");
-		}else {
-			message = TpayConstant.WELCOME_MESSAGE_SMS_ARB.replaceAll("<price>", tpayServiceConfig.getPrice())
+					 .replaceAll("<portalurl>", tpayServiceConfig.getProtalUrl())
+					 .replaceAll("<servicename>", tpayServiceConfig.getServiceName())
+					 .replaceAll("<currency>", tpayServiceConfig.getCurrency())
 					 .replaceAll("<msisdn>", msisdn)
 					 .replaceAll("<billing_sequence>",tpayServiceConfig.getBillingSequence())
 					 .replaceAll("<unsub_keyword>", tpayServiceConfig.getUnsubKeyword())
 					 .replaceAll("<shortcode>", tpayServiceConfig.getShortCode())
-					 .replaceAll("<lang>","2");
+					 .replaceAll("<lang>","1")
+					 .replaceAll("<subid>",msisdn);
+	}else {
+		message = TpayConstant.WELCOME_MESSAGE_SMS_ARB.replaceAll("<price>", tpayServiceConfig.getPrice())
+				 .replaceAll("<portalurl>", tpayServiceConfig.getProtalUrl())
+				 .replaceAll("<servicename>", tpayServiceConfig.getServiceName())
+				 .replaceAll("<currency>", tpayServiceConfig.getCurrency())
+				 .replaceAll("<msisdn>", msisdn)
+				 .replaceAll("<billing_sequence>",tpayServiceConfig.getBillingSequence())
+				 .replaceAll("<unsub_keyword>", tpayServiceConfig.getUnsubKeyword())
+				 .replaceAll("<shortcode>", tpayServiceConfig.getShortCode())
+				 .replaceAll("<lang>","2")
+				 .replaceAll("<subid>",msisdn);
 		}
 		
 		Map<String, String> requestMap = new HashMap<>();
@@ -304,7 +327,7 @@ public class TpayApiService {
 		requestMap.put("messageBody", message);
 		requestMap.put("msisdn", msisdn);
 		requestMap.put("operatorCode", tpayServiceConfig.getOperatorCode());
-		requestMap.put("signature", TpayUtill.CalculateDigest(TpayConstant.PUBLIC_KEY, message+msisdn+tpayServiceConfig.getOperatorCode(), TpayConstant.PRIVATE_KEY));
+		requestMap.put("signature", TpayUtill.CalculateDigest(tpayServiceConfig.getPublicKey(), message+msisdn+tpayServiceConfig.getOperatorCode(), tpayServiceConfig.getPrivateKey()));
 		
 		String request = JsonMapper.getObjectToJson(requestMap);
 
@@ -318,6 +341,10 @@ public class TpayApiService {
 		
 		tpaySubscriptionContractRequest.setResponseCode(response.getStatusCode().value());
 		tpaySubscriptionContractRequest.setResponse(response.getBody());
+		tpaySubscriptionContractRequest.setToken(token);
+		tpaySubscriptionContractRequest.setMsisdn(msisdn);
+		tpaySubscriptionContractRequest.setCampaignId(cgToken.getCampaignId());
+		
 		logger.info("response:"+response.getBody());
 
 		return tpaySubscriptionContractRequest;
@@ -341,7 +368,7 @@ public class TpayApiService {
 		Map<String, String> requestMap = new HashMap<>();
 		requestMap.put("subscriptionContractId", subscriptionContractId);
 		requestMap.put("pinCode", pin);
-		requestMap.put("signature", createSignature(requestMap,subscriptionContractId+pin));
+		requestMap.put("signature", createSignature(requestMap,subscriptionContractId+pin,token));
 		String request = JsonMapper.getObjectToJson(requestMap);
 
 		tpaySubscriptionContractRequest.setRequest("Request URL : "+TpayConstant.PIN_VALIDATE_URL+"; Request : "+request+"; Headers:"+headerMap);
@@ -372,7 +399,7 @@ public class TpayApiService {
 		tpaySubscriptionContractRequest.setCampaignId(cgToken.getCampaignId());
 		Map<String, String> requestMap = new HashMap<>();
 		requestMap.put("subscriptionContractId", subscriptionContractId);
-		requestMap.put("signature", createSignature(requestMap,subscriptionContractId));
+		requestMap.put("signature", createSignature(requestMap,subscriptionContractId,token));
 		requestMap.put("lang", lang.equals("1")?"2":"1");
 		String request = JsonMapper.getObjectToJson(requestMap);
 
@@ -428,7 +455,7 @@ public class TpayApiService {
 		requestMap.put("headerEnrichmentReferenceCode", headerEnrichmentReferenceCode);
 		requestMap.put("smsId", ""); 
 		requestMap.put("lang", lang.equals("1")?"2":"1"); 
-		requestMap.put("signature", createSignature(requestMap,null));
+		requestMap.put("signature", createSignature(requestMap,null,token));
 		 requestMap.put("sessionToken", sessionToken); 
 		String request = JsonMapper.getObjectToJson(requestMap);
 
@@ -444,7 +471,13 @@ public class TpayApiService {
 		return tpaySubscriptionContractRequest;
 	}
 
-	private String createSignature(Map<String,String> requestMap, String message) {
+	private String createSignature(Map<String,String> requestMap, String message,String token) {
+		CGToken cgToken=new CGToken(token);
+		VWServiceCampaignDetail 
+		vwServiceCampaignDetail = MData.mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
+		TpayServiceConfig tpayServiceConfig = TpayConstant.mapServiceIdToTpayServiceConfig
+				.get(vwServiceCampaignDetail.getServiceId());
+		logger.info("CreateSignature  : tpayServiceConfig:  "+tpayServiceConfig);
 		if(message==null) {
 			message = requestMap.get("customerAccountNumber")+requestMap.get("msisdn")+requestMap.get("operatorCode")+
 					requestMap.get("subscriptionPlanId")+requestMap.get("initialPaymentproductId")+
@@ -455,8 +488,8 @@ public class TpayApiService {
 					requestMap.get("sendVerificationSMS")+requestMap.get("allowMultipleFreeStartPeriods")+
 					requestMap.get("headerEnrichmentReferenceCode")+requestMap.get("smsId");
 		}
-		byte[] key = TpayConstant.SECRET_KEY.getBytes();
-		String digest = TpayConstant.PUBLIC_KEY+":"+TpayUtill.hmacSHA256(message, key);
+		byte[] key = tpayServiceConfig.getPrivateKey().getBytes();
+		String digest = tpayServiceConfig.getPublicKey()+":"+TpayUtill.hmacSHA256(message, key);
 		return digest;
 	}
 
@@ -471,7 +504,7 @@ public class TpayApiService {
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-		return sdf.format(addDays(date, 5*365));
+		return sdf.format(addDays(date, 10*365));
 	}
 	
 	public static Date addDays(Date date, int days) {
