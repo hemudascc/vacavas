@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import net.common.service.IDaoService;
 import net.common.service.LiveReportFactoryService;
+import net.jpa.repository.JPASubscriberReg;
 import net.persist.bean.LiveReport;
+import net.persist.bean.SubscriberReg;
 import net.persist.bean.VWServiceCampaignDetail;
 import net.process.bean.CGToken;
 import net.util.MConstants;
@@ -22,8 +24,13 @@ public class JMSAltruistCallbackListener implements MessageListener{
 
 	@Autowired
 	private LiveReportFactoryService liveReportFactoryService;
+	
 	@Autowired
 	private IDaoService daoService;
+
+	@Autowired
+	private JPASubscriberReg jpaSubscriberReg;
+
 	private static final Logger logger = Logger.getLogger(JMSAltruistCallbackListener.class);
 	@Override
 	public void onMessage(Message message) {
@@ -37,6 +44,9 @@ public class JMSAltruistCallbackListener implements MessageListener{
 			ObjectMessage objectMessage = (ObjectMessage) message;
 			altruistCallback = (AltruistCallback)objectMessage.getObject();
 			cgToken = new CGToken(altruistCallback.getTransactionId2());
+			if(cgToken.getCampaignId()<0) {
+				cgToken = new CGToken("-1c0c14");
+			}
 			VWServiceCampaignDetail vwServiceCampaignDetail = MData.mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
 			AltruistServiceConfig altruistServiceConfig = AltruistConstant.mapServiceIdToAltruistServiceConfig.get(vwServiceCampaignDetail.getServiceId());
 			liveReport = new LiveReport(MConstants.ALTRUIST_ETISALAT_UAE_OPERATOR_ID, new Timestamp(System.currentTimeMillis()),
@@ -80,9 +90,11 @@ public class JMSAltruistCallbackListener implements MessageListener{
 			logger.error("error while saving altruistCallback::"+altruistCallback,e);
 		}finally {
 			try {
+				logger.debug("live report:::::"+liveReport);
 				if(liveReport.getAction()!=null){
-					altruistCallback.setAction(liveReport.getAction());
 					liveReportFactoryService.process(liveReport);
+					logger.info("processed");
+					altruistCallback.setAction(liveReport.getAction());
 				}
 			}catch (Exception e) {
 				logger.error(" fianlly liveReport:: " + liveReport
