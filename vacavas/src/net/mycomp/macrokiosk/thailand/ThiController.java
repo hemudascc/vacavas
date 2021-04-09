@@ -8,10 +8,8 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 
 import net.common.jms.JMSService;
-import net.common.service.CommonService;
 import net.common.service.IDaoService;
 import net.common.service.RedisCacheService;
-import net.factory.RequestFactory;
 import net.jpa.repository.JPASubscriberReg;
 import net.persist.bean.ErrorInfo;
 import net.persist.bean.SubscriberReg;
@@ -69,11 +67,6 @@ public class ThiController {
 	@Autowired
 	private JMSThialandService jmsThialandService;
 	
-	@Autowired
-	private CommonService commonService;
-	
-	@Autowired
-	private RequestFactory requestFactory;
 	
 	@Autowired
 	private THServiceApi thServiceApi;
@@ -218,7 +211,8 @@ public class ThiController {
 				return modelAndView;  
 			}else{
 				logger.info("  callBackUrl:: redirect to :: "+MConstants.REDIRECT_TO_WASTE_URL_ALREADY_SUBSCRIBED);
-				return new ModelAndView(new RedirectView(thConfig.getPortalUrl()+"?msisdn="+msisdn));
+				String portalUrl = thConfig.getPortalUrl().replaceAll("<subid>", msisdn);
+				return new ModelAndView(new RedirectView(portalUrl));
 			}
 		}else{
 			modelAndView.addObject("result",0);			
@@ -246,7 +240,7 @@ public class ThiController {
 			jmsService.saveObject(thiaHeCallbackTrans);
 		}	
 		return modelAndView;
-	}
+	}  
 	
 	@RequestMapping("tocg")
 	public ModelAndView toCG(ModelAndView modelAndView,HttpServletRequest  request){

@@ -30,9 +30,9 @@
 		<class>net.persist.bean.VWCallbackDump</class>	
 		<!-- Tpay Start-->
 		<class>net.mycomp.tpay.TpayServiceConfig</class>
-		<class>net.mycomp.tpay.TpayRequest</class>
-		<class>net.mycomp.tpay.TpayNotification</class>
-		<!-- <class>net.mycomp.tpay.TpayTrans</class> -->
+		<!-- Yash <class>net.mycomp.tpay.TpayRequest</class>
+		<class>net.mycomp.tpay.TpayNotification</class> -->
+		<class>net.mycomp.tpay.TpayTrans</class>
 		<!-- Tpay End -->
 		<!-- Actel Start -->
 		<class>net.mycomp.actel.ActelDlr</class>

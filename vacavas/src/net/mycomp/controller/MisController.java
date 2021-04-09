@@ -360,7 +360,10 @@ public class MisController {
 	public ModelAndView aggReport(@ModelAttribute(value="AggReport") AggReport aggReport,BindingResult result) {
 		
 		ModelAndView modelAndView=new ModelAndView("agg_report");
-		
+		LiveReport lastupdatedLiveReport = daoService.getlastupdatedliveReport();
+		logger.info("lastupdatedLiveReport Time :   "+lastupdatedLiveReport.getLastClickTime()+"   lastupdatedLiveReport : "+lastupdatedLiveReport);
+		modelAndView.addObject("lastupdatedLiveReport",lastupdatedLiveReport);
+	
 		modelAndView.addObject("mapAggregator",MData.mapIdToAggregator);
 		modelAndView.addObject("mapOperator",MData.mapIdToOperator);
 		modelAndView.addObject("mapProduct",MData.mapIdToProduct);

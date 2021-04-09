@@ -46,10 +46,10 @@ public class THServiceApi {
 		String accessToken=ThiaConstant.md5(thConfig.getUser().toUpperCase()
 				+thConfig.getKeyword().toUpperCase()+thConfig.getShortcode()
 				+dateTime+ThiaConstant.md5(thConfig.getPassword()).toUpperCase());
-		
+		  
 		String url=accessTokenUrl
 		.replaceAll("<accesstoken>",MUtility.urlEncoding(accessToken))
-		.replaceAll("<keyword>",MUtility.urlEncoding(thConfig.getKeyword()))
+		.replaceAll("<keyword>",MUtility.urlEncoding(thConfig.getKeyword()))  
 		.replaceAll("<shortcode>",MUtility.urlEncoding(thConfig.getShortcode()))
 		.replaceAll("<datetime>",MUtility.urlEncoding(dateTime));
 		

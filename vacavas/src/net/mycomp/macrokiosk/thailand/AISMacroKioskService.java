@@ -44,7 +44,7 @@ public class AISMacroKioskService extends  AbstractMacroKioskMTMessage{
 				break;
 			}
 		}		
-		
+		   
 		
 		//MT Welcome Message
 		logger.info("handleSubscriptionMOMessage:: ::::::selectedTHConfig::  "+selectedTHConfig);
@@ -61,7 +61,7 @@ public class AISMacroKioskService extends  AbstractMacroKioskMTMessage{
 		logger.info("handleSubscriptionMOMessage:: ::::::selectedTHConfig::  "+selectedTHConfig);
 	     msg=ThiaConstant.convertToHexString(
 				ThiaConstant.convertToDateTimeFormat())+
-				selectedTHConfig.getMtBillingMessageTemplate();		
+				selectedTHConfig.getMtBillingMessageTemplate().replaceAll("<subid>",moMessage.getMsisdn());		
 		 mtMessage =createMTBillableMessage(selectedTHConfig,moMessage,msg);
 		// mtMessage.setAction(MConstants.ACT);
 		 mtMessage.setServiceId(selectedTHConfig.getServiceId());
