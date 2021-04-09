@@ -23,6 +23,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import net.common.service.IDaoService;
 import net.common.service.RedisCacheService;
 import net.common.service.SubscriberRegService;
+import net.jpa.repository.JPASubscriberReg;
 import net.persist.bean.SubscriberReg;
 import net.persist.bean.VWServiceCampaignDetail;
 import net.process.bean.CGToken;
@@ -49,8 +50,10 @@ public class TpayController {
 	@Autowired
 	@Qualifier("tpayApiService")
 	private TpayApiService tpayApiService;
-
 	
+	@Autowired
+	private JPASubscriberReg jpaSubscriberReg;
+
 	
 	@RequestMapping(value = "/notification")
 	public String tpayNotification(HttpServletRequest request) {
@@ -58,18 +61,13 @@ public class TpayController {
 		TpayNotification tpayNotification = new TpayNotification(true);
 		try {
 			tpayNotification.setTpayAction(request.getParameter("action"));
-			tpayNotification.setTransactionId(request.getParameter("transactionId"));
 			tpayNotification.setAmount(request.getParameter("collectedAmount"));
-			tpayNotification.setErrorMessage(request.getParameter("errorMessage"));
-			tpayNotification.setBillingAction(request.getParameter("billAction"));
-			tpayNotification.setBillingNumber(request.getParameter("billNumber"));
-			tpayNotification.setProductId(request.getParameter("productId"));
 			tpayNotification.setMsisdn(request.getParameter("msisdn"));
-			tpayNotification.setDigest(URLDecoder.decode(request.getParameter("digest")));
 			tpayNotification.setNotificationStatus(request.getParameter("status"));
 			tpayNotification.setPaymentTransactionStatusCode(request.getParameter("paymentTransactionStatusCode"));
 			tpayNotification.setQueryStr(request.getQueryString());
 			tpayNotification.setSubscriptionContractId(request.getParameter("subscriptionContractId"));
+			tpayNotification.setProductCatalogName(request.getParameter("productCatalogName"));
 		} catch (Exception e) {
 			logger.error("notification:: ", e);
 		} finally {
@@ -78,7 +76,6 @@ public class TpayController {
 		return "CALLBACK ACKNOWELDGED";
 
 	}
-
 	@RequestMapping("send-pin")
 	public String sendPin(@RequestParam String token, @RequestParam String msisdn,
 			@RequestParam(defaultValue = "") String sessionToken,@RequestParam String lang, 
@@ -210,7 +207,8 @@ public class TpayController {
 	public ModelAndView confirmUnsubscribe(HttpServletRequest request, ModelAndView modelAndView) {
 		String msisdn = request.getParameter("msisdn");
 		String lang = request.getParameter("lang");
-		SubscriberReg subscriberReg = daoService.searchSubscriber(msisdn);
+		int productId = Integer.parseInt(request.getParameter("productid"));
+		SubscriberReg subscriberReg = jpaSubscriberReg.findSubscriberRegByMsisdnAndProductId(msisdn,productId );
 		modelAndView.setViewName("tpay/unsubscribe");
 		modelAndView.addObject("msisdn", msisdn);
 		if(subscriberReg!=null && subscriberReg.getStatus()==1) {
@@ -220,14 +218,15 @@ public class TpayController {
 			modelAndView.addObject("lpImageUrl", tpayServiceConfig.getLpImageUrl());
 			modelAndView.addObject("portalUrl", tpayServiceConfig.getProtalUrl().replaceAll("<msisdn>", msisdn).replaceAll("<lang>", lang).replaceAll("<subid>", msisdn));	
 			modelAndView.addObject("campId", cgToken.getCampaignId());	
-			modelAndView.addObject("token", subscriberReg.getParam3());	
+			modelAndView.addObject("token", subscriberReg.getParam3());
+			modelAndView.addObject("productId", subscriberReg.getProductId());
 		}
 		modelAndView.addObject("lang", lang);
 		return modelAndView;
 	}
 
 	@RequestMapping("unsubscribe")
-	public String unsubscribe(@RequestParam String msisdn, @RequestParam String lang,@RequestParam String token) {
+	public String unsubscribe(@RequestParam String msisdn, @RequestParam String lang,@RequestParam String token,@RequestParam String productId ) {
 
 		String response = null;
 		logger.info("unsubscribing user msisdn : " + msisdn);
@@ -235,7 +234,7 @@ public class TpayController {
 			if(msisdn !=null) {
 				msisdn = msisdn.trim();
 			}
-			response = tpayApiService.unsubscribe(msisdn, lang,token);
+			response = tpayApiService.unsubscribe(msisdn, lang,token,Integer.parseInt(productId));
 
 			logger.info("unsubscribing user msisdn : " + msisdn);
 		} catch (Exception e) {

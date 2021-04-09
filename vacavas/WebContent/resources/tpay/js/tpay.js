@@ -178,7 +178,7 @@ function unsubscribe(){
 	
 		$("#unsubscribe-button").prop("disabled",true);
 		$("#unsubscribe-button1").prop("disabled",true);
-			$.get("./unsubscribe?msisdn="+$("#msisdn").val()+"&lang="+$("#langvalue").val()+"&token="+$("#tokenvalue").val(), function(data, status){
+			$.get("./unsubscribe?msisdn="+$("#msisdn").val()+"&lang="+$("#langvalue").val()+"&token="+$("#tokenvalue").val()+"&productId="+$("#productId").val(), function(data, status){
 				if(parseInt(data)==51){
 					$("#consent-p").css('display',"none");
 					$("#unsubscribe-msg").text($("#already-unsub-message").val());

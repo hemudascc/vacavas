@@ -31,6 +31,7 @@ body {
 	<input id="tokenvalue" value="${token}" type="hidden">
 	<input id="lpimageUrl" value="${lpImageUrl}" type="hidden">
 	<input id="portalurl" value="${portalUrl}" type="hidden">
+	<input id="productId" value="${productId}" type="hidden">
 	<c:choose>
 		<c:when test="${lang==2}">
 			<input id="already-unsub-message" value="أنت بالفعل غير مشترك في الخدمة." type="hidden">

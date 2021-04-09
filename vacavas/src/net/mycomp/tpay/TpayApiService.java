@@ -99,6 +99,7 @@ public class TpayApiService {
 		TpayRequest tpayRequest = null;
 
 		try {
+			redisCacheService.putObjectCacheValueByEvictionDay(TpayConstant.TPAY_TEMP_SUBSCRIBE + subscriptionContractId, token,1);
 			tpayRequest = createValidationRequest(token, msisdn,"VALIDATE_PIN",subscriptionContractId,pin);
 		} catch (Exception e) {
 			logger.error("error"+e);
@@ -109,12 +110,13 @@ public class TpayApiService {
 		return tpayRequest.getResponse();
 	}
 
-	public String unsubscribe(String msisdn,String lang,String token) {
+	public String unsubscribe(String msisdn,String lang,String token,int productId) {
 		TpayRequest tpayRequest = null;
 		String contractId=null;
 		try {
 			
-			SubscriberReg subscriberReg = daoService.searchSubscriber(msisdn);
+//			SubscriberReg subscriberReg = daoService.searchSubscriber(msisdn);
+			SubscriberReg subscriberReg = jpaSubscriberReg.findSubscriberRegByMsisdnAndProductId(msisdn, productId);
 			if (subscriberReg != null && 
 					subscriberReg.getSubscriberId() != null &&
 					subscriberReg.getSubscriberId() > 0
@@ -243,12 +245,14 @@ public class TpayApiService {
 			message =	TpayConstant.CONTENT_MESSAGE_SMS_ENG
 					 .replaceAll("<portalurl>", tpayServiceConfig.getProtalUrl())
 					 .replaceAll("<msisdn>", msisdn)  
-					 .replaceAll("<lang>","1");
+					 .replaceAll("<lang>","1")
+					 .replaceAll("<subid>",msisdn);
 		}else {
 			message = TpayConstant.CONTENT_MESSAGE_SMS_ARB
 					.replaceAll("<portalurl>", tpayServiceConfig.getProtalUrl())
 					.replaceAll("<msisdn>", msisdn)
-					.replaceAll("<lang>","2");
+					.replaceAll("<lang>","2")
+					 .replaceAll("<subid>",msisdn);
 		}
 		
 		Map<String, String> requestMap = new HashMap<>();

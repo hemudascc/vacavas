@@ -17,6 +17,7 @@ public interface TpayConstant {
 	Integer TPAY_PRODUCT_ID=1;
 	public static final String TPAY_CACHE_PREFIX="TPAY_CACHE_PREFIX";
 	public static final String TPAY_TEMP_SUBSCRIBE="TPAY_TEMP_SUBSCRIBE";
+	public static final String TPAY_GRACE_RECEIVED_CACHE="TPAY_GRACE_RECEIVED_CACHE";
 	public static final String TPAY_SUB_CONT_ID_PREFIX="TPAY_SUB_CONT_ID_PREFIX";
 	public static final String TPAY_SUBCONTID_TOKEN_AND_MSISDN_CACHE_PREFIX="TPAY_SUBCONTID_TOKEN_AND_MSISDN_CACHE_PREFIX";
 	
