@@ -1145,4 +1145,12 @@ public class CommonDaoImpl extends NamedParameterJdbcTemplate implements ICommon
 				 new BeanPropertyRowMapper<VWCallbackDump>(VWCallbackDump.class));
 		 return list;
 	}
+	
+	@Override
+	public LiveReport getlastupdatedliveReport() {
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		String queryStr = "SELECT * FROM tb_live_report ORDER BY id DESC LIMIT 1";
+		LiveReport lastupdatedliveReport =	queryForObject(queryStr, parameters,new BeanPropertyRowMapper<LiveReport>(LiveReport.class));
+		return 	lastupdatedliveReport;
+	}
 }

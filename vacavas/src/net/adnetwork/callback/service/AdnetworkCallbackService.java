@@ -162,7 +162,7 @@ public class AdnetworkCallbackService {
 		} catch (Exception ex) {
 			logger.error("sendAdnetworkCallBack:: Exception : " + ex+"adnetworkToken::"+adnetworkToken);
 		} finally {
-			if (adnetworkToken != null && !adnetworkToken.isDuplicateConversion()) {
+			if (adnetworkToken != null && !adnetworkToken.isDuplicateConversion() && liveReport.getAction() != null && liveReport.getAction().equalsIgnoreCase(MConstants.ACT)) {
 				adnetworkToken.setConversionReceived(true);
 				adnetworkToken.setConversionReceivedTime(new Timestamp(System.currentTimeMillis()));
 				daoService.updateObject(adnetworkToken);

@@ -21,11 +21,23 @@ import net.util.HttpURLConnectionUtil;
 public class ComvivaSubscriptionService {
 
 	private HttpURLConnectionUtil httpURLConnectionUtil;
-	private  JAXBContext jaxbContextOCSRequest;  
+	private  JAXBContext jaxbContextOCSRequest;
 	private JAXBContext jaxbContextOCSResponse;
-	@Value("${comviva.subscription.url}")
 	private String dbillApi;
-	
+
+	@Autowired
+	public ComvivaSubscriptionService(
+			@Value("${comviva.subscription.url}") String dbillApi) {
+		this.dbillApi=dbillApi;
+		httpURLConnectionUtil=new HttpURLConnectionUtil();
+		try{
+			jaxbContextOCSRequest = JAXBContext.newInstance(OCSRequest.class);   
+			jaxbContextOCSResponse = JAXBContext.newInstance(OCSResponse.class);  
+		}catch(Exception ex){
+			logger.error("OredooKuwaitSubscriptionService",ex);
+		}
+	}
+
 	@Autowired
 	private IDaoService daoService;
 	private static final Logger logger = Logger.getLogger(ComvivaSubscriptionService.class);
@@ -37,7 +49,7 @@ public class ComvivaSubscriptionService {
 			comvivaOCSLogDetail.setMsisdn(comvivaCGCallback.getMsisdn());
 			comvivaOCSLogDetail.setAction(ComvivaConstant.SUBSCRIBE);
 			ocsRequest.setRequestType(ComvivaDBillRequestType.SUBSCRIPTION.requestType);
-			ocsRequest.setServiceId(Objects.toString(comvivaServiceConfig.getServiceId()));
+			ocsRequest.setServiceId(Objects.toString(comvivaServiceConfig.getComvivaServiceId()));
 			ocsRequest.setServiceNode(comvivaServiceConfig.getServiceNode());
 			ocsRequest.setSequenceNo(comvivaCGCallback.getTpCgId());
 			ocsRequest.setCallingParty(comvivaCGCallback.getMsisdn());

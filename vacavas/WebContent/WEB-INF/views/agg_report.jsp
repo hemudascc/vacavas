@@ -251,7 +251,10 @@ $('.formselect').change(function(){
 </form:button>
       </td></tr>            
 	</table>
-	
+	<br>
+	<center>
+	 <label for="lastclickupdatetime">Last click Updated Time :  <b>${lastupdatedLiveReport.lastClickTime }</b></label>&nbsp;    	
+    </center>	
 	<br><br>
 	<table id="reporttable" width="80%" border="1" align="center">
 

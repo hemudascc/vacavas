@@ -11,9 +11,11 @@ import org.springframework.web.servlet.ModelAndView;
 import net.mycomp.actel.ActelService;
 import net.mycomp.altruist.AltruistService;
 import net.mycomp.comviva.ComvivaService;
+import net.mycomp.macrokiosk.thailand.ThialandService;
 import net.mycomp.messagecloud.gateway.MCGService;
 import net.mycomp.mobimind.MobimindService;
 import net.mycomp.mondiapay.MondiaPayService;
+import net.mycomp.timwe.TimweService;
 import net.mycomp.tpay.TpayService;
 import net.persist.bean.SubscriberReg;
 import net.process.bean.AdNetworkRequestBean;
@@ -58,6 +60,13 @@ public class OperatorRequestService implements IOperatorService{
 	@Autowired
 	@Qualifier("altruistService")
 	private AltruistService altruistService;
+	@Autowired
+	@Qualifier("timweService")
+	private TimweService timweService;
+	@Autowired
+	@Qualifier("thialandService")
+	private ThialandService thialandService;
+	
 
 	private IOperatorService findProcessRequest(int opId){
 
@@ -97,6 +106,14 @@ public class OperatorRequestService implements IOperatorService{
 
 		case MConstants.ALTRUIST_ETISALAT_UAE_OPERATOR_ID:{
 			ioperatorService=altruistService;
+			break;
+		}
+		case MConstants.TIMWE_UMNIAH_JORDAN_OPERATOR_ID:{
+			ioperatorService=timweService;
+			break;
+		}
+		case MConstants.MICROKIOSK_AIS_OPERATOR_ID:{
+			ioperatorService=thialandService;
 			break;
 		}
 		default:	{

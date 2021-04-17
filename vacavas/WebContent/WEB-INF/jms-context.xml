@@ -255,7 +255,90 @@
 	<bean id="comvivaCGCallbackListener"
 		class="net.mycomp.comviva.JMSComvivaCGCallbackListener" />
 	<!-- Comviva End -->
-	
+<!-- Start Macrokiosk Thailand  -->
+	<bean id="thMoMessageJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/thMoMessageQueue" />
+		<qualifier value="thMoMessageJMSTemplate" />
+	</bean>
+	<bean id="thMoMessageDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/thMoMessageQueue?consumer.prefetchSize=3" />
+	</bean>
+	<bean id="thMoMessageListener"
+		class="net.mycomp.macrokiosk.thailand.JMSTHMOMessageListener" />
+
+	<bean id="thMtMessageJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/thMtMessageQueue" />
+		<qualifier value="thMtMessageJMSTemplate" />
+	</bean>
+	<bean id="thMtMessageDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/thMtMessageQueue?consumer.prefetchSize=3" />
+	</bean>
+	<bean id="thMtMessageListener"
+		class="net.mycomp.macrokiosk.thailand.JMSTHMTMessageListener" />
+
+	<bean id="thialandRenewalMessageJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/thialandRenewalMessageQueue" />
+		<qualifier value="thialandRenewalMessageJMSTemplate" />
+	</bean>
+	<bean id="thialandRenewalMessageDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/thialandRenewalMessageQueue?consumer.prefetchSize=3" />
+	</bean>
+	<bean id="thialandRenewalMessageListener"
+		class="net.mycomp.macrokiosk.thailand.JMSThialandRenewalMessageListener" />
+
+
+	<bean id="thDlnMessageJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/thDlnMessageQueue" />
+		<qualifier value="thDlnMessageJMSTemplate" />
+	</bean>
+	<bean id="thDlnMessageDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/thDlnMessageQueue?consumer.prefetchSize=3" />
+	</bean>
+	<bean id="thDlnMessageListener"
+		class="net.mycomp.macrokiosk.thailand.JMSTHDNListener" />
+	<!--END Macrokiosk Thailand -->
+	<!-- Timwe Start -->
+	<bean id="timweNotificationJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="vacavas/timweNotificationQueue" />
+		<qualifier value="timweNotificationJMSTemplate" />
+	</bean>
+	<bean id="timweNotificationDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="vacavas/timweNotificationQueue?consumer.prefetchSize=3" />
+	</bean>
+	<bean id="timweNotificationCallbackListener"
+		class="net.mycomp.timwe.JMSTimweNotificationListener" />
+	<!-- Timwe End -->
+
 
 	<jms:listener-container container-type="default"
 		connection-factory="cachedConnectionFactory" acknowledge="auto"
@@ -293,14 +376,30 @@
 		<jms:listener
 			destination="vacavas/mondiaPayNotificationQueue"
 			ref="mondiaPayNotificationListener" method="onMessage" />
-			
-		<jms:listener
-			destination="vacavas/altruistCallbackQueue"
+
+		<jms:listener destination="vacavas/altruistCallbackQueue"
 			ref="altruistCallbackListener" method="onMessage" />
-			
+
 		<jms:listener
 			destination="vacavas/comvivaCGCallbackQueue"
 			ref="comvivaCGCallbackListener" method="onMessage" />
-			
+		<!-- Macrokiosk Thailand Start -->
+			<jms:listener destination="cc/thMoMessageQueue"
+			ref="thMoMessageListener" method="onMessage" />
+
+		<jms:listener destination="cc/thMtMessageQueue"
+			ref="thMtMessageListener" method="onMessage" />
+
+		<jms:listener
+			destination="cc/thialandRenewalMessageQueue"
+			ref="thialandRenewalMessageListener" method="onMessage" />
+
+		<jms:listener destination="cc/thDlnMessageQueue"
+			ref="thDlnMessageListener" method="onMessage" />
+		<!-- Macrokiosk  Thailand End-->
+		<jms:listener
+			destination="vacavas/timweNotificationQueue"
+			ref="timweNotificationCallbackListener" method="onMessage" />
+
 	</jms:listener-container>
 </beans>

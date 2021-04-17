@@ -63,27 +63,21 @@ public class AltruistController {
 			modelAndView.addObject("token", token);
 			modelAndView.addObject("lang", lang);
 			modelAndView.addObject("altruistServiceConfig", altruistServiceConfig);
+			modelAndView.setViewName("altruist/lp");
 			String response = altruistApiService.pinSend(token, msisdn, "web");
 			if(Objects.nonNull(response) && response.equals("1")) {
 				modelAndView.addObject("status", 1);
 				modelAndView.setViewName("altruist/verifyotp");
 			}else if(Objects.nonNull(response) && response.equals("2")) {
-				modelAndView.addObject("altruistServiceConfig", altruistServiceConfig);
 				modelAndView.addObject("status", 1);
-				modelAndView.setViewName("altruist/lp");
 			}else if(Objects.nonNull(response) && response.equals("3")) {
-				modelAndView.addObject("altruistServiceConfig", altruistServiceConfig);
 				modelAndView.addObject("status", 2);
-				modelAndView.setViewName("altruist/lp");
 			}else {
-				modelAndView.addObject("altruistServiceConfig", altruistServiceConfig);
 				modelAndView.addObject("status", 3);
-				modelAndView.setViewName("altruist/lp");
 			}
 		} catch (Exception e) {
 			modelAndView.addObject("altruistServiceConfig", altruistServiceConfig);
 			modelAndView.addObject("status", 3);
-			modelAndView.setViewName("altruist/lp");
 		}
 		return modelAndView;
 	}

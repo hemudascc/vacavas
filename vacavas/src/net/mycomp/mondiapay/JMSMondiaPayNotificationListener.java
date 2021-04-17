@@ -69,28 +69,20 @@ public class JMSMondiaPayNotificationListener implements MessageListener{
 					if(MConstants.ACT.equals(action)) {
 						liveReport.setMsisdn(token);
 						liveReport.setAction(MConstants.ACT);
-						liveReport.setToken(token);
-						liveReport.setTokenId(cgToken.getTokenId());
 						liveReport.setAmount(mondiaPayNotification.getAmount());
 						liveReport.setConversionCount(1);
 					}else if(MConstants.GRACE.equals(action)) {
 						liveReport.setMsisdn(token);
 						liveReport.setAction(MConstants.GRACE);
-						liveReport.setToken(token);
-						liveReport.setTokenId(cgToken.getTokenId());
 						liveReport.setGraceConversionCount(1);
 					} else if(MConstants.RENEW.equals(action)) {
 						liveReport.setMsisdn(token);
 						liveReport.setAction(MConstants.RENEW);
-						liveReport.setToken(token);
-						liveReport.setTokenId(cgToken.getTokenId());
 						liveReport.setRenewalAmount(mondiaPayNotification.getAmount());
 						liveReport.setRenewalCount(1);
 					}else if(MConstants.DCT.equals(action)){
 						liveReport.setMsisdn(token);
 						liveReport.setAction(MConstants.DCT);
-						liveReport.setToken(token);
-						liveReport.setTokenId(cgToken.getTokenId());
 						liveReport.setDctCount(1);
 					}
 				}

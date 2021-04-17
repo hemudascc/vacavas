@@ -85,5 +85,6 @@ public interface IDaoService {
 	public  List<Integer> findValidSubscriberId(List<Integer> operatorId,
 			Integer status);
 	public List<VWCallbackDump> findVWCallbackDump(AggReport aggReport);
+	public LiveReport getlastupdatedliveReport();
 
 }

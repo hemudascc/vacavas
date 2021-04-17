@@ -4,6 +4,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 
+import org.apache.activemq.ScheduledMessage;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,6 +34,7 @@ public class JMSMondiaPayService {
 				@Override
 				public Message createMessage(Session session) throws JMSException {
 					Message message = session.createObjectMessage(mondiaPayNotification);
+					message.setLongProperty(ScheduledMessage.AMQ_SCHEDULED_DELAY, 12*1000L);
 					return message;
 				}
 			});

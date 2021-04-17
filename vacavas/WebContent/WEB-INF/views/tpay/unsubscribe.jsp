@@ -28,6 +28,10 @@ body {
 	<input id="msisdn" value="${msisdn}" type="hidden">
 	<input id="langvalue" value="${lang}" type="hidden">
 	<input id="campId" value="${campId}" type="hidden">
+	<input id="tokenvalue" value="${token}" type="hidden">
+	<input id="lpimageUrl" value="${lpImageUrl}" type="hidden">
+	<input id="portalurl" value="${portalUrl}" type="hidden">
+	<input id="productId" value="${productId}" type="hidden">
 	<c:choose>
 		<c:when test="${lang==2}">
 			<input id="already-unsub-message" value="أنت بالفعل غير مشترك في الخدمة." type="hidden">
@@ -41,7 +45,7 @@ body {
 
 	<div class="img-div">
 		<img
-			src="${pageContext.request.contextPath}/resources/tpay/image/banner.jpg"
+			src="${pageContext.request.contextPath}/${lpImageUrl}"
 			class="img-responsive center-block img-rounded img-banner"
 			alt="gameshub">
 	</div>
@@ -56,9 +60,9 @@ body {
 						الخدمة؟</p>
 					<p id="unsubscribe-msg" style="display: none"></p>
 					<div>
-						<button class="btn btn-sm btn-warning" id="unsubscribe-button">إلغاء
+						<button class="btn btn-sm btn-warning" id="unsubscribe-button" onclick="unsubscribe();">إلغاء
 							الاشتراك</button>
-						<button class="btn btn-sm btn-danger" id="exit-button">خروج</button>
+						<button class="btn btn-sm btn-danger" id="exit-button" onclick="exit();">خروج</button>
 					</div>
 				</c:otherwise>
 			</c:choose>
@@ -74,8 +78,8 @@ body {
 						service ?</p>
 					<p id="unsubscribe-msg" style="display: none"></p>
 					<div>
-						<button class="btn btn-sm btn-warning" id="unsubscribe-button">Unsubscribe</button>
-						<button class="btn btn-sm btn-danger" id="exit-button">Exit</button>
+						<button class="btn btn-sm btn-warning" id="unsubscribe-button1" onclick="unsubscribe();">Unsubscribe</button>
+						<button class="btn btn-sm btn-danger" id="exit-button" onclick="exit();">Exit</button>
 					</div>
 				</c:otherwise>
 			</c:choose>

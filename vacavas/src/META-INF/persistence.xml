@@ -73,14 +73,7 @@
 		<class>net.mycomp.mondiapay.MondiaPayCgCallback</class>
 		<class>net.mycomp.mondiapay.MondiaPayNotification</class>
 		<!-- mondia pay end -->
-		<!-- comviva kuwait start 
-		<class>net.mycomp.oredoo.kuwait.OoredooKuwaitCGTrans</class>
-		<class>net.mycomp.oredoo.kuwait.OredoKuwaitFallbackPricePoint</class>
-		<class>net.mycomp.oredoo.kuwait.OredooKuwaitCGCallback</class>
-		<class>net.mycomp.oredoo.kuwait.OredooKuwaitCGNotification</class>
-		<class>net.mycomp.oredoo.kuwait.OredooKuwaitOCSLogDetail</class>
-		<class>net.mycomp.oredoo.kuwait.OredooKuwaitServiceConfig</class>
-		comviva kuwait end -->
+
 		<!-- altruist start -->
 		<class>net.mycomp.altruist.AltruistServiceConfig</class>
 		<class>net.mycomp.altruist.AltruistTrans</class>
@@ -93,7 +86,20 @@
 		<class>net.mycomp.comviva.ComvivaCGCallback</class>
 		<class>net.mycomp.comviva.ComvivaOCSLogDetail</class>
 		<!-- comviva end -->
-
+		
+		<!-- timwe start -->
+		<class>net.mycomp.timwe.TimweNotification</class>
+		<class>net.mycomp.timwe.TimweHECallback</class>
+		<class>net.mycomp.timwe.TimweServiceConfig</class>
+		<class>net.mycomp.timwe.TimweTrans</class>
+		<!-- timwe end -->
+		<!-- macrokiosk thailand start -->
+			<class>net.mycomp.macrokiosk.thailand.DeliveryNotification</class>
+			<class>net.mycomp.macrokiosk.thailand.THConfig</class>
+			<class>net.mycomp.macrokiosk.thailand.THMOMessage</class>
+			<class>net.mycomp.macrokiosk.thailand.THMTMessage</class>
+			<class>net.mycomp.macrokiosk.thailand.ThiaHeCallbackTrans</class>
+		<!-- macrokiosk thailand end -->
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<validation-mode>NONE</validation-mode>
 		<properties>

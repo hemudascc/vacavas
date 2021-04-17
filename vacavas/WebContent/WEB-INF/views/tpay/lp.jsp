@@ -37,7 +37,7 @@
 	<input id="catalogName" value="${TpayServiceConfig.catalogName}" type="hidden">
 	<input id="paymentProductId" value="${TpayServiceConfig.paymentProductId}" type="hidden">
 	<input id="flow" value="${flow}" type="hidden">
-	
+	<input id="protalUrl" value="${TpayServiceConfig.protalUrl}" type="hidden">
 
 	<c:choose>
 		<c:when test="${lang==0}">
@@ -92,10 +92,10 @@
 	<!-- Body Start -->
 	<div class="img-div">
 		<img
-			src="${pageContext.request.contextPath}/resources/tpay/image/banner.jpg"
+			src="${pageContext.request.contextPath}/${TpayServiceConfig.lpImageUrl}"
 			class="center-block img-rounded img-banner" alt="gameshub">
 	</div>
-	<div class="center-div">
+	<div class="center-div">  
 		<c:choose>
 			<c:when test="${lang==0}">
 				<button type="button" class="btn btn-md center-block sub-btn"
