@@ -18,6 +18,7 @@ public class AggReport implements Serializable{
 	private Timestamp toTime;
     private String reportType;
     private String msisdn;
+    private int pageNo;
     
     
 public String toString() {
@@ -102,6 +103,14 @@ public String toString() {
 
 	public void setMsisdn(String msisdn) {
 		this.msisdn = msisdn;
+	}
+
+	public int getPageNo() {
+		return pageNo;
+	}
+
+	public void setPageNo(int pageNo) {
+		this.pageNo = pageNo;
 	}
 	
 }

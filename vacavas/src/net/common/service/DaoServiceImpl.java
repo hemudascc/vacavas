@@ -516,6 +516,16 @@ public class DaoServiceImpl implements IDaoService {
 	}
 	
 	@Override
+	public long findVWCallbackDumpCount(AggReport aggReport) {
+		try {
+			return commonDao.findVWCallbackDumpCount(aggReport);
+		} catch (Exception ex) {
+			logger.error("findVWCallbackDump:: exception : " , ex);
+		}
+		return 0;
+	}
+	
+	@Override
 	public LiveReport getlastupdatedliveReport() {
 		try {
 			return commonDao.getlastupdatedliveReport();

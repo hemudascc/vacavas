@@ -1097,6 +1097,7 @@ public class CommonDaoImpl extends NamedParameterJdbcTemplate implements ICommon
 		MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource(map);
 		return queryForList(sqlString, sqlParameterSource,Integer.class);
 	}	
+	
 	@Override
 	public List<VWCallbackDump> findVWCallbackDump(AggReport aggReport) {
          Map<String, Object> parameters = new HashMap<String, Object>();
@@ -1136,14 +1137,62 @@ public class CommonDaoImpl extends NamedParameterJdbcTemplate implements ICommon
 				parameters.put("product_id",aggReport.getProductId());
 			}
 			
-			if(parameters.isEmpty()){
-				queryStr+= " order by 1 desc limit 100";
-			}
+//			if(parameters.isEmpty()){
+				queryStr+= " order by 1 desc limit "+aggReport.getPageNo()+", "+MConstants.PAGE_SIZE;
+//			}
 		
 		   logger.info("query str: "+queryStr+" ,parameters:: "+parameters);
 		 List<VWCallbackDump> list = query(queryStr, parameters,
 				 new BeanPropertyRowMapper<VWCallbackDump>(VWCallbackDump.class));
 		 return list;
+	}
+	
+	@Override
+	public long findVWCallbackDumpCount(AggReport aggReport) {
+         Map<String, Object> parameters = new HashMap<String, Object>();
+		
+		String  queryStr="select count(b.id)  from vw_callback_dump b where 1=1 ";
+		
+		if(!StringUtils.isEmpty(aggReport.getMsisdn())){
+			 queryStr+= " and b.msisdn=:msisdn ";
+			 parameters.put("msisdn",aggReport.getMsisdn());
+		}
+		
+		if(aggReport.getAggregatorId()!=null){
+			queryStr+= " and b.aggregator_id=:aggregator_id " ;
+			parameters.put("aggregator_id",aggReport.getAggregatorId());
+		}
+		
+			if(aggReport.getFromTime()!=null){
+				 queryStr+= " and date(b.create_time)>=date(:fromTime) ";
+				 parameters.put("fromTime",aggReport.getFromTime());
+			}//date(create_time)=date(now())
+		
+			if(aggReport.getToTime()!=null){
+				 queryStr+= " and date(b.create_time)<=date(:toTime) ";
+				 parameters.put("toTime",aggReport.getToTime());
+			}
+			if(aggReport.getFromTime()==null&&aggReport.getToTime()==null){
+				queryStr+= " and date(b.create_time)=date(now()) ";
+			}
+			
+			if(aggReport.getOpid()!=null&&aggReport.getOpid()>0){
+				queryStr+= " and b.operator_id=:operator_id";
+				parameters.put("operator_id",aggReport.getOpid());
+			}
+			
+			if(aggReport.getProductId()!=null){
+				queryStr+= " and b.product_id=:product_id";
+				parameters.put("product_id",aggReport.getProductId());
+			}
+			
+//			if(parameters.isEmpty()){
+//				queryStr+= " order by 1 desc ";
+//			}
+		
+		   logger.info("query str: "+queryStr+" ,parameters:: "+parameters);
+		 long listsize = queryForObject(queryStr, parameters, Long.class);
+		 return listsize;
 	}
 	
 	@Override

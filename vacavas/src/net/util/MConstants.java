@@ -58,7 +58,7 @@ public interface MConstants {
 	public static final String SUBSCRIPTION_FAILED_DESC = "SUBSCRIPTION_FAILED";
 
 	public static final int GRACE_STATUS = 10;
-
+    public static final int PAGE_SIZE = 200; // Number of rows to contain per page
 
 
 

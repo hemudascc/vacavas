@@ -139,6 +139,15 @@ $('.formselect').change(function(){
 	$("#reportform").submit();
 })});
 </script>
+<script type="text/javascript">
+function getData(i){
+	document.getElementById("pageNo").value = i;
+	console.log("aggregatorId:  "+aggregatorId);
+	console.log("PageNo:  "+i);
+	$("#reportform").submit();
+}
+</script>
+
 </head>
 <body>
 
@@ -285,8 +294,17 @@ $('.formselect').change(function(){
 				</tr>
 			</c:forEach>
 			</table>
-	</form:form>
 	<br><br>
+	<center>
+	<input type="hidden" path="pageNo" name="pageNo" id="pageNo">
+	<c:if test="${lastPageNo>0}">
+	<c:forEach var="i" begin="0" end="${lastPageNo-1 }" >
+	
+		<a style="color:blue;text-decoration: underline;"  onclick="getData(${i});" >${i+1 }</a>    	<!-- Displaying Page No -->
+	</c:forEach>
+	</c:if>
+	</center>
+	</form:form>
 	<br><br>
 </body>
 </html>
