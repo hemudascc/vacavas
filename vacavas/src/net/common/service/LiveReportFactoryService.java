@@ -311,10 +311,14 @@ public class LiveReportFactoryService {
 	    callbackDump=new CallbackDump(true,liveReport.getReportDate());
 		callbackDump.setMsisdn(liveReport.getMsisdn());
 		callbackDump.setAction(liveReport.getAction());
-		callbackDump.setAmount(liveReport.getAmount());
+		if(MConstants.ACT.equals(liveReport.getAction())) {
+			callbackDump.setAmount(liveReport.getAmount());
+		}else if(MConstants.RENEW.equals(liveReport.getAction())) {
+			callbackDump.setAmount(liveReport.getRenewalAmount());			
+		}
 		callbackDump.setOperatorId(liveReport.getOperatorId());
 		callbackDump.setServiceId(liveReport.getServiceId());
-		callbackDump.setProductId(liveReport.getProductId());
+		callbackDump.setProductId(liveReport.getProductId());  
 		callbackDump.setCampaignId(liveReport.getAdnetworkCampaignId());
 		callbackDump.setToken(liveReport.getToken());
 		callbackDump.setTokenId(liveReport.getTokenId());
