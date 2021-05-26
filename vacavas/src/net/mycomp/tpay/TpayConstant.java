@@ -45,8 +45,10 @@ public interface TpayConstant {
 	public static final String PIN_RESEND_URL = "https://live.tpay.me/api/TPaySubscription.svc/json/SendSubscriptionContractVerificationSMS";
 	public static final String SMS_URL = "https://live.tpay.me/api/TPay.svc/json/SendFreeMTMessage";
 	public static final String CANCEL_SUBSCRIPTION_CONTARCT_URL = "https://live.tpay.me/api/TPaySubscription.svc/json/CancelSubscriptionContractRequest";
-	public static final String WELCOME_MESSAGE_SMS_ENG = "Thanks for subscribing to <servicename>  to enjoy visit <portalurl>. You will be charged for <price> <currency>/<billing_sequence> to unsubscribe send <unsub_keyword> to <shortcode> for free. For queries, contact on vas.support@vacastudios.com";
-	public static final String WELCOME_MESSAGE_SMS_ARB = new String("شكرًا لاشتراكك في <servicename> للاستمتاع بزيارة <portalurl>. سيتم محاسبتك على <price> <currency> / <billing_sequence> لإلغاء الاشتراك ، أرسل <unsub_keyword> إلى <shortcode> مجانًا. للاستفسارات ، اتصل على vas.support@vacastudios.com");
+//	public static final String WELCOME_MESSAGE_SMS_ENG = "Thanks for subscribing to <servicename>  to enjoy visit <portalurl>. You will be charged for <price> <currency>/<billing_sequence> to unsubscribe send <unsub_keyword> to <shortcode> for free. For queries, contact on vas.support@vacastudios.com";
+//	public static final String WELCOME_MESSAGE_SMS_ARB = new String("شكرًا لاشتراكك في <servicename> للاستمتاع بزيارة <portalurl>. سيتم محاسبتك على <price> <currency> / <billing_sequence> لإلغاء الاشتراك ، أرسل <unsub_keyword> إلى <shortcode> مجانًا. للاستفسارات ، اتصل على vas.support@vacastudios.com");
+	public static final String WELCOME_MESSAGE_SMS_ENG = "You have subscribed to <servicename> for <price> <currency>/<billing_sequence>, auto-renewed & consumes from internet. Visit <portalurl>. To cancel, send CANCEL <unsub_keyword> to <shortcode> for free.";
+	public static final String WELCOME_MESSAGE_SMS_ARB = new String("لقد اشتركت في <servicename> من أجل <price> <currency> / <billing_sequence> ، وتجدد تلقائيًا وتستهلك من الإنترنت. قم بزيارة <portalurl>. للإلغاء ، أرسل CANCEL <unsub_keyword> إلى <shortcode> مجانًا.");
 	public static final String CONTENT_MESSAGE_SMS_ENG = "Please access the content using <portalurl> URL. For queries, contact on vas.support@vacastudios.com";
 	public static final String CONTENT_MESSAGE_SMS_ARB = "يرجى الوصول إلى المحتوى باستخدام <portalurl> URL. للاستفسارات ، اتصل على vas.support@vacastudios.com";
 

@@ -62,6 +62,7 @@ public interface ICommonDao {
 	public Map<String,List<LiveReport>> findOredooKuwaitCGNotificationReport(
 			Timestamp fromDate, Timestamp toDate);
 	public List<LiveReport> findAggReport(AggReport aggReport);
+	public List<LiveReport> findAggReportByProduct(AggReport aggReport);
 	public Map<Integer, Integer> findSubscriberActiveBase(AggReport aggReport);
 
 	public List<LiveReport> findSwaziAggReport(AggReport aggReport); 
@@ -82,6 +83,7 @@ public interface ICommonDao {
 	public List<Integer> findValidationExpiredSubscriberIdForTrueMoveSecondRenewal(
 			List<Integer> operatorId, Integer status); 
 	public List<VWCallbackDump> findVWCallbackDump(AggReport aggReport);
+	public long findVWCallbackDumpCount(AggReport aggReport);
 	public LiveReport getlastupdatedliveReport();
 
 }

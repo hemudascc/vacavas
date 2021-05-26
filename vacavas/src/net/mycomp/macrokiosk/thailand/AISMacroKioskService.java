@@ -48,9 +48,7 @@ public class AISMacroKioskService extends  AbstractMacroKioskMTMessage{
 		
 		//MT Welcome Message
 		logger.info("handleSubscriptionMOMessage:: ::::::selectedTHConfig::  "+selectedTHConfig);
-		String msg=ThiaConstant.convertToHexString(
-				ThiaConstant.convertToDateTimeFormat())+
-				selectedTHConfig.getMtWelcomeMessageTemplate();		
+		String msg=ThiaConstant.convertToHexString(selectedTHConfig.getMtWelcomeMessageTemplate());		
 		THMTMessage mtMessage =createMTWelcomeMessage(selectedTHConfig,moMessage,msg);
 		logger.info("handleSubscriptionMOMessage:: create MT message::::::mtMessage "+mtMessage);
 		HTTPResponse  response=smsService.sendMTSMS(mtUrl, mtMessage);
@@ -59,9 +57,8 @@ public class AISMacroKioskService extends  AbstractMacroKioskMTMessage{
 		
 		//MT Billing Messagge
 		logger.info("handleSubscriptionMOMessage:: ::::::selectedTHConfig::  "+selectedTHConfig);
-	     msg=ThiaConstant.convertToHexString(
-				ThiaConstant.convertToDateTimeFormat())+
-				selectedTHConfig.getMtBillingMessageTemplate().replaceAll("<subid>",moMessage.getMsisdn());		
+//	     msg=ThiaConstant.convertToHexString(selectedTHConfig.getMtBillingMessageTemplate().replaceAll("<subid>",moMessage.getMsisdn()));		
+	     msg=selectedTHConfig.getMtBillingMessageTemplate().replaceAll("<subid>",moMessage.getMsisdn());		
 		 mtMessage =createMTBillableMessage(selectedTHConfig,moMessage,msg);
 		// mtMessage.setAction(MConstants.ACT);
 		 mtMessage.setServiceId(selectedTHConfig.getServiceId());
@@ -106,7 +103,7 @@ public class AISMacroKioskService extends  AbstractMacroKioskMTMessage{
 				ThiaConstant.convertToDateTimeFormat())+
 				thConfig.getMtRenewalMessageTemplate();//BillingMessageTemplate();		
 		mtMessage.setTextMsg(msg);
-		mtMessage.setType(ThiaConstant.MT_UCS);
+		mtMessage.setType(ThiaConstant.MT_TEXT);
 		mtMessage.setSenderid(thConfig.getShortcode());	
 		//mtMessage.setAction(MConstants.RENEW);
 		HTTPResponse response=smsService.sendMTSMS(mtUrl, mtMessage);
@@ -190,7 +187,7 @@ protected  THMTMessage createMTWelcomeMessage(THConfig thConfig,THMOMessage moMe
 	mtMessage.setPrice(0d);		
 	mtMessage.setTelcoId(moMessage.getTelcoid());
 	mtMessage.setTextMsg(msg);
-	mtMessage.setType(ThiaConstant.MT_UCS);
+	mtMessage.setType(ThiaConstant.MT_TEXT);
 	mtMessage.setSenderid(moMessage.getShortcode());
 	mtMessage.setLinkId(moMessage.getMoid());
 	return mtMessage;
@@ -216,7 +213,7 @@ protected  THMTMessage createMTBillableMessage(THConfig thConfig,THMOMessage moM
 	mtMessage.setPrice(thConfig.getPrice());		
 	mtMessage.setTelcoId(moMessage.getTelcoid());
 	mtMessage.setTextMsg(msg);
-	mtMessage.setType(ThiaConstant.MT_UCS);
+	mtMessage.setType(ThiaConstant.MT_TEXT);
 	mtMessage.setSenderid(moMessage.getShortcode());
 	mtMessage.setTokenId(moMessage.getTokenId());
 	mtMessage.setToken(moMessage.getToken());

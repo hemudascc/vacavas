@@ -102,7 +102,7 @@ public class ComvivaController {
 		ComvivaServiceConfig comvivaServiceConfig = null;
 		LiveReport liveReport=null;
 		SubscriberReg subscriberReg = null;
-		logger.debug("query str received from cg callback="+request.getQueryString());
+		modelAndView.setView(new RedirectView("http://192.241.167.189:8080/vacavas/sys/sub?adid=1&evid=17&ref=gameshop"));
 		try {
 			comvivaCGCallback.setQueryStr(request.getQueryString());
 			comvivaCGCallback.setMsisdn(request.getParameter("MSISDN"));
@@ -122,10 +122,10 @@ public class ComvivaController {
 			if(Objects.nonNull(comvivaCGCallback.getResult()) && "SUCCESS".equalsIgnoreCase(comvivaCGCallback.getResult())) {
 				subscriberReg = subscriberRegService.findOrCreateSubscriberByAct(comvivaCGCallback.getMsisdn(), 
 						null, liveReport);
+				String portalURL = comvivaServiceConfig.getPortalURL()
+						.replaceAll("<subid>", Objects.toString(subscriberReg.getSubscriberId()));
+				modelAndView.setView(new RedirectView(portalURL));
 			}
-			String portalURL = comvivaServiceConfig.getPortalURL()
-					.replaceAll("<subid>", Objects.toString(subscriberReg.getSubscriberId()));
-			modelAndView.setView(new RedirectView(portalURL));
 		} catch (Exception e) {
 			logger.error("error while processing cg callback",e);
 		}finally {

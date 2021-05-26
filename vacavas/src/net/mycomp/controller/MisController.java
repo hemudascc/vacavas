@@ -407,6 +407,59 @@ public class MisController {
 		return modelAndView;
 	}
 	
+	@RequestMapping("/aggstats/by-product")
+	public ModelAndView aggReportByProduct(@ModelAttribute(value="AggReport") AggReport aggReport,BindingResult result) {
+		
+		ModelAndView modelAndView=new ModelAndView("agg_report_product");
+		LiveReport lastupdatedLiveReport = daoService.getlastupdatedliveReport();
+		logger.info("lastupdatedLiveReport Time :   "+lastupdatedLiveReport.getLastClickTime()+"   lastupdatedLiveReport : "+lastupdatedLiveReport);
+		modelAndView.addObject("lastupdatedLiveReport",lastupdatedLiveReport);
+		modelAndView.addObject("mapAggregator",MData.mapIdToAggregator);
+		modelAndView.addObject("mapOperator",MData.mapIdToOperator);
+		modelAndView.addObject("mapProduct",MData.mapIdToProduct);
+		modelAndView.addObject("productId",aggReport.getProductId());
+		
+		modelAndView.addObject("listAggregator",MData.mapIdToAggregator.values().stream()
+				.collect(Collectors.toList()));
+		
+		if(aggReport.getAggregatorId()!=null){
+			modelAndView.addObject("operatorList", MData.mapIdToOperator.values().stream()
+					.filter(p -> p.getAggregatorId().intValue()==aggReport.getAggregatorId())
+					.collect(Collectors.toList()));
+		}
+		
+		/*
+		 * if(aggReport.getOpid()!=null){
+		 */Map<Integer,Product> mapProduct=new HashMap<Integer,Product>();
+			/*
+			 * for(Service service:MData.mapServiceIdToService.values()){
+			 * if(aggReport.getOpid().intValue()==service.getOpId()){
+			 */	mapProduct.putAll(MData.mapIdToProduct);
+				/*}
+			}*/
+			modelAndView.addObject("productList", mapProduct.values().stream()
+					.collect(Collectors.toList()));
+			/*
+			 * }
+			 */
+		modelAndView.addObject("adnetworksList", MData.mapAdnetworks.values().stream()
+				.collect(Collectors.toList()));
+		
+		List<LiveReport> list = daoService.findAggReportByProduct(aggReport);
+		modelAndView.addObject("report",list);
+		Map<Integer,List<LiveReport>> map=null;
+		if(list!=null){
+			map=list.stream()
+					.collect(Collectors.groupingBy(p->p.getOperatorId(),Collectors.toList()
+							));
+		}		
+		modelAndView.addObject("reportMap",map);
+		Map<Integer,Integer> mapActiveBase=daoService.findSubscriberActiveBase(aggReport);
+		modelAndView.addObject("mapActiveBase",mapActiveBase);
+		return modelAndView;
+	}
+	
+	
 	@RequestMapping("/block")
 	@ResponseBody
 	public String isBlock(@RequestParam("key")String key){
@@ -459,24 +512,28 @@ public class MisController {
 		ModelAndView modelAndView=new ModelAndView("redirect:/sys/rcerpaotrt/adnoconfig");
 		return modelAndView;
 	}
-	
+
+
+    
 	@RequestMapping("callbackdump")	
-	public ModelAndView callbackDumpReport(@ModelAttribute(value="AggReport") AggReport aggReport,BindingResult result) {
-		
+	public ModelAndView callbackDumpReport(@ModelAttribute(value="AggReport") AggReport aggReport,BindingResult result,@RequestParam(value = "pageNo", required = false, defaultValue = "0") String pageNo ) {
+	    long totalUsersCount; // number of rows in Database
+		int lastPageNo;
 		ModelAndView modelAndView=new ModelAndView("callback_dump_report");
 		modelAndView.addObject("mapAggregator",MData.mapIdToAggregator);
 		modelAndView.addObject("mapOperator",MData.mapIdToOperator);
 		modelAndView.addObject("mapProduct",MData.mapIdToProduct);
 		modelAndView.addObject("productId",aggReport.getProductId());
-		
 		modelAndView.addObject("listAggregator",MData.mapIdToAggregator.values().stream()
 				.collect(Collectors.toList()));
-		
+		logger.info("aggReport:  "+aggReport);
+			aggReport.setPageNo(aggReport.getPageNo()*MConstants.PAGE_SIZE);
 		if(aggReport.getAggregatorId()!=null){
 			modelAndView.addObject("operatorList", MData.mapIdToOperator.values().stream()
 			.filter(p -> p.getAggregatorId().intValue()==aggReport.getAggregatorId())
 			.collect(Collectors.toList()));
 		}
+		
 		
 		if(aggReport.getOpid()!=null){
 			Map<Integer,Product> mapProduct=new HashMap<Integer,Product>();			
@@ -487,9 +544,18 @@ public class MisController {
 			}
 			modelAndView.addObject("productList", mapProduct.values().stream()
 					.collect(Collectors.toList()));
-		}		
+		}   
+        totalUsersCount = daoService.findVWCallbackDumpCount(aggReport); //total no of users
+        if (totalUsersCount % MConstants.PAGE_SIZE != 0)
+            lastPageNo = (int)(totalUsersCount / MConstants.PAGE_SIZE) + 1; // get last page No (zero based)
+        else
+            lastPageNo = (int)(totalUsersCount / MConstants.PAGE_SIZE);
+        logger.info("totalUsersCount:  "+totalUsersCount);
+        logger.info("lastPageNo:  "+lastPageNo);
+        modelAndView.addObject("lastPageNo", lastPageNo);
 		List<VWCallbackDump> list = daoService.findVWCallbackDump(aggReport);
 		modelAndView.addObject("reportList",list);
+	
 		return modelAndView;
 	}
 	

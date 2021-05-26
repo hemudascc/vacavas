@@ -149,10 +149,14 @@ $('.formselect').change(function(){
    if(url==null||!url.contains("hourlyreport")){
 	url="http://"+request.getLocalAddr()+":8080/vacavas/sys/rcerpaotrt/hourlyreport";   
    }
+   String productUrl="http://"+request.getLocalAddr()+":8080/vacavas/sys/rcerpaotrt/aggstats/by-product";
    %>
     <h3 style="color: red;white-space:nowrap;"><a 
-	href="<%=url%>" >Hourly Report</a></h3>
+	href="<%=url%>" >Hourly Report</a>
+	<a href="<%=productUrl%>" >Product Report</a>
+	</h3>
 	</p>
+	
 	</div>
 	
     

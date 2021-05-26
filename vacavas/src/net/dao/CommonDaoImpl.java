@@ -901,7 +901,81 @@ public class CommonDaoImpl extends NamedParameterJdbcTemplate implements ICommon
 		 List<LiveReport> list = query(queryStr, parameters,new BeanPropertyRowMapper<LiveReport>(LiveReport.class));
 		 return list;
 	}
-
+	@Override
+	public List<LiveReport> findAggReportByProduct(AggReport aggReport) {
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		
+		String  queryStr="select if(vwlive.operator_id is not null,vwlive.operator_id,0) as operatorId,"
+			     + "if(vwlive.operator_name is not null,vwlive.operator_name,'Other') as operatorName,";
+		if(aggReport.getReportType()!=null&&aggReport.getReportType().equalsIgnoreCase(MConstants.MONTHLY_REPORT_TYPE)){	     
+		queryStr+=  "concat(MONTHNAME(vwlive.report_date),'-',year(vwlive.report_date)) as reportDateStr,";
+		}else{
+			queryStr+=  "vwlive.report_date as reportDateStr,";
+		}
+		
+		queryStr+=" if(vwlive.network_name is null,'Other',vwlive.network_name) as networkName,"
+			     + "vwlive.adnetwork_campaign_id as adnetworkCampaignId," 
+			     + "vwlive.adnetworkid as adnetworkId,"
+			     + "vwlive.aggregator_id as aggregatorId,"
+			     + "vwlive.product_id as productId,"
+			     + "vwlive.product_name as productName,"
+				 +" COALESCE(sum(vwlive.click_count),0) as clickCount,"
+				 +" COALESCE(sum(vwlive.valid_click_count),0) as validClickCount,"
+			     + "COALESCE(sum(vwlive.conversion_count),0) as conversionCount,"
+			     + "COALESCE(sum(vwlive.send_conversion_count),0) as sendConversionCount,"
+			     +"COALESCE(sum(vwlive.amount),0) as amount,"
+			     + "COALESCE(sum(dct_count),0) as dctCount,COALESCE(sum(dct_churn_count),0) as churnDctCount"
+			     +",COALESCE(sum(renewal_count),0) as renewalCount,"
+			     + "COALESCE(sum(renewal_sentcount),0) as renewalSentCount"
+			     + ",COALESCE(sum(renewal_amount),0) as renewalAmount"
+			     + ",COALESCE(sum(grace_conversion_count),0) as graceConversionCount"
+			     + ",COALESCE(sum(dct_churn_count),0) as churnDctCount " 
+			     + ",COALESCE(sum(dct_count),0) as dctCount " 
+			     
+                 + ",COALESCE(sum(if(mode='"+SubscriptionMode.SMS.getMode()+"',conversion_count,0)),0) as smsConversionCount "
+                 + ",COALESCE(sum(if(mode='"+SubscriptionMode.SMS.getMode()+"',amount,0)),0) as smsConversionAmount "
+                 + ",COALESCE(sum(if(mode='"+SubscriptionMode.SMS.getMode()+"',renewal_count,0)),0) as smsRenwalCount "
+                 + ",COALESCE(sum(if(mode='"+SubscriptionMode.SMS.getMode()+"',renewal_amount,0)),0) as smsRenewalAmount "
+                 + ",COALESCE(sum(if(mode='"+SubscriptionMode.SMS.getMode()+"',grace_conversion_count,0)),0) as smsGraceCount "
+                  
+			     + " from vw_live_report_monthly_new vwlive   "
+			    // + " on vwlive.adnetworkid =vwscd.ad_network_id and vwscd.op_id=vwlive.operator_id "
+			    // + " and vwlive.service_id =vwscd.service_id "			  
+			     + " where  1=1 ";
+		
+			if(aggReport.getFromTime()!=null){
+				 queryStr+= " and date(report_date)>=date(:fromTime)";
+				 parameters.put("fromTime",aggReport.getFromTime());
+			}//date(report_date)=date(now())
+		
+			if(aggReport.getToTime()!=null){
+				 queryStr+= " and date(report_date)<=date(:toTime)";
+				 parameters.put("toTime",aggReport.getToTime());
+			}
+			if(aggReport.getFromTime()==null&&aggReport.getToTime()==null){
+				queryStr+= " and date(report_date)=date(now())";
+			}
+			
+			if(aggReport.getAggregatorId()!=null){
+				queryStr+= " and vwlive.aggregator_id=:aggregator_id";
+				parameters.put("aggregator_id",aggReport.getAggregatorId());
+			}
+			
+			if(aggReport.getAdnetworkId()!=null&&aggReport.getAdnetworkId()>0){
+				queryStr+= " and vwlive.adnetworkid=:adnetworkid";
+				parameters.put("adnetworkid",aggReport.getAdnetworkId());
+			}
+			
+			if(aggReport.getOpid()!=null&&aggReport.getOpid()>0){
+				queryStr+= " and vwlive.operator_id=:operator_id";
+				parameters.put("operator_id",aggReport.getOpid());
+			}
+			
+		   queryStr+= " group by 8,3,1";
+		   logger.info("query str: "+queryStr+" ,parameters:: "+parameters);
+		 List<LiveReport> list = query(queryStr, parameters,new BeanPropertyRowMapper<LiveReport>(LiveReport.class));
+		 return list;
+	}
 
 	@Override
 	public List<LiveReport> findSwaziAggReport(AggReport aggReport) {
@@ -1136,14 +1210,62 @@ public class CommonDaoImpl extends NamedParameterJdbcTemplate implements ICommon
 				parameters.put("product_id",aggReport.getProductId());
 			}
 			
-			if(parameters.isEmpty()){
-				queryStr+= " order by 1 desc limit 100";
-			}
+//			if(parameters.isEmpty()){
+				queryStr+= " order by 1 desc limit "+aggReport.getPageNo()+", "+MConstants.PAGE_SIZE;
+//			}
 		
 		   logger.info("query str: "+queryStr+" ,parameters:: "+parameters);
 		 List<VWCallbackDump> list = query(queryStr, parameters,
 				 new BeanPropertyRowMapper<VWCallbackDump>(VWCallbackDump.class));
 		 return list;
+	}
+	
+	@Override
+	public long findVWCallbackDumpCount(AggReport aggReport) {
+         Map<String, Object> parameters = new HashMap<String, Object>();
+		
+		String  queryStr="select count(b.id)  from vw_callback_dump b where 1=1 ";
+		
+		if(!StringUtils.isEmpty(aggReport.getMsisdn())){
+			 queryStr+= " and b.msisdn=:msisdn ";
+			 parameters.put("msisdn",aggReport.getMsisdn());
+		}
+		
+		if(aggReport.getAggregatorId()!=null){
+			queryStr+= " and b.aggregator_id=:aggregator_id " ;
+			parameters.put("aggregator_id",aggReport.getAggregatorId());
+		}
+		
+			if(aggReport.getFromTime()!=null){
+				 queryStr+= " and date(b.create_time)>=date(:fromTime) ";
+				 parameters.put("fromTime",aggReport.getFromTime());
+			}//date(create_time)=date(now())
+		
+			if(aggReport.getToTime()!=null){
+				 queryStr+= " and date(b.create_time)<=date(:toTime) ";
+				 parameters.put("toTime",aggReport.getToTime());
+			}
+			if(aggReport.getFromTime()==null&&aggReport.getToTime()==null){
+				queryStr+= " and date(b.create_time)=date(now()) ";
+			}
+			
+			if(aggReport.getOpid()!=null&&aggReport.getOpid()>0){
+				queryStr+= " and b.operator_id=:operator_id";
+				parameters.put("operator_id",aggReport.getOpid());
+			}
+			
+			if(aggReport.getProductId()!=null){
+				queryStr+= " and b.product_id=:product_id";
+				parameters.put("product_id",aggReport.getProductId());
+			}
+			
+//			if(parameters.isEmpty()){
+//				queryStr+= " order by 1 desc ";
+//			}
+		
+		   logger.info("query str: "+queryStr+" ,parameters:: "+parameters);
+		 long listsize = queryForObject(queryStr, parameters, Long.class);
+		 return listsize;
 	}
 	
 	@Override

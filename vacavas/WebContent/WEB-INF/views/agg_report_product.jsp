@@ -12,7 +12,7 @@
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Callback Report</title>
+  <title>Report</title>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="/resources/demos/style.css">
   <script src="../../resources/js/jquery-1.12.4.js"></script>
@@ -106,12 +106,12 @@
 	
 	<script type="text/javascript">
 	function callProduct(opid){
-	  // alert("change:::::::::: "+opid+", serverip: <%=request.getLocalAddr()%>");
+	  // alert("change:::::::::: "+opid+", serverip: <%=request.getLocalAddr()%>:8080");
 	   
    // var opid = $(this).val();
     $.ajax({
         type: 'GET',
-        url: "http://<%=request.getLocalAddr()%>/vacavas/sys/rcerpaotrt/productdetail?opid=" + opid,
+        url: "http://<%=request.getLocalAddr()%>:8080/vacavas/sys/rcerpaotrt/productdetail?opid=" + opid,
         success: function(data){
             var product=$('#productId'), option="";
             product.empty();
@@ -135,19 +135,10 @@
 $(function(){
 $('.formselect').change(function(){
 	// alert("change");
-	//$("#otpform").attr("action", "${pageContext.request.contextPath}/cnt/bz/change/msisdnprefix");
+	//$("#otpform").attr("action", "${pageContext.request.contextPath}/sys/bz/change/msisdnprefix");
 	$("#reportform").submit();
 })});
 </script>
-<script type="text/javascript">
-function getData(i){
-	document.getElementById("pageNo").value = i;
-	console.log("aggregatorId:  "+aggregatorId);
-	console.log("PageNo:  "+i);
-	$("#reportform").submit();
-}
-</script>
-
 </head>
 <body>
 
@@ -166,7 +157,7 @@ function getData(i){
 	
     
 <form:form  modelAttribute="AggReport" name="reportform" id="reportform"
- action="${pageContext.request.contextPath}/sys/rcerpaotrt/callbackdump">
+ action="${pageContext.request.contextPath}/sys/rcerpaotrt/aggstats/by-product">
 <table  border="1" class="mtable" align="center">
 
 	 <tr>
@@ -198,19 +189,13 @@ function getData(i){
            </td>  
            </tr>
                <tr>   
-           <td>
-           <p>
-           	Product
-             <form:select  name="productid" id="opid" path="productId" > 
-						<form:option value="" label="Select Product" />
-						<c:forEach var="product" items="${productList}"
-								varStatus="productloop">
-							<form:option value="${product.id}" 
-							label="${product.productName}"></form:option>
-						</c:forEach>
+            <td> 
+  	  <label for="reportType">Report Type :</label>&nbsp;		
+     <form:select id="reportType" path="reportType">
+						<form:option value="Daily" label="Daily" />
+						<form:option value="Monthly" label="Monthly" />						
 				</form:select>
-				</p>
-           </td>     
+   </td>     
            <td>
             <label for="adnetworkId">Adnetwork :</label>&nbsp;
       <form:select id="adnetworkId" path="adnetworkId">
@@ -238,18 +223,6 @@ function getData(i){
    </td>
      </tr>     
      
-     <tr>
-  <td>
-         
-         <label for="adnetworkId">Msisdn :</label>&nbsp;
-          <form:input type="text" path="msisdn" name="msisdn" id="msisdn" 
-      class="text ui-widget-content ui-corner-all"/>
-           </td>
-    <td > 
-    
-   </td>
-     </tr> 
-     
       <tr>
       <td colspan="2">
       <input type="submit" value="Find Report" />
@@ -259,52 +232,99 @@ function getData(i){
 </form:button>
       </td></tr>            
 	</table>
-	
+	<br>
+	<center>
+	 <label for="lastclickupdatetime">Last click Updated Time :  <b>${lastupdatedLiveReport.lastClickTime }</b></label>&nbsp;    	
+    </center>	
 	<br><br>
 	<table id="reporttable" width="80%" border="1" align="center">
+
+	<c:forEach var="entry" items="${reportMap}" varStatus="outerloop">
+		<tr ><td colspan="20">&nbsp;</td><tr>
+	     
+					
 	<tr>
-		<th>id</th>
-		<th>Msisdn</th>	
 		<th>Aggregator Name</th>
-		<th>Action</th>
+		<th>Product Name</th>
 		<th>Operator Name</th>
-		<th>Service Name</th>
-		<th>Product Name</th>		
-		<th>Report Date</th>	
-		<th>Amount</th>
-		<th>Token</th>
-		<th>Click Id</th>
-		<th>Send To Adnetwork</th>
+		<th>Report Date</th>		
+		<th>Conversion count</th>		
+		<th>Conversion Amount</th>
+		<th>Renewal Count</th>
+		<th>Renewal Amount</th>
+		<th>Renewal Amount(USD)</th>
+		<th>Grace Count</th>
+		<th>Total Revenue</th>
+		<th>Total Revenue(USD)</th>
+		<th>Adnetwork Sent Count</th>
+		<th>DCT Count</th>
+		<th>SMS Conversions</th>
+		<th>SMS Renewals</th>
+		<th>SMS Conversion Amount </th>
+		<th>SMS Renewal Amount </th>
+		<th>SMS Grace</th>
+		<th>Total Revenue</th>
 	</tr>
-			<c:forEach var="vwCallbackDump" items="${reportList}" varStatus="loop">
+			<c:forEach var="liveReport" items="${entry.value}" varStatus="loop">
 				<tr bgcolor="">
-				    <td>${vwCallbackDump.id}</td>	
-					<td>${vwCallbackDump.msisdn}</td>
-					<td>${mapAggregator[mapOperator[vwCallbackDump.operatorId].aggregatorId].name}</td>			
-					<td>${vwCallbackDump.action}</td>	
-					<td>${vwCallbackDump.operatorName}</td>					
-					<td>${vwCallbackDump.serviceName}</td>
-					<td>${vwCallbackDump.productName}</td>
-					<td>${vwCallbackDump.createTime}</td>					
-					<td>${vwCallbackDump.amount}</td>
-					<td>${vwCallbackDump.token}</td>
-					<td>${vwCallbackDump.clickId}</td>
-					<td>${vwCallbackDump.sendToAdnetwork}</td>
+					<td>${mapAggregator[mapOperator[liveReport.operatorId].aggregatorId].name}</td>						
+					<td>
+					${liveReport.productName}
+					<%-- <c:if test="${productId!=null&&productId>0}">
+					${mapProduct[liveReport.productId].productName}
+					</c:if> --%>
+					</td>						
+					<td>${liveReport.operatorName}</td>					
+					<td>${liveReport.reportDateStr}</td>								
+					<td>${liveReport.conversionCount}</td>
+					<td>${liveReport.amount}</td>
+					<td>${liveReport.renewalCount}</td>
+					<td>${liveReport.renewalAmount}</td>
+					<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${liveReport.renewalAmount/3.67}"/></td>
+					<td>${liveReport.graceConversionCount}</td>
+					<td>${liveReport.amount+liveReport.renewalAmount}</td>
+					<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${(liveReport.amount+liveReport.renewalAmount)/3.67}"/></td>
+					<td>${liveReport.sendConversionCount}</td>
+					<td>${liveReport.dctCount}</td>
+					
+					<td>${liveReport.smsConversionCount}</td>
+					<td>${liveReport.smsRenwalCount}</td>
+					<td>${liveReport.smsConversionAmount}</td>					
+					<td>${liveReport.smsRenewalAmount}</td>
+					<td>${liveReport.smsGraceCount}</td>					
+					<td>${liveReport.smsConversionAmount+liveReport.smsRenewalAmount}</td>
+					
+				</tr>
+			</c:forEach>	
+			
+				<tr bgcolor="">
+						
+					<td colspan="4">Total</td>										
+					<td>${entry.value.stream().map(v->v.conversionCount).sum()}</td>								
+					<td>${entry.value.stream().map(v->v.amount).sum()}</td>
+					<td>${entry.value.stream().map(v->v.renewalCount).sum()}</td>
+					<td>${entry.value.stream().map(v->v.renewalAmount).sum()}</td>
+					<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${entry.value.stream().map(v->v.renewalAmount).sum()/3.67}"/></td>
+					<td>${entry.value.stream().map(v->v.graceConversionCount).sum()}</td>
+					<td>${entry.value.stream().map(v->v.amount).sum()+entry.value.stream().map(v->v.renewalAmount).sum()}</td>
+					<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${(entry.value.stream().map(v->v.amount).sum() + entry.value.stream().map(v->v.renewalAmount).sum())/3.67}"/></td>
+					<td>${entry.value.stream().map(v->v.sendConversionCount).sum()}</td>
+					<td>${entry.value.stream().map(v->v.dctCount).sum()}</td>
+					
+				    <td>${entry.value.stream().map(v->v.smsConversionCount).sum()}</td>
+				    <td>${entry.value.stream().map(v->v.smsRenwalCount).sum()}</td>
+					<td>${entry.value.stream().map(v->v.smsConversionAmount).sum()}</td>
+					
+					<td>${entry.value.stream().map(v->v.smsRenewalAmount).sum()}</td>
+					<td>${entry.value.stream().map(v->v.smsGraceCount).sum()}</td>
+					<td>${entry.value.stream().map(v->v.smsConversionAmount).sum()
+					+entry.value.stream().map(v->v.smsRenewalAmount).sum()}</td>
 					
 				</tr>
 			</c:forEach>
 			</table>
-	<br><br>
-	<center>
-	<input type="hidden" path="pageNo" name="pageNo" id="pageNo">
-	<c:if test="${lastPageNo>0}">
-	<c:forEach var="i" begin="0" end="${lastPageNo-1 }" >
-	
-		<a style="color:blue;text-decoration: underline;"  onclick="getData(${i});" >${i+1 }</a>    	<!-- Displaying Page No -->
-	</c:forEach>
-	</c:if>
-	</center>
 	</form:form>
+	<br><br>
 	<br><br>
 </body>
 </html>

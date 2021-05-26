@@ -21,18 +21,6 @@ body {
 </style>
 <body>
 	<!-- Body Start -->
-	<c:if test="${lang==0}">
-		<p>Free for 1 day then AED ${altruistServiceConfig.price} per
-			${altruistServiceConfig.durationDescription} VAT Included</p>
-	</c:if>
-	<c:if test="${lang==1}">
-		<p dir="rtl">
-			مجانًا ليوم واحد ثم ${altruistServiceConfig.price} درهم لكل
-			<c:if test="${altruistServiceConfig.durationDescription=='day'}">يوم</c:if>
-			<c:if test="${altruistServiceConfig.durationDescription=='week'}">أسبوع</c:if>
-			شامل ضريبة القيمة المضافة
-		</p>
-	</c:if>
 	<div class="img-div">
 		<img style="height: 200px; width: 80%;"
 			src="${pageContext.request.contextPath}/resources/altruist/image/banner.png"

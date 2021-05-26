@@ -71,6 +71,7 @@ public class LiveReport {
 		
 		private boolean duplicateRequest;
 		private String operatorName;
+		private String productName;
 		private String networkName;
 		private Double spend = 0d;
 		private String lcId;
@@ -775,6 +776,14 @@ public LiveReport(){
 
 	public void setSmsGraceCount(int smsGraceCount) {
 		this.smsGraceCount = smsGraceCount;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 
 }

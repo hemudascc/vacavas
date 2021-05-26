@@ -119,7 +119,7 @@ public class SmsService {
 				+"&cat="+MUtility.urlEncoding(""+mtMessage.getCat())
 				+"&from="+MUtility.urlEncoding(mtMessage.getFromStr())
 				+"&to="+MUtility.urlEncoding(mtMessage.getMsisdn())
-				+"&text="+MUtility.urlEncoding(mtMessage.getTextMsg())
+				+"&text="+mtMessage.getTextMsg()
 				+"&type="+MUtility.urlEncoding(mtMessage.getType())
 				+"&keyword="+MUtility.urlEncoding(mtMessage.getKeyword())
 				+"&user="+MUtility.urlEncoding(mtMessage.getUser())

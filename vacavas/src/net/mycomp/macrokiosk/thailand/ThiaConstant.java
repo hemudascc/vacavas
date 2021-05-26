@@ -63,7 +63,7 @@ public interface ThiaConstant {
 		}catch(Exception ex){
 			hex=null;
 		}
-		return hex;
+		return hex.toUpperCase();
 	}
 	
 	

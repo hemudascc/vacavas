@@ -75,7 +75,7 @@ public class TimweApiService {
 			String url =pinSendURL.replaceAll("<roleid>",TimweConstant.ROLE_ID);
 			requestMap.put("userIdentifier", msisdn);
 			requestMap.put("userIdentifierType", "MSISDN");
-			requestMap.put("productId", Objects.toString(timweServiceConfig.getProductId()));
+			requestMap.put("productId", timweServiceConfig.getTimweProductId());
 			requestMap.put("mcc", timweServiceConfig.getMcc());
 			requestMap.put("mnc", timweServiceConfig.getMnc());
 			requestMap.put("entryChannel", "WAP");
@@ -128,10 +128,10 @@ public class TimweApiService {
 			String url =pinVerifyURL.replaceAll("<roleid>",TimweConstant.ROLE_ID);
 			requestMap.put("userIdentifier", msisdn);
 			requestMap.put("userIdentifierType", "MSISDN");
-			requestMap.put("productId", Objects.toString(timweServiceConfig.getProductId()));
+			requestMap.put("productId", timweServiceConfig.getTimweProductId());
 			requestMap.put("mcc", timweServiceConfig.getMcc());
 			requestMap.put("mnc", timweServiceConfig.getMnc());
-			requestMap.put("entryChannel", "WAP");
+			requestMap.put("entryChannel", "WEB");
 			requestMap.put("clientIP", "");
 			requestMap.put("transactionAuthCode", pin);
 			String requestJson = JsonMapper.getObjectToJson(requestMap);
@@ -171,7 +171,7 @@ public class TimweApiService {
 			timweTrans.setToken(token);
 			timweTrans.setTokenId(cgToken.getTokenId());
 			String url =mtPushURL.replaceAll("<roleid>",TimweConstant.ROLE_ID);
-			requestMap.put("productId", Objects.toString(timweServiceConfig.getProductId()));
+			requestMap.put("productId", timweServiceConfig.getTimweProductId());
 			requestMap.put("pricepointId", Objects.toString(timweServiceConfig.getPricePointId()));
 			requestMap.put("mcc", timweServiceConfig.getMcc());
 			requestMap.put("mnc", timweServiceConfig.getMnc());
@@ -225,10 +225,10 @@ public class TimweApiService {
 			String url =unsubscriptionURL.replaceAll("<roleid>",TimweConstant.ROLE_ID);
 			requestMap.put("userIdentifier", msisdn);
 			requestMap.put("userIdentifierType", "MSISDN");
-			requestMap.put("productId", Objects.toString(timweServiceConfig.getProductId()));
+			requestMap.put("productId", timweServiceConfig.getTimweProductId());
 			requestMap.put("mcc", timweServiceConfig.getMcc());
 			requestMap.put("mnc", timweServiceConfig.getMnc());
-			requestMap.put("entryChannel", "WAP");
+			requestMap.put("entryChannel", "WEB");
 			requestMap.put("largeAccount", timweServiceConfig.getShortCode());
 			requestMap.put("subKeyword", timweServiceConfig.getSubKey());
 			String requestJson = JsonMapper.getObjectToJson(requestMap);

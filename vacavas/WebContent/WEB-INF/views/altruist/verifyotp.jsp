@@ -102,15 +102,16 @@ body {
 		<p>
 			<b>-</b>
 			<c:if test="${lang==0}">
-			After 1 day free trial, you will be charged AED 
+			Free for 24 hours then, you will be charged AED 
 			${altruistServiceConfig.price}/${altruistServiceConfig.durationDescription} automatically.
 			</c:if>
 			<c:if test="${lang==1}">
-				<span dir="rtl">
-				بعد يوم واحد من الإصدار التجريبي المجاني ، ستتم محاسبتك تلقائيًا على ${altruistServiceConfig.price} / 
-				<c:if test="${altruistServiceConfig.durationDescription=='day'}">يوم</c:if>
-				<c:if test="${altruistServiceConfig.durationDescription=='week'}">أسبوع</c:if> درهم إماراتي.
-				</span>
+			
+			<span dir="rtl">
+			مجانًا لمدة 24 ساعة بعد ذلك ، سيتم محاسبتك بالدرهم الإماراتي
+${altruistServiceConfig.price} / <c:if test="${altruistServiceConfig.durationDescription=='day'}">يوم</c:if>
+				<c:if test="${altruistServiceConfig.durationDescription=='week'}">أسبوع</c:if> تلقائيًا.
+			</span>
 			</c:if>
 		</p>
 			<p>

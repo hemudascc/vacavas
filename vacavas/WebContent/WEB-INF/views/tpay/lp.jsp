@@ -133,8 +133,12 @@
 		 </div> --%>
 		 
 		 <div dir="rtl"> 
-		 سوف تشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price} جنيه في اليوم. لإلغاء الاشتراك لعملاء ${TpayServiceConfig.operatorName} ، أرسل ${TpayServiceConfig.unsubKeyword} إلى ${TpayServiceConfig.shortCode} مجانًا.الخدمة تجدد تلقائيا , استهلاك الانترنت سوف يخصم من الباقة الخاصة بك لأية استفسارات ، يرجى الاتصال بنا على vas.support@vacastudios.com
+	<!-- 	 سوف تشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price} جنية مصري في اليوم. لإلغاء الاشتراك لعملاء ${TpayServiceConfig.operatorName} ، أرسل ${TpayServiceConfig.unsubKeyword} إلى ${TpayServiceConfig.shortCode} مجانًا.الخدمة تجدد تلقائيا , استهلاك الانترنت سوف يخصم من الباقة الخاصة بك لأية استفسارات ، يرجى الاتصال بنا على vas.support@vacastudios.com
+		 -->
 		 
+		 ستشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price} جنية مصري لكل ${TpayServiceConfig.billingSequence}
+. لإلغاء اشتراكك ، لمشتركي ${TpayServiceConfig.operatorName} ${TpayServiceConfig.country} ، يرجى إرسال ${TpayServiceConfig.unsubKeyword}
+ إلى ${TpayServiceConfig.shortCode} مجانًا. يتم تجديد الخدمة تلقائيًا. يتم خصم استخدام الإنترنت من حزمة الإنترنت الخاصة بك لأي استفسارات ، يرجى الاتصال بنا على vas.support@vacastudios.com.
 		 </div>
 		 
 		<%-- 		<ol>
@@ -219,8 +223,11 @@
 							</c:when>
 							<c:otherwise>
 			 <div dir="rtl"> 
-		 سوف تشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price} جنيه في اليوم. لإلغاء الاشتراك لعملاء ${TpayServiceConfig.operatorName} ، أرسل ${TpayServiceConfig.unsubKeyword} إلى ${TpayServiceConfig.shortCode} مجانًا.الخدمة تجدد تلقائيا , استهلاك الانترنت سوف يخصم من الباقة الخاصة بك لأية استفسارات ، يرجى الاتصال بنا على vas.support@vacastudios.com
-		 
+<!-- 		 سوف تشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price} جنية مصري في اليوم. لإلغاء الاشتراك لعملاء ${TpayServiceConfig.operatorName} ، أرسل ${TpayServiceConfig.unsubKeyword} إلى ${TpayServiceConfig.shortCode} مجانًا.الخدمة تجدد تلقائيا , استهلاك الانترنت سوف يخصم من الباقة الخاصة بك لأية استفسارات ، يرجى الاتصال بنا على vas.support@vacastudios.com
+	-->
+			 ستشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price} جنية مصري لكل ${TpayServiceConfig.billingSequence}
+. لإلغاء اشتراكك ، لمشتركي ${TpayServiceConfig.operatorName} ${TpayServiceConfig.country} ، يرجى إرسال ${TpayServiceConfig.unsubKeyword}
+ إلى ${TpayServiceConfig.shortCode} مجانًا. يتم تجديد الخدمة تلقائيًا. يتم خصم استخدام الإنترنت من حزمة الإنترنت الخاصة بك لأي استفسارات ، يرجى الاتصال بنا على vas.support@vacastudios.com.	 
 		 </div>
 								<%-- <ol>
 									<li dir="rtl">سوف تشترك في GamePad مقابل 2 جنيه / يوم.</li>
