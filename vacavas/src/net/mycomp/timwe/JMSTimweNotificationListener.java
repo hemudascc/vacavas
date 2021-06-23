@@ -28,6 +28,8 @@ public class JMSTimweNotificationListener implements MessageListener{
 	private LiveReportFactoryService liveReportFactoryService;
 	@Autowired
 	private RedisCacheService redisCacheService;
+	@Autowired
+	private TimweApiService timweApiService;
 
 	@Override
 	public void onMessage(Message m) {
@@ -80,6 +82,9 @@ public class JMSTimweNotificationListener implements MessageListener{
 				try {
 					if(Objects.nonNull(liveReport.getAction())) {
 						liveReportFactoryService.process(liveReport);
+						if(MConstants.ACT.equals(liveReport.getAction())) {
+							timweApiService.mtPush(timweNotification.getMsisdn());
+						}
 					}
 					timweNotification.setActon(liveReport.getAction());
 					timweNotification.setSendToAdnetwork(liveReport.getSendConversionCount()>0?true:false);

@@ -32,7 +32,10 @@ public class JMSComvivaCGCallbackListener implements MessageListener{
 					 MData.mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
 			ComvivaServiceConfig comvivaServiceConfig = ComvivaConstant.mapServiceIdToComvivaServiceConfig.get(vwServiceCampaignDetail.getServiceId());
 			if(ComvivaConstant.SUCCESS_RESULT.equalsIgnoreCase(comvivaCGCallback.getResult())) {
+				comvivaSubscriptionService.checkSubs(comvivaServiceConfig, comvivaCGCallback);
 				comvivaSubscriptionService.subscribe(comvivaServiceConfig, comvivaCGCallback);
+				comvivaSubscriptionService.sendMT(comvivaServiceConfig, comvivaCGCallback);
+				
 			}
 		} catch (Exception e) {
 			logger.error("onMessage::::: "+comvivaCGCallback,e);

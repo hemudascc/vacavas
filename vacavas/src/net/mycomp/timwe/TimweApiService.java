@@ -175,7 +175,7 @@ public class TimweApiService {
 			requestMap.put("pricepointId", Objects.toString(timweServiceConfig.getPricePointId()));
 			requestMap.put("mcc", timweServiceConfig.getMcc());
 			requestMap.put("mnc", timweServiceConfig.getMnc());
-			requestMap.put("mnc", TimweConstant.getSubscriptionMessage(timweServiceConfig, msisdn));
+			requestMap.put("text", TimweConstant.getSubscriptionMessage(timweServiceConfig, msisdn));
 			requestMap.put("msisdn", msisdn);
 			requestMap.put("largeAccount", timweServiceConfig.getShortCode());
 			requestMap.put("priority", "NORMAL");

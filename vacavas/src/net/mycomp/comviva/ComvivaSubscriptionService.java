@@ -24,11 +24,15 @@ public class ComvivaSubscriptionService {
 	private  JAXBContext jaxbContextOCSRequest;
 	private JAXBContext jaxbContextOCSResponse;
 	private String dbillApi;
+	private String subMessageTemplate;
 
 	@Autowired
 	public ComvivaSubscriptionService(
-			@Value("${comviva.subscription.url}") String dbillApi) {
+			@Value("${comviva.subscription.url}") String dbillApi,
+			@Value("${comviva.sub.msg.template}") String subMessageTemplate
+			) {
 		this.dbillApi=dbillApi;
+		this.subMessageTemplate=subMessageTemplate;
 		httpURLConnectionUtil=new HttpURLConnectionUtil();
 		try{
 			jaxbContextOCSRequest = JAXBContext.newInstance(OCSRequest.class);   
@@ -78,6 +82,94 @@ public class ComvivaSubscriptionService {
 		return true;
 	}
 
+	public OCSResponse checkSubs(ComvivaServiceConfig comvivaServiceConfig, ComvivaCGCallback comvivaCGCallback){
+
+		ComvivaOCSLogDetail comvivaOCSLogDetail = new ComvivaOCSLogDetail(true);
+		OCSRequest  ocsRequest=new OCSRequest();
+		OCSResponse  ocsResponse = null;
+		try{
+			comvivaOCSLogDetail.setMsisdn(comvivaCGCallback.getMsisdn());
+			comvivaOCSLogDetail.setAction(ComvivaConstant.CHECK_SUB);
+			ocsRequest.setRequestType(ComvivaDBillRequestType.SUB_CHECK.requestType);
+			ocsRequest.setServiceNode(comvivaServiceConfig.getServiceNode());
+			ocsRequest.setSequenceNo(Objects.toString(comvivaOCSLogDetail.getId()));		
+			ocsRequest.setCallingParty(comvivaCGCallback.getMsisdn());
+			ocsRequest.setServiceId(Objects.toString(comvivaServiceConfig.getComvivaServiceId()));
+			ocsRequest.setServiceType(comvivaServiceConfig.getServiceType());
+			ocsRequest.setBearerId(comvivaServiceConfig.getRequestMode());
+			ocsRequest.setSubscriptionFlag("S");
+			ocsRequest.setAsyncFlag("N");
+			ocsRequest.setOptionalParameter12(null);
+			ocsRequest.setPlanId(null);
+			ocsRequest.setOptionalParameter4("balanceFlag#-1");
+			ocsRequest.setOptionalParameter9("languageId#en");
+			ocsRequest.setPlanId("-1");
+			Marshaller jaxbMarshaller = jaxbContextOCSRequest.createMarshaller();
+			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			StringWriter sw = new StringWriter();
+			jaxbMarshaller.marshal(ocsRequest, sw);
+			comvivaOCSLogDetail.setRequet(sw.toString());
+			HTTPResponse  httpResponse= httpURLConnectionUtil.makeHTTPPOSTRequestWithXML(dbillApi, sw.toString());
+			comvivaOCSLogDetail.setResponse(dbillApi+":response code: "+httpResponse.getResponseCode()+": response: "+ httpResponse.getResponseStr());
+			if(httpResponse.getResponseCode()==200){
+				StringReader sr = new StringReader(httpResponse.getResponseStr());	
+				ocsResponse= (OCSResponse)jaxbContextOCSResponse.createUnmarshaller().unmarshal(sr);
+				logger.info("ocsResponse:::::::::::: "+ocsResponse);
+			}
+		}catch(Exception ex){
+			logger.error("checkSubs:: ",ex);
+		}finally{
+			daoService.updateObject(comvivaOCSLogDetail);
+		}
+		return ocsResponse;
+	}
+
+	public OCSResponse sendMT(ComvivaServiceConfig comvivaServiceConfig, ComvivaCGCallback comvivaCGCallback){
+
+		ComvivaOCSLogDetail comvivaOCSLogDetail= new ComvivaOCSLogDetail(Boolean.TRUE);
+		OCSRequest ocsRequest=new OCSRequest();
+		OCSResponse  ocsResponse = new OCSResponse();
+		String sms=null;
+		try{
+			sms=ComvivaConstant.getSubMessage(subMessageTemplate, comvivaServiceConfig);
+			comvivaOCSLogDetail.setMsisdn(comvivaCGCallback.getMsisdn());
+			comvivaOCSLogDetail.setAction(ComvivaConstant.SMS_MT);
+			ocsRequest.setRequestType(ComvivaDBillRequestType.MT_SMS.requestType);
+			ocsRequest.setServiceNode(comvivaServiceConfig.getServiceNode());
+			ocsRequest.setSequenceNo(Objects.toString(comvivaOCSLogDetail.getId()));		
+			ocsRequest.setCallingParty(comvivaCGCallback.getMsisdn());
+			ocsRequest.setServiceId(comvivaServiceConfig.getComvivaServiceId());
+			ocsRequest.setServiceType(comvivaServiceConfig.getServiceType());
+			//ocsRequest.setBearerId(oredooKuwaitServiceConfig.getReqMode());
+			ocsRequest.setSubscriptionFlag("S");
+			ocsRequest.setAsyncFlag("N");
+
+			ocsRequest.setOptionalParameter1("cli#"+comvivaServiceConfig.getShortCode());
+			ocsRequest.setOptionalParameter7("ipr#P");
+			ocsRequest.setOptionalParameter8("reqSource#"+comvivaServiceConfig.getShortCode());
+			ocsRequest.setOptionalParameter11("<![CDATA[msgText#"+sms+"]]>");
+			logger.info("sendMT:: ocsRequest::: "+ocsRequest);
+			Marshaller jaxbMarshaller = jaxbContextOCSRequest.createMarshaller();
+			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			StringWriter sw = new StringWriter();
+			jaxbMarshaller.marshal(ocsRequest, sw);	
+			comvivaOCSLogDetail.setRequet(sw.toString());
+			HTTPResponse  httpResponse= httpURLConnectionUtil.makeHTTPPOSTRequestWithXML(dbillApi, sw.toString());
+			comvivaOCSLogDetail.setResponse(dbillApi+":"+httpResponse.getResponseStr());
+			logger.info("sendMT:: httpResponse::: "+httpResponse);
+			if(httpResponse.getResponseCode()==200){
+				StringReader sr = new StringReader(httpResponse.getResponseStr());	
+				ocsResponse= (OCSResponse)jaxbContextOCSResponse.createUnmarshaller().unmarshal(sr);
+				logger.info("ocsResponse:::::::::::: "+ocsResponse);
+			}
+		}catch(Exception e){
+			logger.error("sendMT:: ",e);
+		}finally{
+			daoService.updateObject(comvivaOCSLogDetail);
+		}
+		return ocsResponse;
+
+	}
 
 	public OCSResponse unsubscribe(SubscriberReg subscriberReg, 
 			ComvivaServiceConfig comvivaServiceConfig){

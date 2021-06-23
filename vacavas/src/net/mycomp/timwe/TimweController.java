@@ -11,11 +11,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import net.common.service.IDaoService;
+import net.common.service.RedisCacheService;
 import net.jpa.repository.JPASubscriberReg;
 import net.persist.bean.SubscriberReg;
 import net.persist.bean.VWServiceCampaignDetail;
@@ -35,7 +37,8 @@ public class TimweController {
 	private TimweApiService timweApiService;
 	@Autowired
 	private IDaoService daoService;
-	
+	@Autowired
+	RedisCacheService redisCacheService;
 	@Autowired
 	private JPASubscriberReg jpaSubscriberReg;
 
@@ -168,6 +171,14 @@ public class TimweController {
 			logger.error("error while processing timwe notification",e);
 		}
 		return modelAndView;
+	}
+	
+	@RequestMapping("send-mt")
+	@ResponseBody
+	public String sendMt(@RequestParam String msisdn, String token) {
+		//redisCacheService.putObjectCacheValueByEvictionDay(TimweConstant.TIMWE_TOKEN_MSISDN_CACHE_PREFIX+msisdn, "1623670484989c1447318c23", 1);
+		timweApiService.mtPush(msisdn);
+		return "OK";
 	}
 	
 }
