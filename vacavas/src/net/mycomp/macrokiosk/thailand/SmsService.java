@@ -106,15 +106,16 @@ public class SmsService {
 				map.put("cat",String.valueOf(mtMessage.getCat()));
 				map.put("keyword", mtMessage.getKeyword());
 			    //Uncoment
-				map.put("senderid", mtMessage.getSenderid());
+//				map.put("senderid", mtMessage.getSenderid());
+				if(mtMessage.getMessageType().equalsIgnoreCase(ThiaConstant.MT_WELCOME_MESSAGE)) {
 				map.put("linkid",mtMessage.getLinkId());
+				}
 		 //http://mis.etracker.cc/thpush/thpush.aspx?user=macrokiosk
 				//&pass=macro 123&type=0&to=66874111222&from=4541404&
 				//text=welcome MT&price=0&telcoid=3&cat=1&keyword=wall&senderid=4541123&linkid=122920190480972745
 		
-		url=url+"?senderid="+MUtility.urlEncoding(mtMessage.getSenderid())
-				+"&linkid="+MUtility.urlEncoding(mtMessage.getLinkId())
-				+"&pass="+MUtility.urlEncoding(mtMessage.getPass())
+//		url=url+"?senderid="+MUtility.urlEncoding(mtMessage.getSenderid())
+		url=url+"&pass="+MUtility.urlEncoding(mtMessage.getPass())
 				+"&price="+MUtility.urlEncoding(""+mtMessage.getPrice().intValue())
 				+"&cat="+MUtility.urlEncoding(""+mtMessage.getCat())
 				+"&from="+MUtility.urlEncoding(mtMessage.getFromStr())
@@ -125,6 +126,9 @@ public class SmsService {
 				+"&user="+MUtility.urlEncoding(mtMessage.getUser())
 				+"&telcoid="+MUtility.urlEncoding(""+mtMessage.getTelcoId())
 				;
+		if(mtMessage.getMessageType().equalsIgnoreCase(ThiaConstant.MT_WELCOME_MESSAGE)) {
+			url +="&linkid="+MUtility.urlEncoding(mtMessage.getLinkId());
+		}
 				
 		logger.info("sendMTSMS::::calling url:: "+url+", map:::::: "+map);
 		//HTTPResponse response=httpURLConnectionUtil.sendPostRequest(url, map); 
